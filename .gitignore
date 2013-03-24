@@ -1,0 +1,10 @@
+# File types to be ignored
+*.swp
+*.py~
+*.pyc
+*.jpeg
+*.jpg
+
+#to ignore folders use -
+#example/
+
