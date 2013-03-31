@@ -28,126 +28,135 @@ class RovCon():
 			Accept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
 		moveSocket.send(msg)
 
-	# Get the return message
-	print 'Wait for HTML return msg'
-	data = ''
-	while len(data) == 0:
-		data = moveSocket.recv(size)
-	print data
+		# Get the return message
+		print 'Wait for HTML return msg'
+		data = ''
+		while len(data) == 0:
+			data = moveSocket.recv(size)
+		print data
 
-	moveSocket.close()
+		moveSocket.close()
 
-	# We have to close the socket and open it again
-	moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	moveSocket.connect((host,port))
-	moveSocket.setblocking(1)
+		# We have to close the socket and open it again
+		moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		moveSocket.connect((host,port))
+		moveSocket.setblocking(1)
 
-	# The first MO_O command
-	mc = array.array('c')
-	mc.extend(['M','O','_','O']);
-	i = 0
-	mc.extend('\x00')
-	while i < 18:
-		mc.extend('\0')
-		i = i + 1
-	msg = mc.tostring()
-	moveSocket.send(msg)
+		# The first MO_O command
+		mc = array.array('c')
+		mc.extend(['M','O','_','O']);
+		i = 0
+		mc.extend('\x00')
+		while i < 18:
+			mc.extend('\0')
+			i = i + 1
+		msg = mc.tostring()
+		moveSocket.send(msg)
 
-	print 'Wait for result on 1st MO command'
-	data = ''
-	while len(data) == 0:
-		data = moveSocket.recv(size)
-	ldata = list(data)
-	msg_i = ldata[4]
+		print 'Wait for result on 1st MO command'
+		data = ''
+		while len(data) == 0:
+			data = moveSocket.recv(size)
+		ldata = list(data)
+		msg_i = ldata[4]
 
-	# The second MO_O command
-	#49=4+1+10+1+7+4+9+4+9
-	mc = array.array('c')
-	mc.extend(['M','O','_','O']);
-	mc.extend('\x02')
-	i = 0
-	while i < 10:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend('\x1a')
-	i = 0
-	while i < 7:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend(['A','C','1','3']);
-	i = 0
-	while i < 9:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend(['A','C','1','3']);
-	i = 0
-	while i < 9:
-		mc.extend('\0')
-		i = i + 1
-	msg = mc.tostring()
-	moveSocket.send(msg)
+		# The second MO_O command
+		#49=4+1+10+1+7+4+9+4+9
+		mc = array.array('c')
+		mc.extend(['M','O','_','O']);
+		mc.extend('\x02')
+		i = 0
+		while i < 10:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend('\x1a')
+		i = 0
+		while i < 7:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend(['A','C','1','3']);
+		i = 0
+		while i < 9:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend(['A','C','1','3']);
+		i = 0
+		while i < 9:
+			mc.extend('\0')
+			i = i + 1
+		msg = mc.tostring()
+		moveSocket.send(msg)
 
-	print 'Wait for next MO msg'
-	data = ''
-	while len(data) == 0:
-		data = moveSocket.recv(size)
-	#print list(data)
+		print 'Wait for next MO msg'
+		data = ''
+		while len(data) == 0:
+			data = moveSocket.recv(size)
+		#print list(data)
 
-	mc = array.array('c')
-	mc.extend(['M','O','_','O']);
-	mc.extend('\x04')
-	i = 0
-	while i < 10:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend('\x01')
-	i = 0
-	while i < 3:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend('\x01')
-	i = 0
-	while i < 3:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend('\x02')
-	msg = mc.tostring()
-	moveSocket.send(msg)
+		mc = array.array('c')
+		mc.extend(['M','O','_','O']);
+		mc.extend('\x04')
+		i = 0
+		while i < 10:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend('\x01')
+		i = 0
+		while i < 3:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend('\x01')
+		i = 0
+		while i < 3:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend('\x02')
+		msg = mc.tostring()
+		moveSocket.send(msg)
 
-	print 'Wait for next MO msg'
-	data = ''
-	while len(data) == 0:
-		data = moveSocket.recv(size)
-	#print list(data)
+		print 'Wait for next MO msg'
+		data = ''
+		while len(data) == 0:
+			data = moveSocket.recv(size)
+		#print list(data)
 
-	# Create new socket for video
-	videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	videoSocket.connect((host,port))
-	videoSocket.setblocking(1)
+		# Create new socket for video
+		videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		videoSocket.connect((host,port))
+		videoSocket.setblocking(1)
 
-	mc = array.array('c')
-	mc.extend(['M','O','_','V']);
-	mc.extend('\0')
-	i = 0
-	while i < 10:
+		mc = array.array('c')
+		mc.extend(['M','O','_','V']);
 		mc.extend('\0')
-		i = i + 1
-	mc.extend('\x04')
-	i = 0
-	while i < 3:
-		mc.extend('\0')
-		i = i + 1
-	mc.extend('\x04')
-	i = 0
-	while i < 3:
-		mc.extend('\0')
-		i = i + 1
-	ldata = list(data)
-	id_cp = ldata[25:29]
-	mc.extend(id_cp)
-	#print mc, identifier of the image(?)
-	msg = mc.tostring()
-	videoSocket.send(msg)
+		i = 0
+		while i < 10:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend('\x04')
+		i = 0
+		while i < 3:
+			mc.extend('\0')
+			i = i + 1
+		mc.extend('\x04')
+		i = 0
+		while i < 3:
+			mc.extend('\0')
+			i = i + 1
+		ldata = list(data)
+		id_cp = ldata[25:29]
+		mc.extend(id_cp)
+		#print mc, identifier of the image(?)
+		msg = mc.tostring()
+		videoSocket.send(msg)
+
+
+	def writeCmd(self, object, index, extraInput)	
+	 # index is integer which specifies which command to send
+         #j_extra_input is a javaArray of Bytes
+
+
+
+
 
 	# For now just get one frame, we have to make this a loop of course
 	print 'Get video frame!'
