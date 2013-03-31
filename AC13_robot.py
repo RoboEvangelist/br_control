@@ -152,7 +152,8 @@ class RovCon():
 		self.videoSocket.send(msg)
 
 	def disconnectRover(self):
-		
+		self.moveSocket.close()
+		self.videoSocket.close()
 
 	def writeCmd(self, index, extraInput)	
 #	     Robot's Track Motion Control Packets
@@ -295,59 +296,56 @@ class RovCon():
 			buffer[23] = '\x04'
 			buffer[24] = '\x00'
 		msg = buffer.tostring()
-		moveSocket.send(msg)
-		if index != 4:
-			self.moveSocket.send(msg)   				
+		if index == 4:
+			self.videoSocket.send(msg)   				
 		else:
-			self.videoSocket.send(msg)
+			self.moveSocket.send(msg)
 
+# 		# For now just get one frame, we have to make this a loop of course
+#		print 'Get video frame!'
+#		data = ''
+#		ldata = []
+#		start = ''
+#		while len(data) == 0:
+#			data = videoSocket.recv(size)
+#			ld = list(data)
+#			mc = array.array('c')
+#			mc.extend (ld[0:4])
 
+#			if (start == ''):
+#				start = 'first'
+#			else:
+#				start = mc.tostring()
+#			if (start == 'MO_V'):
+#				break
+#			else:
+#				ldata.extend(ld)
+#
+#			data = ''
 
-
-
-
-	# For now just get one frame, we have to make this a loop of course
-	print 'Get video frame!'
-	data = ''
-	ldata = []
-	start = ''
-	while len(data) == 0:
-		data = videoSocket.recv(size)
-		ld = list(data)
-		mc = array.array('c')
-		mc.extend (ld[0:4])
-
-		if (start == ''):
-			start = 'first'
-		else:
-			start = mc.tostring()
-		if (start == 'MO_V'):
-			break
-		else:
-			ldata.extend(ld)
-
-		data = ''
-
-	# Write image to "test.jpg"
-	img = ldata[36:]
-	jpgfile = open('test.jpg','wb')
-	for i in img:
-		jpgfile.write(i)
-
-	# Close file handlers
-	jpgfile.close()
-	videoSocket.close()
-	videoSocket.close()
-
-	while not rospy.is_shutdown():
-		str = "robot connected %s" % rospy.get_time()
-		rospy.loginfo(str)
-		pub.publish(String(str))
-		rospy.sleep(1.0)
+		# Write image to "test.jpg"
+#		img = ldata[36:]
+#		jpgfile = open('test.jpg','wb')
+#		for i in img:
+#			jpgfile.write(i)
+#
+#		# Close file handlers
+#		jpgfile.close()
+#		videoSocket.close()
+#		videoSocket.close()
+#
+		#while not rospy.is_shutdown():
+		#	str = "robot connected %s" % rospy.get_time()
+		#	rospy.loginfo(str)
+		#	pub.publish(String(str))
+		#	rospy.sleep(1.0)
 
 
 if __name__ == '__main__':
     try:
-        roboTalker()
+       # roboTalker()
+		rover = RovCon() 
+		rover.writeCmd(7,0)
+		rover.disconnectRover()
     except rospy.ROSInterruptException:
         pass
