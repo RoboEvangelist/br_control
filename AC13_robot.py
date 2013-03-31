@@ -8,31 +8,39 @@ import time
 import array
 import struct
 
-def roboTalker():
-	pub = rospy.Publisher('chatter', String)
-	rospy.init_node('roboTalker')
-	host = '192.168.1.100'
-	port = 80
-	size = 2048
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((host,port))
-	s.setblocking(1)
-	msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
-	s.send(msg)
+class RovCon(): 
+	def __init__(self):
+        super(Interface, self).__init__()
+
+		self.pub = rospy.Publisher('chatter', String)
+		rospy.init_node('roboTalker')
+		self.host = '192.168.1.100'
+		self.port = 80
+		self.maxTCPBuffer = 2048
+		self.initConnection()
+
+	def initConnection(self):
+		moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		moveSocket.connect((host,port))
+		moveSocket.setblocking(1)
+		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\n
+			User-Agent: WifiCar/1.0 CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\n
+			Accept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
+		moveSocket.send(msg)
 
 	# Get the return message
 	print 'Wait for HTML return msg'
 	data = ''
 	while len(data) == 0:
-		data = s.recv(size)
+		data = moveSocket.recv(size)
 	print data
 
-	s.close()
+	moveSocket.close()
 
 	# We have to close the socket and open it again
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((host,port))
-	s.setblocking(1)
+	moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	moveSocket.connect((host,port))
+	moveSocket.setblocking(1)
 
 	# The first MO_O command
 	mc = array.array('c')
@@ -43,12 +51,12 @@ def roboTalker():
 		mc.extend('\0')
 		i = i + 1
 	msg = mc.tostring()
-	s.send(msg)
+	moveSocket.send(msg)
 
 	print 'Wait for result on 1st MO command'
 	data = ''
 	while len(data) == 0:
-		data = s.recv(size)
+		data = moveSocket.recv(size)
 	ldata = list(data)
 	msg_i = ldata[4]
 
@@ -77,12 +85,12 @@ def roboTalker():
 		mc.extend('\0')
 		i = i + 1
 	msg = mc.tostring()
-	s.send(msg)
+	moveSocket.send(msg)
 
 	print 'Wait for next MO msg'
 	data = ''
 	while len(data) == 0:
-		data = s.recv(size)
+		data = moveSocket.recv(size)
 	#print list(data)
 
 	mc = array.array('c')
@@ -104,18 +112,18 @@ def roboTalker():
 		i = i + 1
 	mc.extend('\x02')
 	msg = mc.tostring()
-	s.send(msg)
+	moveSocket.send(msg)
 
 	print 'Wait for next MO msg'
 	data = ''
 	while len(data) == 0:
-		data = s.recv(size)
+		data = moveSocket.recv(size)
 	#print list(data)
 
 	# Create new socket for video
-	s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s1.connect((host,port))
-	s1.setblocking(1)
+	videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	videoSocket.connect((host,port))
+	videoSocket.setblocking(1)
 
 	mc = array.array('c')
 	mc.extend(['M','O','_','V']);
@@ -139,7 +147,7 @@ def roboTalker():
 	mc.extend(id_cp)
 	#print mc, identifier of the image(?)
 	msg = mc.tostring()
-	s1.send(msg)
+	videoSocket.send(msg)
 
 	# For now just get one frame, we have to make this a loop of course
 	print 'Get video frame!'
@@ -147,7 +155,7 @@ def roboTalker():
 	ldata = []
 	start = ''
 	while len(data) == 0:
-		data = s1.recv(size)
+		data = videoSocket.recv(size)
 		ld = list(data)
 		mc = array.array('c')
 		mc.extend (ld[0:4])
@@ -171,8 +179,8 @@ def roboTalker():
 
 	# Close file handlers
 	jpgfile.close()
-	s1.close()
-	s.close()
+	videoSocket.close()
+	videoSocket.close()
 
 	while not rospy.is_shutdown():
 		str = "robot connected %s" % rospy.get_time()
