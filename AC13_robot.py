@@ -13,34 +13,34 @@ class RovCon():
         super(Interface, self).__init__()
 
 		self.pub = rospy.Publisher('chatter', String)
-		rospy.init_node('roboTalker')
+		self.rospy.init_node('roboTalker')
 		self.host = '192.168.1.100'
 		self.port = 80
 		self.maxTCPBuffer = 2048
 		self.initConnection()
 
 	def initConnection(self):
-		moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		moveSocket.connect((host,port))
-		moveSocket.setblocking(1)
+		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.moveSocket.connect((host,port))
+		self.moveSocket.setblocking(1)
 		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\n
 			User-Agent: WifiCar/1.0 CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\n
 			Accept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
-		moveSocket.send(msg)
+		self.moveSocket.send(msg)
 
 		# Get the return message
 		print 'Wait for HTML return msg'
 		data = ''
 		while len(data) == 0:
-			data = moveSocket.recv(size)
+			data = self.moveSocket.recv(size)
 		print data
 
-		moveSocket.close()
+		self.moveSocket.close()
 
 		# We have to close the socket and open it again
-		moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		moveSocket.connect((host,port))
-		moveSocket.setblocking(1)
+		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.moveSocket.connect((host,port))
+		self.moveSocket.setblocking(1)
 
 		# The first MO_O command
 		mc = array.array('c')
@@ -51,12 +51,12 @@ class RovCon():
 			mc.extend('\0')
 			i = i + 1
 		msg = mc.tostring()
-		moveSocket.send(msg)
+		self.moveSocket.send(msg)
 
 		print 'Wait for result on 1st MO command'
 		data = ''
 		while len(data) == 0:
-			data = moveSocket.recv(size)
+			data = self.moveSocket.recv(size)
 		ldata = list(data)
 		msg_i = ldata[4]
 
@@ -85,12 +85,12 @@ class RovCon():
 			mc.extend('\0')
 			i = i + 1
 		msg = mc.tostring()
-		moveSocket.send(msg)
+		self.moveSocket.send(msg)
 
 		print 'Wait for next MO msg'
 		data = ''
 		while len(data) == 0:
-			data = moveSocket.recv(size)
+			data = self.moveSocket.recv(size)
 		#print list(data)
 
 		mc = array.array('c')
@@ -112,18 +112,18 @@ class RovCon():
 			i = i + 1
 		mc.extend('\x02')
 		msg = mc.tostring()
-		moveSocket.send(msg)
+		self.moveSocket.send(msg)
 
 		print 'Wait for next MO msg'
 		data = ''
 		while len(data) == 0:
-			data = moveSocket.recv(size)
+			data = self.moveSocket.recv(size)
 		#print list(data)
 
 		# Create new socket for video
-		videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		videoSocket.connect((host,port))
-		videoSocket.setblocking(1)
+		self.videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.videoSocket.connect((host,port))
+		self.videoSocket.setblocking(1)
 
 		mc = array.array('c')
 		mc.extend(['M','O','_','V']);
@@ -147,12 +147,40 @@ class RovCon():
 		mc.extend(id_cp)
 		#print mc, identifier of the image(?)
 		msg = mc.tostring()
-		videoSocket.send(msg)
+		self.videoSocket.send(msg)
 
 
 	def writeCmd(self, object, index, extraInput)	
+#	     Robot's Track Motion Control Packets
+
+# 		     The left brake command is 
+# 		      1 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+# 		      0010 00 00 00 01 00 00 00 02 00
+# 		 02 was the byte that puts the left break
+# 
+# 		     and the right brake command is
+# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+# 		      0010 00 00 00 01 00 00 00 04 00
+# 		  04 was the byte that puts the left break
+# 
+# 		     Left Wheel forward
+# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+# 		      0010 00 00 00 01 00 00 00 04 0a
+# 		 
+# 		     Right Wheel Forward
+# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+# 		      0010 00 00 00 01 00 00 00 01 0a
+# 		 
+# 		     Left Wheel Backward
+# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+# 		      0010 00 00 00 01 00 00 00 05 0a
+# 		 
+# 		     Right Wheel Backward
+# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+# 		      0010 00 00 00 01 00 00 00 02 0a
+ 
 		# index is integer which specifies which command to send
-		#j_extra_input is a javaArray of Bytes
+		#extraInput is a javaArray of Bytes
 		
 		len = 0
 		if index == 1:
@@ -177,12 +205,18 @@ class RovCon():
 			len = 23
 		elif index == 11:
 			len = 23
+		elif index == 12:
+			len = 24
+		elif index == 13:
+			len = 24
+
 		buffer = array.array('c')
 		buffer.extend(['M','O','_','O']);
 		if index == 4:
 			buffer[3] = 'V'
 		for i in range(4,len+1):	
 			buffer.append('\0')
+
 		if index == 1:
 		elif index == 2:
 			buffer[4] = '\x02'
@@ -203,22 +237,68 @@ class RovCon():
 		elif index == 4: 
 			buffer[15] = '\x04'
 			buffer[19] = '\x04'
-			for i in range(0,3)
-				if len(extraInput) >= 4:
-					buffer[i + 22] = extraInput[i]
-		elif index == 5:
+#			for i in range(0,3)
+#				if (len(extraInput) >= 4):
+#					buffer[i + 22] = extraInput[i]
+#				else:	
+#					buffer[i + 22] = extraInput[1]
+		elif index == 5:     # left wheel Forward
+			buffer[4] = '\xfa'
+			buffer[15] = '\x02'
+			buffer[19] = '\x01'
+			buffer[23] = '\x04'
+			buffer[24] = '\x0a'
+		elif index == 6:    # left wheel Backward
+			buffer[4] = '\xfa'
+			buffer[15] = '\x02'
+			buffer[19] = '\x01'
+			buffer[23] = '\x05'
+			buffer[24] = '\x0a'
+		elif index == 7:    # right wheel Forward
+			buffer[4] = '\xfa'
+			buffer[15] = '\x02'
+			buffer[19] = '\x01'
+			buffer[23] = '\x01'
+			buffer[24] = '\x0a'
+		elif index == 8:    # right whell backward
+			buffer[4] = '\xfa'
+			buffer[15] = '\x02'
+			buffer[19] = '\x01'
+			buffer[23] = '\x02'
+			buffer[24] = '\x0a'
+		elif index == 9:    # IR off(?)
+			buffer[4] = '\xff'
+		elif index == 10:   # switches infrared LED on
+			buffer[4] = '\x0e'
+			buffer[15] = '\x01'
+			buffer[19] = '\x01'
+			buffer[23] = '\x5e'
+		elif index == 11:   # switches infrared LED off
+			buffer[4] = '\x0e'
+			buffer[15] = '\x01'
+			buffer[19] = '\x01'
+			buffer[23] = '\x5f'
+		elif index == 12:   # stop left track
+			buffer[4] = '\xfa'
+			buffer[15] = '\x02'
+			buffer[19] = '\x01'
+			buffer[23] = '\x02'
+			buffer[24] = '\x00'
+		elif index == 13:  # stop right track
+			buffer[4] = '\xfa'
+			buffer[15] = '\x02'
+			buffer[19] = '\x01'
+			buffer[23] = '\x04'
+			buffer[24] = '\x00'
+		msg = buffer.tostring()
+		moveSocket.send(msg)
+		if index != 4:
+			self.moveSocket.send(msg)   				
 
-		elif index == 6:
 
-		elif index == 7:
 
-		elif index == 8:
 
-		elif index == 9:
 
-		elif index == 10:
-
-		elif index == 11:
 
 	# For now just get one frame, we have to make this a loop of course
 	print 'Get video frame!'
