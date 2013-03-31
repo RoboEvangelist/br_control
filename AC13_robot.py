@@ -23,6 +23,8 @@ class RovCon():
 		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.moveSocket.connect((host,port))
 		self.moveSocket.setblocking(1)
+		
+		# set up rover for communication
 		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\n
 			User-Agent: WifiCar/1.0 CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\n
 			Accept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
@@ -149,8 +151,10 @@ class RovCon():
 		msg = mc.tostring()
 		self.videoSocket.send(msg)
 
+	def disconnectRover(self):
+		
 
-	def writeCmd(self, object, index, extraInput)	
+	def writeCmd(self, index, extraInput)	
 #	     Robot's Track Motion Control Packets
 
 # 		     The left brake command is 
@@ -237,11 +241,11 @@ class RovCon():
 		elif index == 4: 
 			buffer[15] = '\x04'
 			buffer[19] = '\x04'
-#			for i in range(0,3)
-#				if (len(extraInput) >= 4):
-#					buffer[i + 22] = extraInput[i]
-#				else:	
-#					buffer[i + 22] = extraInput[1]
+			for i in range(0,3)
+				if (len(extraInput) >= 4):
+					buffer[i + 22] = extraInput[i]
+				else:	
+					buffer[i + 22] = '\0'     #extraInput[1]
 		elif index == 5:     # left wheel Forward
 			buffer[4] = '\xfa'
 			buffer[15] = '\x02'
@@ -294,6 +298,8 @@ class RovCon():
 		moveSocket.send(msg)
 		if index != 4:
 			self.moveSocket.send(msg)   				
+		else:
+			self.videoSocket.send(msg)
 
 
 
