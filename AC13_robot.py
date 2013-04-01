@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('beginner_tutorials')
-import rospy
+#import roslib; roslib.load_manifest('beginner_tutorials')
+#import rospy
 from std_msgs.msg import String
 
 import socket
@@ -10,10 +10,10 @@ import struct
 
 class RovCon(): 
 	def __init__(self):
-        super(Interface, self).__init__()
+	#	super(RovCon, self).__init__()
 
-		self.pub = rospy.Publisher('chatter', String)
-		self.rospy.init_node('roboTalker')
+# 		self.pub = rospy.Publisher('chatter', String)
+#		self.rospy.init_node('roboTalker')
 		self.host = '192.168.1.100'
 		self.port = 80
 		self.maxTCPBuffer = 2048
@@ -21,27 +21,25 @@ class RovCon():
 
 	def initConnection(self):
 		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.moveSocket.connect((host,port))
+		self.moveSocket.connect((self.host,self.port))
 		self.moveSocket.setblocking(1)
 		
 		# set up rover for communication
-		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\n
-			User-Agent: WifiCar/1.0 CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\n
-			Accept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
+		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n\r\n'
 		self.moveSocket.send(msg)
 
 		# Get the return message
 		print 'Wait for HTML return msg'
 		data = ''
 		while len(data) == 0:
-			data = self.moveSocket.recv(size)
+			data = self.moveSocket.recv(self.maxTCPBuffer)
 		print data
 
 		self.moveSocket.close()
 
 		# We have to close the socket and open it again
 		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.moveSocket.connect((host,port))
+		self.moveSocket.connect((self.host,self.port))
 		self.moveSocket.setblocking(1)
 
 		# The first MO_O command
@@ -58,7 +56,7 @@ class RovCon():
 		print 'Wait for result on 1st MO command'
 		data = ''
 		while len(data) == 0:
-			data = self.moveSocket.recv(size)
+			data = self.moveSocket.recv(self.maxTCPBuffer)
 		ldata = list(data)
 		msg_i = ldata[4]
 
@@ -92,7 +90,7 @@ class RovCon():
 		print 'Wait for next MO msg'
 		data = ''
 		while len(data) == 0:
-			data = self.moveSocket.recv(size)
+			data = self.moveSocket.recv(self.maxTCPBuffer)
 		#print list(data)
 
 		mc = array.array('c')
@@ -119,12 +117,12 @@ class RovCon():
 		print 'Wait for next MO msg'
 		data = ''
 		while len(data) == 0:
-			data = self.moveSocket.recv(size)
+			data = self.moveSocket.recv(self.maxTCPBuffer)
 		#print list(data)
 
 		# Create new socket for video
 		self.videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.videoSocket.connect((host,port))
+		self.videoSocket.connect((self.host,self.port))
 		self.videoSocket.setblocking(1)
 
 		mc = array.array('c')
@@ -155,7 +153,7 @@ class RovCon():
 		self.moveSocket.close()
 		self.videoSocket.close()
 
-	def writeCmd(self, index, extraInput)	
+	def writeCmd(self, index, extraInput):	
 #	     Robot's Track Motion Control Packets
 
 # 		     The left brake command is 
@@ -194,7 +192,7 @@ class RovCon():
 			len = 48
 		elif index == 3:
 			len = 23
-		elif index == 4 
+		elif index == 4: 
 			len = 26 
 		elif index == 5:
 			len = 24
@@ -223,6 +221,7 @@ class RovCon():
 			buffer.append('\0')
 
 		if index == 1:
+			buffer[4] = '\x02'
 		elif index == 2:
 			buffer[4] = '\x02'
 			buffer[15] = '\x1a'
@@ -242,7 +241,7 @@ class RovCon():
 		elif index == 4: 
 			buffer[15] = '\x04'
 			buffer[19] = '\x04'
-			for i in range(0,3)
+			for i in range(0,3):
 				if (len(extraInput) >= 4):
 					buffer[i + 22] = extraInput[i]
 				else:	
@@ -342,10 +341,10 @@ class RovCon():
 
 
 if __name__ == '__main__':
-    try:
+    #try:
        # roboTalker()
 		rover = RovCon() 
 		rover.writeCmd(7,0)
 		rover.disconnectRover()
-    except rospy.ROSInterruptException:
-        pass
+    #except rospy.ROSInterruptException:
+     #   pass
