@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#import roslib; roslib.load_manifest('beginner_tutorials')
-#import rospy
+import roslib; roslib.load_manifest('beginner_tutorials')
+import rospy
 from std_msgs.msg import String
 
 import socket
@@ -341,10 +341,26 @@ class RovCon():
 
 
 if __name__ == '__main__':
-    #try:
-       # roboTalker()
-		rover = RovCon() 
-		rover.writeCmd(7,0)
-		rover.disconnectRover()
-    #except rospy.ROSInterruptException:
-     #   pass
+	#pub = rospy.Publisher('chatter', String)
+	#rospy.init_node('roboTalker')
+    try:
+	pub = rospy.Publisher('chatter', String)
+	rospy.init_node('AC13_robot')
+	rover = RovCon() 
+	counter = 0
+	while counter != 40:
+		str = "robot moves %s" % rospy.get_time()
+		rospy.loginfo(str)
+		pub.publish(String(str))
+		rospy.sleep(1.0)
+		if counter%2 == 0:
+			rover.writeCmd(7,0)
+			rover.writeCmd(5,0)
+		else:
+			rover.writeCmd(6,0)
+			rover.writeCmd(8,0)
+		rospy.sleep(1.0)
+
+	rover.disconnectRover()
+    except rospy.ROSInterruptException:
+        pass
