@@ -5,15 +5,12 @@ from std_msgs.msg import String
 
 import socket
 import time
+import datetime
 import array
 import struct
 
 class RovCon(): 
 	def __init__(self):
-	#	super(RovCon, self).__init__()
-
-# 		self.pub = rospy.Publisher('chatter', String)
-#		self.rospy.init_node('roboTalker')
 		self.host = '192.168.1.100'
 		self.port = 80
 		self.maxTCPBuffer = 2048
@@ -154,7 +151,7 @@ class RovCon():
 		self.videoSocket.close()
 
 	def writeCmd(self, index, extraInput):	
-#	     Robot's Track Motion Control Packets
+#	     Robot's Control Packets
 
 # 		     The left brake command is 
 # 		      1 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
@@ -300,6 +297,39 @@ class RovCon():
 		else:
 			self.moveSocket.send(msg)
 
+# robot's speed is ~2 feet/second
+
+	def moveForward(self, distance, speed):
+		speed = 2
+		moveTime = distance/speed
+		iniTime = time.time()
+		deltaTime = 0
+		while deltaTime <= moveTime:
+			self.writeCmd(7,0)
+			self.writeCmd(5,0)
+			deltaTime = time.time() - iniTime
+		# stop tracks
+		self.writeCmd(12,0)
+		self.writeCmd(13,0)
+
+	def moveLeftForward(self, distance, speed):
+		speed = 1
+		moveTime = distance/speed
+		iniTime = time.time()
+		deltaTime = 0
+	#	while deltaTime <= moveTime:       
+		self.writeCmd(7,0)
+	#		deltaTime = datetime.datetime.now() - deltaTime  
+		# stop tracks
+		self.writeCmd(13,0)
+
+
+
+
+
+
+
+
 # 		# For now just get one frame, we have to make this a loop of course
 #		print 'Get video frame!'
 #		data = ''
@@ -333,33 +363,24 @@ class RovCon():
 #		videoSocket.close()
 #		videoSocket.close()
 #
-		#while not rospy.is_shutdown():
-		#	str = "robot connected %s" % rospy.get_time()
-		#	rospy.loginfo(str)
-		#	pub.publish(String(str))
-		#	rospy.sleep(1.0)
 
 
 if __name__ == '__main__':
-	#pub = rospy.Publisher('chatter', String)
-	#rospy.init_node('roboTalker')
     try:
 	pub = rospy.Publisher('chatter', String)
 	rospy.init_node('AC13_robot')
 	rover = RovCon() 
 	counter = 0
-	while counter != 40:
+	distance = 0.5    # feet
+	speed = 1         # feet/sec
+	while not rospy.is_shutdown(): 
 		str = "robot moves %s" % rospy.get_time()
 		rospy.loginfo(str)
 		pub.publish(String(str))
 		rospy.sleep(1.0)
-		if counter%2 == 0:
-			rover.writeCmd(7,0)
-			rover.writeCmd(5,0)
-		else:
-			rover.writeCmd(6,0)
-			rover.writeCmd(8,0)
+		rover.moveForward(distance,speed)
 		rospy.sleep(1.0)
+		counter = counter + 1
 
 	rover.disconnectRover()
     except rospy.ROSInterruptException:
