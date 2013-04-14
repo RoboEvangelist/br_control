@@ -3,7 +3,7 @@ import roslib; roslib.load_manifest('beginner_tutorials')
 import rospy
 from std_msgs.msg import String
 
-import cv
+import cv2
 
 import socket
 import time
@@ -332,7 +332,7 @@ class RovCon():
 		ldata = []
 		start = ''
 		while len(data) == 0:
-			data = videoSocket.recv(size)
+			data = self.videoSocket.recv(self.maxTCPBuffer)
 			ld = list(data)
 			mc = array.array('c')
 			mc.extend (ld[0:4])
@@ -355,10 +355,11 @@ class RovCon():
 			jpgfile.write(i)
 		# Close file handlers
 		jpgfile.close()
-		cv.NamedWindow('robot window', cv.CV_WINDOW_AUTOSIZE)
-		image = cv.LoadImage('test.jpg', cv.CV_LOAD_IMAGE_COLOR)
-		cv.ShowImage('robot window', image)
 
+		cv2.NamedWindow('robot window', cv2.CV_WINDOW_AUTOSIZE)
+		image = cv2.LoadImage('test.jpg', cv2.CV_LOAD_IMAGE_COLOR)
+		cv2.ShowImage('robot window', image)
+		cv2.WaitKey(2)
 
 if __name__ == '__main__':
     try:
