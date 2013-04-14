@@ -356,10 +356,12 @@ class RovCon():
 		# Close file handlers
 		jpgfile.close()
 
-		cv2.NamedWindow('robot window', cv2.CV_WINDOW_AUTOSIZE)
-		image = cv2.LoadImage('test.jpg', cv2.CV_LOAD_IMAGE_COLOR)
-		cv2.ShowImage('robot window', image)
-		cv2.WaitKey(2)
+		image = cv2.imread('test.jpg')
+		#cv2.NamedWindow('hola', WINDOW_AUTOSIZE)
+		#cv2.ShowImage('robot window', image)
+		cv2.imshow('hola', image)
+		cv2.waitKey(100)
+		cv2.destroyWindow('test.jpg')
 
 if __name__ == '__main__':
     try:
