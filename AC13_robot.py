@@ -3,6 +3,8 @@ import roslib; roslib.load_manifest('beginner_tutorials')
 import rospy
 from std_msgs.msg import String
 
+import cv
+
 import socket
 import time
 import datetime
@@ -323,46 +325,39 @@ class RovCon():
 		# stop tracks
 		self.writeCmd(13,0)
 
+	def displayImage(self):
+ 		# For now just get one frame, we have to make this a loop of course
+		print 'Get video frame!'
+		data = ''
+		ldata = []
+		start = ''
+		while len(data) == 0:
+			data = videoSocket.recv(size)
+			ld = list(data)
+			mc = array.array('c')
+			mc.extend (ld[0:4])
 
+			if (start == ''):
+				start = 'first'
+			else:
+				start = mc.tostring()
+			if (start == 'MO_V'):
+				break
+			else:
+				ldata.extend(ld)
 
-
-
-
-
-
-# 		# For now just get one frame, we have to make this a loop of course
-#		print 'Get video frame!'
-#		data = ''
-#		ldata = []
-#		start = ''
-#		while len(data) == 0:
-#			data = videoSocket.recv(size)
-#			ld = list(data)
-#			mc = array.array('c')
-#			mc.extend (ld[0:4])
-
-#			if (start == ''):
-#				start = 'first'
-#			else:
-#				start = mc.tostring()
-#			if (start == 'MO_V'):
-#				break
-#			else:
-#				ldata.extend(ld)
-#
-#			data = ''
+			data = ''
 
 		# Write image to "test.jpg"
-#		img = ldata[36:]
-#		jpgfile = open('test.jpg','wb')
-#		for i in img:
-#			jpgfile.write(i)
-#
-#		# Close file handlers
-#		jpgfile.close()
-#		videoSocket.close()
-#		videoSocket.close()
-#
+		img = ldata[36:]
+		jpgfile = open('test.jpg','wb')
+		for i in img:
+			jpgfile.write(i)
+		# Close file handlers
+		jpgfile.close()
+		cv.NamedWindow('robot window', cv.CV_WINDOW_AUTOSIZE)
+		image = cv.LoadImage('test.jpg', cv.CV_LOAD_IMAGE_COLOR)
+		cv.ShowImage('robot window', image)
 
 
 if __name__ == '__main__':
@@ -372,15 +367,15 @@ if __name__ == '__main__':
 	rover = RovCon() 
 	counter = 0
 	distance = 0.5    # feet
-	speed = 1         # feet/sec
+	speed = 1         # foot/sec
 	while not rospy.is_shutdown(): 
 		str = "robot moves %s" % rospy.get_time()
 		rospy.loginfo(str)
 		pub.publish(String(str))
-		rospy.sleep(1.0)
-		rover.moveForward(distance,speed)
-		rospy.sleep(1.0)
-		counter = counter + 1
+#		rover.moveForward(distance,speed)
+		rover.displayImage()
+		rospy.sleep(0.1)
+#		counter = counter + 1
 
 	rover.disconnectRover()
     except rospy.ROSInterruptException:
