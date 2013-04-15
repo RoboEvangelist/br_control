@@ -17,6 +17,7 @@ class RovCam():
 		self.port = 80
 		self.maxTCPBuffer = 2048
 		self.initConnection()
+
 	def initConnection(self):
 		# set up rover for communication
 		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 \
@@ -51,4 +52,29 @@ class RovCam():
 		#print mc, identifier of the image(?)
 		msg = mc.tostring()
 		self.videoSocket.send(msg)
+
+	def disconnectVideo(self):
+		self.videoSocket.close()
+
+	def writeCmd(self, index, extraInput):	
+#	    Robot's Control Packets
+		len = 26                          # actuall length of the video buffer
+		buffer = array.array('c')
+		buffer.extend(['M','O','_','V']);
+		for i in range(4,len+1):	
+			buffer.append('\0')
+		buffer[15] = '\x04'
+		buffer[19] = '\x04'
+		for i in range(0,3):
+			if (len(extraInput) >= 4):
+				buffer[i + 22] = extraInput[i]
+			else:	
+				buffer[i + 22] = '\0'     #extraInput[1]
+		
+		msg = buffer.tostring()
+		self.videoSocket.send(msg) 
+
+
+
+
 
