@@ -113,24 +113,24 @@ class RovCon():
         self.moveSocket.send(msg)
 
 		print 'Wait for next MO msg'
-		data = ''
-		while len(data) == 0:
-			data = self.moveSocket.recv(self.maxTCPBuffer)
+        data = ''
+        while len(data) == 0:
+            data = self.moveSocket.recv(self.maxTCPBuffer)
 		#print list(data)
-		self.data = data
+        self.data = data
 
-	def connectRover(self):	
-		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.moveSocket.connect((self.host,self.port))
-		self.moveSocket.setblocking(1)
+    def connectRover(self):	
+        self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.moveSocket.connect((self.host,self.port))
+        self.moveSocket.setblocking(1)
 
-	def disconnectRover(self):
-		self.moveSocket.close()
+    def disconnectRover(self):
+        self.moveSocket.close()
 
-	def returnData(self):
-		return self.data
+    def returnData(self):
+        return self.data
 
-	def writeCmd(self, index, extraInput):	
+    def writeCmd(self, index, extraInput):	
 #	     Robot's Control Packets
 
 # 		     The left brake command is 
@@ -162,61 +162,61 @@ class RovCon():
 		# index is integer which specifies which command to send
 		#extraInput is a javaArray of Bytes
 		
-		len = 0
-		if index == 1:
-			len = 22
-		elif index == 2:
-			len = 48
-		elif index == 3:
-			len = 23
-		elif index == 4: 
-			len = 26 
-		elif index == 5:
-			len = 24
-		elif index == 6:
-			len = 24
-		elif index == 7:
-			len = 24
-		elif index == 8:
-			len = 24
-		elif index == 9:
-			len = 22
-		elif index == 10:
-			len = 23
-		elif index == 11:
-			len = 23
-		elif index == 12:
-			len = 24
-		elif index == 13:
-			len = 24
+        len = 0
+        if index == 1:
+            len = 22
+        elif index == 2:
+            len = 48
+        elif index == 3:
+            len = 23
+        elif index == 4: 
+            len = 26 
+        elif index == 5:
+            len = 24
+        elif index == 6:
+            len = 24
+        elif index == 7:
+            len = 24
+        elif index == 8:
+            len = 24
+        elif index == 9:
+            len = 22
+        elif index == 10:
+            len = 23
+        elif index == 11:
+            len = 23
+        elif index == 12:
+            len = 24
+        elif index == 13:
+            len = 24
 
-		buffer = array.array('c')
-		buffer.extend(['M','O','_','O']);
-		if index == 4:
-			buffer[3] = 'V'
-		for i in range(4,len+1):	
-			buffer.append('\0')
+        buffer = array.array('c')
+        buffer.extend(['M','O','_','O']);
+        if index == 4:
+            buffer[3] = 'V'
+        for i in range(4,len+1):	
+            buffer.append('\0')
 
-		if index == 1:
-			buffer[4] = '\x02'
-		elif index == 2:
-			buffer[4] = '\x02'
-			buffer[15] = '\x1a'
-			buffer[23] = 'A'
-			buffer[24] = 'C'
-			buffer[25] = '1'
-			buffer[26] = '3'
-			buffer[36] = 'A'
-			buffer[37] = 'C'
-			buffer[38] = '1'
-			buffer[39] = '3'
-		elif index == 3:
-			buffer[4] = '\x04'
-			buffer[15] = '\x01'
-			buffer[19] = '\x01'
-			buffer[23] = '\x02'
-		elif index == 4: 
-			buffer[15] = '\x04'
+        if index == 1:
+            buffer[4] = '\x02'
+        elif index == 2:
+            buffer[4] = '\x02'
+            buffer[15] = '\x1a'
+            buffer[23] = 'A'
+            buffer[24] = 'C'
+            buffer[25] = '1'
+            buffer[26] = '3'
+            buffer[36] = 'A'
+            buffer[37] = 'C'
+            buffer[38] = '1'
+            buffer[39] = '3'
+        elif index == 3:
+            buffer[4] = '\x04'
+            buffer[15] = '\x01'
+            buffer[19] = '\x01'
+            buffer[23] = '\x02'
+        elif index == 4: 
+            buffer[15] = '\x04'
 			buffer[19] = '\x04'
 			for i in range(0,3):
 				if (len(extraInput) >= 4):
