@@ -305,22 +305,22 @@ class RovCon():
 
 if __name__ == '__main__':
     try:
-    pub = rospy.Publisher('chatter', String)
-    rospy.init_node('AC13_robot')
-    rover = RovCon() 
-    video = RovCam(rover.returnData())
-    counter = 0
-    distance = 0.5    # feet
-    speed = 1         # foot/sec
-    while not rospy.is_shutdown(): 
-        str = "robot moves %s" % rospy.get_time()
-        rospy.loginfo(str)
-        pub.publish(String(str))
-#       rover.moveForward(distance,speed)
-        rover.displayImage()
-        rospy.sleep(0.1)
-#       counter = counter + 1
+        pub = rospy.Publisher('chatter', String)
+        rospy.init_node('AC13_robot')
+        rover = RovCon() 
+        video = RovCam(rover.returnData())
+        counter = 0
+        distance = 0.5    # feet
+        speed = 1         # foot/sec
+        while not rospy.is_shutdown(): 
+            str = "robot moves %s" % rospy.get_time()
+            rospy.loginfo(str)
+            pub.publish(String(str))
+#           rover.moveForward(distance,speed)
+            rover.displayImage()
+            rospy.sleep(0.1)
+#           counter = counter + 1
 
-    rover.disconnectRover()
+        rover.disconnectRover()
     except rospy.ROSInterruptException:
         pass
