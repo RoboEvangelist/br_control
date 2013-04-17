@@ -53,7 +53,7 @@ class RovCon():
 
         print 'Wait for result on 1st MO command'
         data = ''
-        while len(data) == 0
+        while len(data) == 0:
             data = self.moveSocket.recv(self.maxTCPBuffer)
         ldata = list(data)
         msg_i = ldata[4]
