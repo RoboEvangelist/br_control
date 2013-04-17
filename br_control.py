@@ -292,73 +292,35 @@ class RovCon():
         self.writeCmd(12,0)
         self.writeCmd(13,0)
 
-	def moveLeftForward(self, distance, speed):
-		speed = 1
-		moveTime = distance/speed
-		iniTime = time.time()
-		deltaTime = 0
-	#	while deltaTime <= moveTime:       
-		self.writeCmd(7,0)
-	#		deltaTime = datetime.datetime.now() - deltaTime  
+    def moveLeftForward(self, distance, speed):
+        speed = 1
+        moveTime = distance/speed
+        iniTime = time.time()
+        deltaTime = 0
+    #	while deltaTime <= moveTime:       
+        self.writeCmd(7,0)
+    #		deltaTime = datetime.datetime.now() - deltaTime  
 		# stop tracks
-		self.writeCmd(13,0)
-
-	def displayImage(self):
- 		# For now just get one frame, we have to make this a loop of course
-		print 'Get video frame!'
-		data = ''
-		ldata = []
-		start = ''
-		while len(data) == 0:
-			data = self.videoSocket.recv(self.maxTCPBuffer)
-			ld = list(data)
-			mc = array.array('c')
-			mc.extend (ld[0:4])
-
-			if (start == ''):
-				start = 'first'
-			else:
-				start = mc.tostring()
-			if (start == 'MO_V'):
-				break
-			else:
-				ldata.extend(ld)
-
-			data = ''
-
-		# Write image to "test.jpg"
-		img = ldata[36:]
-		jpgfile = open('test.jpg','wb')
-		for i in img:
-			jpgfile.write(i)
-		# Close file handlers
-		jpgfile.close()
-
-		image = cv2.imread('test.jpg')
-		#cv2.NamedWindow('hola', WINDOW_AUTOSIZE)
-		#cv2.ShowImage('robot window', image)
-		cv2.imshow('hola', image)
-		cv2.waitKey(100)
-		cv2.destroyWindow('test.jpg')
+       self.writeCmd(13,0)
 
 if __name__ == '__main__':
     try:
-	pub = rospy.Publisher('chatter', String)
-	rospy.init_node('AC13_robot')
-	rover = RovCon() 
-	video = RovCam(rover.returnData())
-	counter = 0
-	distance = 0.5    # feet
-	speed = 1         # foot/sec
-	while not rospy.is_shutdown(): 
-		str = "robot moves %s" % rospy.get_time()
-		rospy.loginfo(str)
-		pub.publish(String(str))
-#		rover.moveForward(distance,speed)
-		rover.displayImage()
-		rospy.sleep(0.1)
-#		counter = counter + 1
+    pub = rospy.Publisher('chatter', String)
+    rospy.init_node('AC13_robot')
+    rover = RovCon() 
+    video = RovCam(rover.returnData())
+    counter = 0
+    distance = 0.5    # feet
+    speed = 1         # foot/sec
+    while not rospy.is_shutdown(): 
+        str = "robot moves %s" % rospy.get_time()
+        rospy.loginfo(str)
+        pub.publish(String(str))
+#       rover.moveForward(distance,speed)
+        rover.displayImage()
+        rospy.sleep(0.1)
+#       counter = counter + 1
 
-	rover.disconnectRover()
+    rover.disconnectRover()
     except rospy.ROSInterruptException:
         pass

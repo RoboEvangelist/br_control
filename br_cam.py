@@ -76,3 +76,42 @@ class RovCam():
 		
 		msg = buffer.tostring()
 		self.videoSocket.send(msg) 
+
+    def displayImage(self):
+ 		# For now just get one frame, we have to make this a loop of course
+        print 'Get video frame!'
+        data = ''
+		ldata = []
+		start = ''
+		while len(data) == 0:
+			data = self.videoSocket.recv(self.maxTCPBuffer)
+			ld = list(data)
+			mc = array.array('c')
+			mc.extend (ld[0:4])
+
+			if (start == ''):
+				start = 'first'
+			else:
+				start = mc.tostring()
+			if (start == 'MO_V'):
+				break
+			else:
+				ldata.extend(ld)
+
+			data = ''
+
+		# Write image to "test.jpg"
+		img = ldata[36:]
+		jpgfile = open('test.jpg','wb')
+		for i in img:
+			jpgfile.write(i)
+		# Close file handlers
+		jpgfile.close()
+
+		image = cv2.imread('test.jpg')
+		#cv2.NamedWindow('hola', WINDOW_AUTOSIZE)
+		#cv2.ShowImage('robot window', image)
+		cv2.imshow('hola', image)
+		cv2.waitKey(100)
+		cv2.destroyWindow('test.jpg')
+
