@@ -17,10 +17,8 @@ class RovCon():
 		self.initConnection()
 
 	def initConnection(self):
-		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.moveSocket.connect((self.host,self.port))
-		self.moveSocket.setblocking(1)
-		
+		self.connectRover()
+
 		# set up rover for communication
 		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: \
 		192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 CFNetwork/485.12.7 \
@@ -35,12 +33,9 @@ class RovCon():
 			data = self.moveSocket.recv(self.maxTCPBuffer)
 		print data
 
-		self.moveSocket.close()
-
 		# We have to close the socket and open it again
-		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.moveSocket.connect((self.host,self.port))
-		self.moveSocket.setblocking(1)
+		self.disconnnectRover()
+		self.connectRover()
 
 		# The first MO_O command
 		mc = array.array('c')
@@ -119,6 +114,11 @@ class RovCon():
 		while len(data) == 0:
 			data = self.moveSocket.recv(self.maxTCPBuffer)
 		#print list(data)
+
+	def connectRover(self):	
+		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.moveSocket.connect((self.host,self.port))
+		self.moveSocket.setblocking(1)
 
 	def disconnectRover(self):
 		self.moveSocket.close()

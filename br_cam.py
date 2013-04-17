@@ -25,9 +25,7 @@ class RovCam():
 		Connection: keep-alive\r\n\r\n'
 
 		# Create new socket for video
-		self.videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.videoSocket.connect((self.host,self.port))
-		self.videoSocket.setblocking(1)
+		self.connectRover()
 
 		mc = array.array('c')
 		mc.extend(['M','O','_','V']);
@@ -53,6 +51,11 @@ class RovCam():
 		msg = mc.tostring()
 		self.videoSocket.send(msg)
 
+	def connectRover(self):	
+		self.videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.videoSocket.connect((self.host,self.port))
+		self.videoSocket.setblocking(1)
+
 	def disconnectVideo(self):
 		self.videoSocket.close()
 
@@ -73,8 +76,3 @@ class RovCam():
 		
 		msg = buffer.tostring()
 		self.videoSocket.send(msg) 
-
-
-
-
-
