@@ -112,7 +112,7 @@ class RovCon():
         msg = mc.tostring()
         self.moveSocket.send(msg)
 
-		print 'Wait for next MO msg'
+        print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
             data = self.moveSocket.recv(self.maxTCPBuffer)
