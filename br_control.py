@@ -51,66 +51,66 @@ class RovCon():
         msg = mc.tostring()
         self.moveSocket.send(msg)
 
-		print 'Wait for result on 1st MO command'
-		data = ''
-		while len(data) == 0:
-			data = self.moveSocket.recv(self.maxTCPBuffer)
-		ldata = list(data)
-		msg_i = ldata[4]
+        print 'Wait for result on 1st MO command'
+        data = ''
+        while len(data) == 0
+            data = self.moveSocket.recv(self.maxTCPBuffer)
+        ldata = list(data)
+        msg_i = ldata[4]
 
 		# The second MO_O command
 		#49=4+1+10+1+7+4+9+4+9
-		mc = array.array('c')
-		mc.extend(['M','O','_','O']);
-		mc.extend('\x02')
-		i = 0
-		while i < 10:
-			mc.extend('\0')
-			i = i + 1
-		mc.extend('\x1a')
-		i = 0
-		while i < 7:
-			mc.extend('\0')
-			i = i + 1
-		mc.extend(['A','C','1','3']);
-		i = 0
-		while i < 9:
-			mc.extend('\0')
-			i = i + 1
-		mc.extend(['A','C','1','3']);
-		i = 0
-		while i < 9:
-			mc.extend('\0')
-			i = i + 1
-		msg = mc.tostring()
-		self.moveSocket.send(msg)
+        mc = array.array('c')
+        mc.extend(['M','O','_','O']);
+        mc.extend('\x02')
+        i = 0
+        while i < 10:
+            mc.extend('\0')
+            i = i + 1
+        mc.extend('\x1a')
+        i = 0
+        while i < 7:
+            mc.extend('\0')
+            i = i + 1
+        mc.extend(['A','C','1','3']);
+        i = 0
+        while i < 9:
+            mc.extend('\0')
+            i = i + 1
+        mc.extend(['A','C','1','3']);
+        i = 0
+        while i < 9:
+            mc.extend('\0')
+            i = i + 1
+        msg = mc.tostring()
+        self.moveSocket.send(msg)
 
-		print 'Wait for next MO msg'
-		data = ''
-		while len(data) == 0:
-			data = self.moveSocket.recv(self.maxTCPBuffer)
+        print 'Wait for next MO msg'
+        data = ''
+        while len(data) == 0:
+            data = self.moveSocket.recv(self.maxTCPBuffer)
 		#print list(data)
 
-		mc = array.array('c')
-		mc.extend(['M','O','_','O']);
-		mc.extend('\x04')
-		i = 0
-		while i < 10:
-			mc.extend('\0')
-			i = i + 1
-		mc.extend('\x01')
-		i = 0
-		while i < 3:
-			mc.extend('\0')
-			i = i + 1
-		mc.extend('\x01')
-		i = 0
-		while i < 3:
-			mc.extend('\0')
-			i = i + 1
-		mc.extend('\x02')
-		msg = mc.tostring()
-		self.moveSocket.send(msg)
+        mc = array.array('c')
+        mc.extend(['M','O','_','O']);
+        mc.extend('\x04')
+        i = 0
+        while i < 10:
+            mc.extend('\0')
+            i = i + 1
+        mc.extend('\x01')
+        i = 0
+        while i < 3:
+            mc.extend('\0')
+            i = i + 1
+            mc.extend('\x01')
+        i = 0
+        while i < 3:
+            mc.extend('\0')
+            i = i + 1
+        mc.extend('\x02')
+        msg = mc.tostring()
+        self.moveSocket.send(msg)
 
 		print 'Wait for next MO msg'
 		data = ''
