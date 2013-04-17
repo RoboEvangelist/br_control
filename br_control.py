@@ -217,80 +217,80 @@ class RovCon():
             buffer[23] = '\x02'
         elif index == 4: 
             buffer[15] = '\x04'
-			buffer[19] = '\x04'
-			for i in range(0,3):
-				if (len(extraInput) >= 4):
-					buffer[i + 22] = extraInput[i]
-				else:	
-					buffer[i + 22] = '\0'     #extraInput[1]
-		elif index == 5:     # left wheel Forward
-			buffer[4] = '\xfa'
-			buffer[15] = '\x02'
-			buffer[19] = '\x01'
-			buffer[23] = '\x04'
-			buffer[24] = '\x0a'
-		elif index == 6:    # left wheel Backward
-			buffer[4] = '\xfa'
-			buffer[15] = '\x02'
-			buffer[19] = '\x01'
-			buffer[23] = '\x05'
-			buffer[24] = '\x0a'
-		elif index == 7:    # right wheel Forward
-			buffer[4] = '\xfa'
-			buffer[15] = '\x02'
-			buffer[19] = '\x01'
-			buffer[23] = '\x01'
-			buffer[24] = '\x0a'
-		elif index == 8:    # right whell backward
-			buffer[4] = '\xfa'
-			buffer[15] = '\x02'
-			buffer[19] = '\x01'
-			buffer[23] = '\x02'
-			buffer[24] = '\x0a'
-		elif index == 9:    # IR off(?)
-			buffer[4] = '\xff'
-		elif index == 10:   # switches infrared LED on
-			buffer[4] = '\x0e'
-			buffer[15] = '\x01'
-			buffer[19] = '\x01'
-			buffer[23] = '\x5e'
-		elif index == 11:   # switches infrared LED off
-			buffer[4] = '\x0e'
-			buffer[15] = '\x01'
-			buffer[19] = '\x01'
-			buffer[23] = '\x5f'
-		elif index == 12:   # stop left track
-			buffer[4] = '\xfa'
-			buffer[15] = '\x02'
-			buffer[19] = '\x01'
-			buffer[23] = '\x02'
-			buffer[24] = '\x00'
-		elif index == 13:  # stop right track
-			buffer[4] = '\xfa'
-			buffer[15] = '\x02'
-			buffer[19] = '\x01'
-			buffer[23] = '\x04'
-			buffer[24] = '\x00'
-		msg = buffer.tostring()
-		if index == 4:
-			self.videoSocket.send(msg)   				
-		else:
-			self.moveSocket.send(msg)
+            buffer[19] = '\x04'
+            for i in range(0,3):
+                if (len(extraInput) >= 4):
+                    buffer[i + 22] = extraInput[i]
+                else:	
+                    buffer[i + 22] = '\0'     #extraInput[1]
+        elif index == 5:     # left wheel Forward
+            buffer[4] = '\xfa'
+            buffer[15] = '\x02'
+            buffer[19] = '\x01'
+            buffer[23] = '\x04'
+            buffer[24] = '\x0a'
+        elif index == 6:    # left wheel Backward
+            buffer[4] = '\xfa'
+            buffer[15] = '\x02'
+            buffer[19] = '\x01'
+            buffer[23] = '\x05'
+            buffer[24] = '\x0a'
+        elif index == 7:    # right wheel Forward
+            buffer[4] = '\xfa'
+            buffer[15] = '\x02'
+            buffer[19] = '\x01'
+            buffer[23] = '\x01'
+            buffer[24] = '\x0a'
+        elif index == 8:    # right whell backward
+            buffer[4] = '\xfa'
+            buffer[15] = '\x02'
+            buffer[19] = '\x01'
+            buffer[23] = '\x02'
+            buffer[24] = '\x0a'
+        elif index == 9:    # IR off(?)
+            buffer[4] = '\xff'
+        elif index == 10:   # switches infrared LED on
+            buffer[4] = '\x0e'
+            buffer[15] = '\x01'
+            buffer[19] = '\x01'
+            buffer[23] = '\x5e'
+        elif index == 11:   # switches infrared LED off
+            buffer[4] = '\x0e'
+            buffer[15] = '\x01'
+            buffer[19] = '\x01'
+            buffer[23] = '\x5f'
+        elif index == 12:   # stop left track
+            buffer[4] = '\xfa'
+            buffer[15] = '\x02'
+            buffer[19] = '\x01'
+            buffer[23] = '\x02'
+            buffer[24] = '\x00'
+        elif index == 13:  # stop right track
+            buffer[4] = '\xfa'
+            buffer[15] = '\x02'
+            buffer[19] = '\x01'
+            buffer[23] = '\x04'
+            buffer[24] = '\x00'
+        msg = buffer.tostring()
+        if index == 4:
+            self.videoSocket.send(msg)   				
+        else:
+            self.moveSocket.send(msg)
 
-# robot's speed is ~2 feet/second
+    # robot's speed is ~2 feet/second
 
-	def moveForward(self, distance, speed):
-		speed = 2
-		moveTime = distance/speed
-		iniTime = time.time()
-		deltaTime = 0
-		while deltaTime <= moveTime:
-			self.writeCmd(7,0)
-			self.writeCmd(5,0)
-			deltaTime = time.time() - iniTime
+    def moveForward(self, distance, speed):
+        speed = 2
+        moveTime = distance/speed
+        iniTime = time.time()
+        deltaTime = 0
+        while deltaTime <= moveTime:
+            self.writeCmd(7,0)
+            self.writeCmd(5,0)
+            deltaTime = time.time() - iniTime
 		# stop tracks
-		self.writeCmd(12,0)
-		self.writeCmd(13,0)
+        self.writeCmd(12,0)
+        self.writeCmd(13,0)
 
 	def moveLeftForward(self, distance, speed):
 		speed = 1
