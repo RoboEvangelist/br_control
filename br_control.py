@@ -301,7 +301,7 @@ class RovCon():
         self.writeCmd(7,0)
     #		deltaTime = datetime.datetime.now() - deltaTime  
 		# stop tracks
-       self.writeCmd(13,0)
+        self.writeCmd(13,0)
 
 if __name__ == '__main__':
     try:
