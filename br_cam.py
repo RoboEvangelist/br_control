@@ -12,13 +12,13 @@ import array
 import struct
 
 class RovCam(): 
-	def __init__(self):
+	def __init__(self, data):
 		self.host = '192.168.1.100'
 		self.port = 80
 		self.maxTCPBuffer = 2048
-		self.initConnection()
+		self.initConnection(data)     #image id is taken from data 
 
-	def initConnection(self):
+	def initConnection(self, data):
 		# set up rover for communication
 		msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 \
 		CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\n \

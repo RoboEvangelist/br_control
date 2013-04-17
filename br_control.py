@@ -3,6 +3,8 @@ import roslib; roslib.load_manifest('beginner_tutorials')
 import rospy
 from std_msgs.msg import String
 
+import br_cam
+
 import socket
 import time
 import datetime
@@ -15,6 +17,7 @@ class RovCon():
 		self.port = 80
 		self.maxTCPBuffer = 2048
 		self.initConnection()
+		self.data = ''
 
 	def initConnection(self):
 		self.connectRover()
@@ -114,6 +117,7 @@ class RovCon():
 		while len(data) == 0:
 			data = self.moveSocket.recv(self.maxTCPBuffer)
 		#print list(data)
+		self.data = data
 
 	def connectRover(self):	
 		self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -122,6 +126,9 @@ class RovCon():
 
 	def disconnectRover(self):
 		self.moveSocket.close()
+
+	def returnData(self):
+		return self.data
 
 	def writeCmd(self, index, extraInput):	
 #	     Robot's Control Packets
@@ -339,6 +346,7 @@ if __name__ == '__main__':
 	pub = rospy.Publisher('chatter', String)
 	rospy.init_node('AC13_robot')
 	rover = RovCon() 
+	video = RovCam(rover.returnData())
 	counter = 0
 	distance = 0.5    # feet
 	speed = 1         # foot/sec
