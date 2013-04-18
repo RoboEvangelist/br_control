@@ -195,7 +195,7 @@ class RovCon():
         buffer.extend(['M', 'O', '_', 'O'])
         if index == 4:
             buffer[3] = 'V'
-        for i in range(4,len+1):	
+        for i in range(4, len+1):	
             buffer.append('\0')
 
         if index == 1:
@@ -219,7 +219,7 @@ class RovCon():
         elif index == 4: 
             buffer[15] = '\x04'
             buffer[19] = '\x04'
-            for i in range(0,3):
+            for i in range(0, 3):
                 if (len(extra_input) >= 4):
                     buffer[i + 22] = extra_input[i]
                 else:	
@@ -279,27 +279,27 @@ class RovCon():
 
     def move_forward(self, distance, speed):
         speed = 2
-        moveTime = distance/speed
-        iniTime = time.time()
-        deltaTime = 0
-        while deltaTime <= moveTime:
-            self.write_cmd(7,0)
-            self.write_cmd(5,0)
-            deltaTime = time.time() - iniTime
+        move_time = distance/speed
+        init_time = time.time()
+        delta_time = 0
+        while delta_time <= move_time:
+            self.write_cmd(7, 0)
+            self.write_cmd(5, 0)
+            delta_time = time.time() - init_time
 		# stop tracks
-        self.write_cmd(12,0)
-        self.write_cmd(13,0)
+        self.write_cmd(12, 0)
+        self.write_cmd(13, 0)
 
     def move_left_forward(self, distance, speed):
         speed = 1
-        moveTime = distance/speed
-        iniTime = time.time()
-        deltaTime = 0
-    #	while deltaTime <= moveTime:       
-        self.write_cmd(7,0)
-    #		deltaTime = datetime.datetime.now() - deltaTime  
+        move_time = distance/speed
+        init_time = time.time()
+        delta_time = 0
+    #	while delta_time <= move_time:       
+        self.write_cmd(7, 0)
+    #		delta_time = datetime.datetime.now() - delta_time  
 		# stop tracks
-        self.write_cmd(13,0)
+        self.write_cmd(13, 0)
 
 if __name__ == '__main__':
     try:
