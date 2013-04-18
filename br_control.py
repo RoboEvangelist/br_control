@@ -28,13 +28,13 @@ class RovCon():
         Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: \
         en-us\r\nAccept-Encoding: gzip, deflate\r\n \
         Connection: keep-alive\r\n\r\n'
-        self.moveSocket.send(msg)
+        self.move_socket.send(msg)
 
 		# Get the return message
         print 'Wait for HTML return msg'
         data = ''
         while len(data) == 0:
-            data = self.moveSocket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.maxTCPBuffer)
         print data
 
 		# We have to close the socket and open it again
@@ -50,12 +50,12 @@ class RovCon():
             mc.extend('\0')
             i = i + 1
         msg = mc.tostring()
-        self.moveSocket.send(msg)
+        self.move_socket.send(msg)
 
         print 'Wait for result on 1st MO command'
         data = ''
         while len(data) == 0:
-            data = self.moveSocket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.maxTCPBuffer)
         ldata = list(data)
         msg_i = ldata[4]
 
@@ -84,12 +84,12 @@ class RovCon():
             mc.extend('\0')
             i = i + 1
         msg = mc.tostring()
-        self.moveSocket.send(msg)
+        self.move_socket.send(msg)
 
         print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
-            data = self.moveSocket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.maxTCPBuffer)
 		#print list(data)
 
         mc = array.array('c')
@@ -111,22 +111,22 @@ class RovCon():
             i = i + 1
         mc.extend('\x02')
         msg = mc.tostring()
-        self.moveSocket.send(msg)
+        self.move_socket.send(msg)
 
         print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
-            data = self.moveSocket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.maxTCPBuffer)
 		#print list(data)
         self.data = data
 
     def connect_rover(self):	
-        self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.moveSocket.connect((self.host,self.port))
-        self.moveSocket.setblocking(1)
+        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.move_socket.connect((self.host,self.port))
+        self.move_socket.setblocking(1)
 
     def disconnect_rover(self):
-        self.moveSocket.close()
+        self.move_socket.close()
 
     def return_data(self):
         return self.data
@@ -273,10 +273,7 @@ class RovCon():
             buffer[23] = '\x04'
             buffer[24] = '\x00'
         msg = buffer.tostring()
-        if index == 4:
-            self.videoSocket.send(msg)   				
-        else:
-            self.moveSocket.send(msg)
+        self.move_socket.send(msg)
 
     # robot's speed is ~2 feet/second
 
