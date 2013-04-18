@@ -15,7 +15,7 @@ class RovCon():
     def __init__(self):
         self.host = '192.168.1.100'
         self.port = 80
-        self.maxTCPBuffer = 2048
+        self.max_tcp_buffer = 2048
         self.init_connection()
         self.data = ''
 
@@ -34,95 +34,95 @@ class RovCon():
         print 'Wait for HTML return msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.max_tcp_buffer)
         print data
 
 		# We have to close the socket and open it again
-        self.disconnnect_rover()
+        self.disconnect_rover()
         self.connect_rover()
 
 		# The first MO_O command
-        mc = array.array('c')
-        mc.extend(['M','O','_','O'])
+        m_c = array.array('c')
+        m_c.extend(['M', 'O', '_', 'O'])
         i = 0
-        mc.extend('\x00')
+        m_c.extend('\x00')
         while i < 18:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        msg = mc.tostring()
+        msg = m_c.tostring()
         self.move_socket.send(msg)
 
         print 'Wait for result on 1st MO command'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.maxTCPBuffer)
-        ldata = list(data)
-        msg_i = ldata[4]
+            data = self.move_socket.recv(self.max_tcp_buffer)
+        #ldata = list(data)
+        # msg_i = ldata[4]
 
 		# The second MO_O command
 		#49=4+1+10+1+7+4+9+4+9
-        mc = array.array('c')
-        mc.extend(['M','O','_','O'])
-        mc.extend('\x02')
+        m_c = array.array('c')
+        m_c.extend(['M', 'O', '_', 'O'])
+        m_c.extend('\x02')
         i = 0
         while i < 10:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        mc.extend('\x1a')
+        m_c.extend('\x1a')
         i = 0
         while i < 7:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        mc.extend(['A','C','1','3'])
+        m_c.extend(['A', 'C', '1', '3'])
         i = 0
         while i < 9:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        mc.extend(['A','C','1','3'])
+        m_c.extend(['A', 'C', '1', '3'])
         i = 0
         while i < 9:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        msg = mc.tostring()
+        msg = m_c.tostring()
         self.move_socket.send(msg)
 
         print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.max_tcp_buffer)
 		#print list(data)
 
-        mc = array.array('c')
-        mc.extend(['M','O','_','O'])
-        mc.extend('\x04')
+        m_c = array.array('c')
+        m_c.extend(['M', 'O', '_', 'O'])
+        m_c.extend('\x04')
         i = 0
         while i < 10:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        mc.extend('\x01')
+        m_c.extend('\x01')
         i = 0
         while i < 3:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-            mc.extend('\x01')
+            m_c.extend('\x01')
         i = 0
         while i < 3:
-            mc.extend('\0')
+            m_c.extend('\0')
             i = i + 1
-        mc.extend('\x02')
-        msg = mc.tostring()
+        m_c.extend('\x02')
+        msg = m_c.tostring()
         self.move_socket.send(msg)
 
         print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.maxTCPBuffer)
+            data = self.move_socket.recv(self.max_tcp_buffer)
 		#print list(data)
         self.data = data
 
     def connect_rover(self):	
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.move_socket.connect((self.host,self.port))
+        self.move_socket.connect((self.host, self.port))
         self.move_socket.setblocking(1)
 
     def disconnect_rover(self):
@@ -131,7 +131,7 @@ class RovCon():
     def return_data(self):
         return self.data
 
-    def write_cmd(self, index, extraInput):	
+    def write_cmd(self, index, extra_input):	
 #	     Robot's Control Packets
 
 # 		     The left brake command is 
@@ -161,7 +161,7 @@ class RovCon():
 # 		      0010 00 00 00 01 00 00 00 02 0a
  
 		# index is integer which specifies which command to send
-		#extraInput is a javaArray of Bytes
+		#extra_input is a javaArray of Bytes
 		
         len = 0
         if index == 1:
@@ -192,7 +192,7 @@ class RovCon():
             len = 24
 
         buffer = array.array('c')
-        buffer.extend(['M','O','_','O'])
+        buffer.extend(['M', 'O', '_', 'O'])
         if index == 4:
             buffer[3] = 'V'
         for i in range(4,len+1):	
@@ -220,10 +220,10 @@ class RovCon():
             buffer[15] = '\x04'
             buffer[19] = '\x04'
             for i in range(0,3):
-                if (len(extraInput) >= 4):
-                    buffer[i + 22] = extraInput[i]
+                if (len(extra_input) >= 4):
+                    buffer[i + 22] = extra_input[i]
                 else:	
-                    buffer[i + 22] = '\0'     #extraInput[1]
+                    buffer[i + 22] = '\0'     #extra_input[1]
         elif index == 5:     # left wheel Forward
             buffer[4] = '\xfa'
             buffer[15] = '\x02'
