@@ -43,7 +43,7 @@ class RovCon():
 
 		# The first MO_O command
         mc = array.array('c')
-        mc.extend(['M','O','_','O']);
+        mc.extend(['M','O','_','O'])
         i = 0
         mc.extend('\x00')
         while i < 18:
@@ -62,7 +62,7 @@ class RovCon():
 		# The second MO_O command
 		#49=4+1+10+1+7+4+9+4+9
         mc = array.array('c')
-        mc.extend(['M','O','_','O']);
+        mc.extend(['M','O','_','O'])
         mc.extend('\x02')
         i = 0
         while i < 10:
@@ -73,12 +73,12 @@ class RovCon():
         while i < 7:
             mc.extend('\0')
             i = i + 1
-        mc.extend(['A','C','1','3']);
+        mc.extend(['A','C','1','3'])
         i = 0
         while i < 9:
             mc.extend('\0')
             i = i + 1
-        mc.extend(['A','C','1','3']);
+        mc.extend(['A','C','1','3'])
         i = 0
         while i < 9:
             mc.extend('\0')
@@ -93,7 +93,7 @@ class RovCon():
 		#print list(data)
 
         mc = array.array('c')
-        mc.extend(['M','O','_','O']);
+        mc.extend(['M','O','_','O'])
         mc.extend('\x04')
         i = 0
         while i < 10:
@@ -192,7 +192,7 @@ class RovCon():
             len = 24
 
         buffer = array.array('c')
-        buffer.extend(['M','O','_','O']);
+        buffer.extend(['M','O','_','O'])
         if index == 4:
             buffer[3] = 'V'
         for i in range(4,len+1):	
