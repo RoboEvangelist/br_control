@@ -16,13 +16,13 @@ class RovCon():
         self.host = '192.168.1.100'
         self.port = 80
         self.maxTCPBuffer = 2048
-        self.initConnection()
+        self.init_connection()
         self.data = ''
 
-    def initConnection(self):
-        self.connectRover()
+    def init_connection(self):
+        self.connect_rover()
 
-		# set up rover for communication
+	# set up rover for communication
         msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: \
         192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 CFNetwork/485.12.7 \
         Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: \
@@ -38,8 +38,8 @@ class RovCon():
         print data
 
 		# We have to close the socket and open it again
-        self.disconnnectRover()
-        self.connectRover()
+        self.disconnnect_rover()
+        self.connect_rover()
 
 		# The first MO_O command
         mc = array.array('c')
@@ -120,18 +120,18 @@ class RovCon():
 		#print list(data)
         self.data = data
 
-    def connectRover(self):	
+    def connect_rover(self):	
         self.moveSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.moveSocket.connect((self.host,self.port))
         self.moveSocket.setblocking(1)
 
-    def disconnectRover(self):
+    def disconnect_rover(self):
         self.moveSocket.close()
 
-    def returnData(self):
+    def return_data(self):
         return self.data
 
-    def writeCmd(self, index, extraInput):	
+    def write_cmd(self, index, extraInput):	
 #	     Robot's Control Packets
 
 # 		     The left brake command is 
@@ -280,36 +280,36 @@ class RovCon():
 
     # robot's speed is ~2 feet/second
 
-    def moveForward(self, distance, speed):
+    def move_forward(self, distance, speed):
         speed = 2
         moveTime = distance/speed
         iniTime = time.time()
         deltaTime = 0
         while deltaTime <= moveTime:
-            self.writeCmd(7,0)
-            self.writeCmd(5,0)
+            self.write_cmd(7,0)
+            self.write_cmd(5,0)
             deltaTime = time.time() - iniTime
 		# stop tracks
-        self.writeCmd(12,0)
-        self.writeCmd(13,0)
+        self.write_cmd(12,0)
+        self.write_cmd(13,0)
 
-    def moveLeftForward(self, distance, speed):
+    def move_left_forward(self, distance, speed):
         speed = 1
         moveTime = distance/speed
         iniTime = time.time()
         deltaTime = 0
     #	while deltaTime <= moveTime:       
-        self.writeCmd(7,0)
+        self.write_cmd(7,0)
     #		deltaTime = datetime.datetime.now() - deltaTime  
 		# stop tracks
-        self.writeCmd(13,0)
+        self.write_cmd(13,0)
 
 if __name__ == '__main__':
     try:
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
         rover = RovCon() 
-        video = RovCam(rover.returnData())
+        video = RovCam(rover.return_data())
         counter = 0
         distance = 0.5    # feet
         speed = 1         # foot/sec
@@ -318,10 +318,10 @@ if __name__ == '__main__':
             rospy.loginfo(str)
             pub.publish(String(str))
 #           rover.moveForward(distance,speed)
-            rover.displayImage()
+            rover.display_image()
             rospy.sleep(0.1)
 #           counter = counter + 1
 
-        rover.disconnectRover()
+        rover.disconnect_rover()
     except rospy.ROSInterruptException:
         pass
