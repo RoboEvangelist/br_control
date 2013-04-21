@@ -15,7 +15,7 @@ class RovCon():
         self.port = 80
         self.max_tcp_cmd_buffer = 2048
         self.init_connection()
-        self.data = ''
+        self.final_data = ''
 
     def init_connection(self):
         self.connect_rover()
@@ -119,7 +119,7 @@ class RovCon():
         while len(data) == 0:
             data = self.move_socket.recv(self.max_tcp_cmd_buffer)
 		#print list(data)
-        self.data = data
+        self.final_data = data
 
     def connect_rover(self):	
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -130,7 +130,7 @@ class RovCon():
         self.move_socket.close()
 
     def return_data(self):
-        return self.data
+        return self.final_data
 
     def write_cmd(self, index, extra_input):	
 #	     Robot's Control Packets
@@ -295,8 +295,7 @@ if __name__ == '__main__':
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
         rover = RovCon() 
-        rover_video = RovCam(rover.return_data())
-        counter = 0
+        rover_video = br_cam.RovCam(rover.return_data())
         distance = 0.5    # feet
         speed = 1         # foot/sec
         while not rospy.is_shutdown(): 
