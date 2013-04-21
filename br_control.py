@@ -7,9 +7,7 @@ import br_cam
 
 import socket
 import time
-import datetime
 import array
-import struct
 
 class RovCon(): 
     def __init__(self):
