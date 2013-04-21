@@ -13,7 +13,7 @@ class RovCon():
     def __init__(self):
         self.host = '192.168.1.100'
         self.port = 80
-        self.max_tcp_buffer = 2048
+        self.max_tcp_cmd_buffer = 2048
         self.init_connection()
         self.data = ''
 
@@ -26,13 +26,14 @@ class RovCon():
         Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: \
         en-us\r\nAccept-Encoding: gzip, deflate\r\n \
         Connection: keep-alive\r\n\r\n'
+        print msg
         self.move_socket.send(msg)
 
 		# Get the return message
         print 'Wait for HTML return msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_buffer)
+            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
         print data
 
 		# We have to close the socket and open it again
@@ -53,7 +54,7 @@ class RovCon():
         print 'Wait for result on 1st MO command'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_buffer)
+            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
         #ldata = list(data)
         # msg_i = ldata[4]
 
@@ -87,7 +88,7 @@ class RovCon():
         print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_buffer)
+            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
 		#print list(data)
 
         m_c = array.array('c')
@@ -114,7 +115,7 @@ class RovCon():
         print 'Wait for next MO msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_buffer)
+            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
 		#print list(data)
         self.data = data
 
@@ -161,104 +162,104 @@ class RovCon():
 		# index is integer which specifies which command to send
 		#extra_input is a javaArray of Bytes
 		
-        len = 0
+        packet_len = 0
         if index == 1:
-            len = 22
+            packet_len = 22
         elif index == 2:
-            len = 48
+            packet_len = 48
         elif index == 3:
-            len = 23
+            packet_len = 23
         elif index == 5:
-            len = 24
+            packet_len = 24
         elif index == 6:
-            len = 24
+            packet_len = 24
         elif index == 7:
-            len = 24
+            packet_len = 24
         elif index == 8:
-            len = 24
+            packet_len = 24
         elif index == 9:
-            len = 22
+            packet_len = 22
         elif index == 10:
-            len = 23
+            packet_len = 23
         elif index == 11:
-            len = 23
+            packet_len = 23
         elif index == 12:
-            len = 24
+            packet_len = 24
         elif index == 13:
-            len = 24
+            packet_len = 24
 
-        buffer = array.array('c')
-        buffer.extend(['M', 'O', '_', 'O'])
-        for i in range(4, len+1):	
-            buffer.append('\0')
+        cmd_buffer = array.array('c')
+        cmd_buffer.extend(['M', 'O', '_', 'O'])
+        for i in range(4, packet_len+1):	
+            cmd_buffer.append('\0')
 
         if index == 1:
-            buffer[4] = '\x02'
+            cmd_buffer[4] = '\x02'
         elif index == 2:
-            buffer[4] = '\x02'
-            buffer[15] = '\x1a'
-            buffer[23] = 'A'
-            buffer[24] = 'C'
-            buffer[25] = '1'
-            buffer[26] = '3'
-            buffer[36] = 'A'
-            buffer[37] = 'C'
-            buffer[38] = '1'
-            buffer[39] = '3'
+            cmd_buffer[4] = '\x02'
+            cmd_buffer[15] = '\x1a'
+            cmd_buffer[23] = 'A'
+            cmd_buffer[24] = 'C'
+            cmd_buffer[25] = '1'
+            cmd_buffer[26] = '3'
+            cmd_buffer[36] = 'A'
+            cmd_buffer[37] = 'C'
+            cmd_buffer[38] = '1'
+            cmd_buffer[39] = '3'
         elif index == 3:
-            buffer[4] = '\x04'
-            buffer[15] = '\x01'
-            buffer[19] = '\x01'
-            buffer[23] = '\x02'
+            cmd_buffer[4] = '\x04'
+            cmd_buffer[15] = '\x01'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x02'
         elif index == 5:     # left wheel Forward
-            buffer[4] = '\xfa'
-            buffer[15] = '\x02'
-            buffer[19] = '\x01'
-            buffer[23] = '\x04'
-            buffer[24] = '\x0a'
+            cmd_buffer[4] = '\xfa'
+            cmd_buffer[15] = '\x02'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x04'
+            cmd_buffer[24] = '\x0a'
         elif index == 6:    # left wheel Backward
-            buffer[4] = '\xfa'
-            buffer[15] = '\x02'
-            buffer[19] = '\x01'
-            buffer[23] = '\x05'
-            buffer[24] = '\x0a'
+            cmd_buffer[4] = '\xfa'
+            cmd_buffer[15] = '\x02'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x05'
+            cmd_buffer[24] = '\x0a'
         elif index == 7:    # right wheel Forward
-            buffer[4] = '\xfa'
-            buffer[15] = '\x02'
-            buffer[19] = '\x01'
-            buffer[23] = '\x01'
-            buffer[24] = '\x0a'
+            cmd_buffer[4] = '\xfa'
+            cmd_buffer[15] = '\x02'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x01'
+            cmd_buffer[24] = '\x0a'
         elif index == 8:    # right whell backward
-            buffer[4] = '\xfa'
-            buffer[15] = '\x02'
-            buffer[19] = '\x01'
-            buffer[23] = '\x02'
-            buffer[24] = '\x0a'
+            cmd_buffer[4] = '\xfa'
+            cmd_buffer[15] = '\x02'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x02'
+            cmd_buffer[24] = '\x0a'
         elif index == 9:    # IR off(?)
-            buffer[4] = '\xff'
+            cmd_buffer[4] = '\xff'
         elif index == 10:   # switches infrared LED on
-            buffer[4] = '\x0e'
-            buffer[15] = '\x01'
-            buffer[19] = '\x01'
-            buffer[23] = '\x5e'
+            cmd_buffer[4] = '\x0e'
+            cmd_buffer[15] = '\x01'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x5e'
         elif index == 11:   # switches infrared LED off
-            buffer[4] = '\x0e'
-            buffer[15] = '\x01'
-            buffer[19] = '\x01'
-            buffer[23] = '\x5f'
+            cmd_buffer[4] = '\x0e'
+            cmd_buffer[15] = '\x01'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x5f'
         elif index == 12:   # stop left track
-            buffer[4] = '\xfa'
-            buffer[15] = '\x02'
-            buffer[19] = '\x01'
-            buffer[23] = '\x02'
-            buffer[24] = '\x00'
+            cmd_buffer[4] = '\xfa'
+            cmd_buffer[15] = '\x02'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x02'
+            cmd_buffer[24] = '\x00'
         elif index == 13:  # stop right track
-            buffer[4] = '\xfa'
-            buffer[15] = '\x02'
-            buffer[19] = '\x01'
-            buffer[23] = '\x04'
-            buffer[24] = '\x00'
-        msg = buffer.tostring()
+            cmd_buffer[4] = '\xfa'
+            cmd_buffer[15] = '\x02'
+            cmd_buffer[19] = '\x01'
+            cmd_buffer[23] = '\x04'
+            cmd_buffer[24] = '\x00'
+        msg = cmd_buffer.tostring()
         self.move_socket.send(msg)
 
     # robot's speed is ~2 feet/second
@@ -292,7 +293,7 @@ if __name__ == '__main__':
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
         rover = RovCon() 
-        video = RovCam(rover.return_data())
+        rover_video = RovCam(rover.return_data())
         counter = 0
         distance = 0.5    # feet
         speed = 1         # foot/sec
@@ -300,8 +301,8 @@ if __name__ == '__main__':
             str = "robot moves %s" % rospy.get_time()
             rospy.loginfo(str)
             pub.publish(String(str))
-#           rover.moveForward(distance,speed)
-            rover.display_image()
+            rover.move_forward(distance,speed)
+            #rover_video.display_image()
             rospy.sleep(0.1)
 #           counter = counter + 1
 
