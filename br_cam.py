@@ -7,28 +7,29 @@ import cv2
 
 import socket
 import time
-import datetime
 import array
-import struct
 
 class RovCam(): 
     def __init__(self, data):
         self.host = '192.168.1.100'
         self.port = 80
-        self.maxTCPBuffer = 2048
-        self.initConnection(data)     #image id is taken from data 
+        self.max_tcp_buffer = 2048
+        self.init_connection(data)     #image id is taken from data 
 
-    def initConnection(self, data):
-		# set up rover for communication
-        msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: 192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 \
-        CFNetwork/485.12.7 Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: en-us\r\nAccept-Encoding: gzip, deflate\r\n \
+    def init_connectionion(self, data):
+	# set up rover for communication
+        msg = 'GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: \
+        192.168.1.100:80\r\nUser-Agent: WifiCar/1.0 CFNetwork/485.12.7 \
+        Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: \
+        en-us\r\nAccept-Encoding: gzip, deflate\r\n \
         Connection: keep-alive\r\n\r\n'
 
-		# Create new socket for video
-        self.connectRover()
+
+	# Create new socket for video
+        self.connect_rover()
 
         mc = array.array('c')
-        mc.extend(['M','O','_','V']);
+        mc.extend(['M', 'O', '_', 'V'])
         mc.extend('\0')
         i = 0
         while i < 10:
@@ -49,42 +50,42 @@ class RovCam():
         mc.extend(id_cp)
         #print mc, identifier of the image(?)
         msg = mc.tostring()
-        self.videoSocket.send(msg)
+        self.video_socket.send(msg)
 
-    def connectRover(self):	
-        self.videoSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.videoSocket.connect((self.host,self.port))
-        self.videoSocket.setblocking(1)
+    def connect_rover(self):	
+        self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.video_socket.connect((self.host, self.port))
+        self.video_socket.setblocking(1)
 
-    def disconnectVideo(self):
-        self.videoSocket.close()
+    def disconnect_video(self):
+        self.video_socket.close()
 
-    def writeCmd(self, index, extraInput):	
+    def writeCmd(self, index, extra_input):	
 #	    Robot's Control Packets
         len = 26                          # actuall length of the video buffer
         buffer = array.array('c')
-        buffer.extend(['M','O','_','V']);
-        for i in range(4,len+1):	
+        buffer.extend(['M', 'O', '_', 'V'])
+        for i in range(4, len+1):	
             buffer.append('\0')
         buffer[15] = '\x04'
         buffer[19] = '\x04'
         for i in range(0,3):
-            if (len(extraInput) >= 4):
-                buffer[i + 22] = extraInput[i]
+            if (len(extra_input) >= 4):
+                buffer[i + 22] = extra_input[i]
             else:	
-                buffer[i + 22] = '\0'     #extraInput[1]
+                buffer[i + 22] = '\0'     #extra_input[1]
 		
         msg = buffer.tostring()
-        self.videoSocket.send(msg) 
+        self.video_socket.send(msg) 
 
     def displayImage(self):
- 		# For now just get one frame, we have to make this a loop of course
+ 	# For now just get one frame, we have to make this a loop of course
         print 'Get video frame!'
         data = ''
         ldata = []
         start = ''
         while len(data) == 0:
-            data = self.videoSocket.recv(self.maxTCPBuffer)
+            data = self.video_socket.recv(self.max_tcp_buffer)
             ld = list(data)
             mc = array.array('c')
             mc.extend (ld[0:4])
@@ -102,7 +103,7 @@ class RovCam():
 
 		# Write image to "test.jpg"
             img = ldata[36:]
-        jpgfile = open('test.jpg','wb')
+        jpgfile = open('test.jpg', 'wb')
         for i in img:
             jpgfile.write(i)
 		# Close file handlers
