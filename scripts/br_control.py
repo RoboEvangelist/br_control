@@ -43,91 +43,14 @@ class RovCon():
         self.connect_rover()
 
         # send MO_O commands
-        for i in range(1,4)
-            self.writ_cmd(i,0)
+        for i in range(1, 4):
+            self.write_cmd(i, 0)
+            print 'Wait for result on ' + str(i) + ' MO command'
             data = ''
             while len(data) == 0:
                 data = self.move_socket.recv(self.max_tcp_cmd_buffer)
             print data            
-
-	# The first MO_O command
-        m_c = array.array('c')
-        m_c.extend(['M', 'O', '_', 'O'])
-        i = 0
-        m_c.extend('\x00')
-        while i < 18:
-            m_c.extend('\0')
-            i = i + 1
-        msg = m_c.tostring()
-        self.move_socket.send(msg)
-
-        print 'Wait for result on 1st MO command'
-        data = ''
-        while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
-        #ldata = list(data)
-        # msg_i = ldata[4]
-
-	# The second MO_O command
-	#49=4+1+10+1+7+4+9+4+9
-        m_c = array.array('c')
-        m_c.extend(['M', 'O', '_', 'O'])
-        m_c.extend('\x02')
-        i = 0
-        while i < 10:
-            m_c.extend('\0')
-            i = i + 1
-        m_c.extend('\x1a')
-        i = 0
-        while i < 7:
-            m_c.extend('\0')
-            i = i + 1
-        m_c.extend(['A', 'C', '1', '3'])
-        i = 0
-        while i < 9:
-            m_c.extend('\0')
-            i = i + 1
-        m_c.extend(['A', 'C', '1', '3'])
-        i = 0
-        while i < 9:
-            m_c.extend('\0')
-            i = i + 1
-        msg = m_c.tostring()
-        self.move_socket.send(msg)
-
-        print 'Wait for next MO msg'
-        data = ''
-        while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
-	#print list(data)
-
-        m_c = array.array('c')
-        m_c.extend(['M', 'O', '_', 'O'])
-        m_c.extend('\x04')
-        i = 0
-        while i < 10:
-            m_c.extend('\0')
-            i = i + 1
-        m_c.extend('\x01')
-        i = 0
-        while i < 3:
-            m_c.extend('\0')
-            i = i + 1
-            m_c.extend('\x01')
-        i = 0
-        while i < 3:
-            m_c.extend('\0')
-            i = i + 1
-        m_c.extend('\x02')
-        msg = m_c.tostring()
-        self.move_socket.send(msg)
-
-        print 'Wait for next MO msg'
-        data = ''
-        while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
-		#print list(data)
-        self.final_data = data
+        self.final_data = data     # las data received is the image data
 
     def connect_rover(self):	
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
