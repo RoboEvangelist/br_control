@@ -75,7 +75,6 @@ class RovCam():
                 cmd_buffer[i + 22] = extra_input[i]
             else:	
                 cmd_buffer[i + 22] = '\0'     #extra_input[1]
-		
         msg = cmd_buffer.tostring()
         self.video_socket.send(msg) 
 
