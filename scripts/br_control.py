@@ -31,18 +31,26 @@ class RovCon():
 
         self.move_socket.send(msg)
 
-		# Get the return message
+	# Get the return message
         print 'Wait for HTML return msg'
         data = ''
         while len(data) == 0:
             data = self.move_socket.recv(self.max_tcp_cmd_buffer)
         print data
 
-		# We have to close the socket and open it again
+	# We have to close the socket and open it again
         self.disconnect_rover()
         self.connect_rover()
 
-		# The first MO_O command
+        # send MO_O commands
+        for i in range(1,4)
+            self.writ_cmd(i,0)
+            data = ''
+            while len(data) == 0:
+                data = self.move_socket.recv(self.max_tcp_cmd_buffer)
+            print data            
+
+	# The first MO_O command
         m_c = array.array('c')
         m_c.extend(['M', 'O', '_', 'O'])
         i = 0
@@ -60,8 +68,8 @@ class RovCon():
         #ldata = list(data)
         # msg_i = ldata[4]
 
-		# The second MO_O command
-		#49=4+1+10+1+7+4+9+4+9
+	# The second MO_O command
+	#49=4+1+10+1+7+4+9+4+9
         m_c = array.array('c')
         m_c.extend(['M', 'O', '_', 'O'])
         m_c.extend('\x02')
@@ -91,7 +99,7 @@ class RovCon():
         data = ''
         while len(data) == 0:
             data = self.move_socket.recv(self.max_tcp_cmd_buffer)
-		#print list(data)
+	#print list(data)
 
         m_c = array.array('c')
         m_c.extend(['M', 'O', '_', 'O'])
