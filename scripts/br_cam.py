@@ -12,6 +12,7 @@ class RovCam():
     def __init__(self, data):
         self.host = '192.168.1.100'
         self.port = 80
+        self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.max_tcp_cmd_buffer = 2048
         self.init_connection(data)     #image id is taken from data 
 
@@ -61,9 +62,9 @@ class RovCam():
     def disconnect_video(self):
         self.video_socket.close()
 
-    def write_cmd(self, index, extra_input):	
+    def write_cmd(self, extra_input):	
 #	    Robot's Control Packets
-        packet_len = 26                          # actuall packet_length of the video cmd_buffer
+        packet_len = 26                          # length of the video buffer
         cmd_buffer = array.array('c')
         cmd_buffer.extend(['M', 'O', '_', 'V'])
         for i in range(4, packet_len+1):	

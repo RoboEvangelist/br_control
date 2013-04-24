@@ -14,6 +14,7 @@ class RovCon():
         self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_cmd_buffer = 2048
+        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.init_connection()
         self.final_data = ''
 
@@ -44,7 +45,7 @@ class RovCon():
 
         # send MO_O commands
         for i in range(1, 4):
-            self.write_cmd(i, 0)
+            self.write_cmd(i)
             print 'Wait for result on ' + str(i) + ' MO command'
             data = ''
             while len(data) == 0:
@@ -63,38 +64,36 @@ class RovCon():
     def return_data(self):
         return self.final_data
 
-    def write_cmd(self, index, extra_input):	
-#	     Robot's Control Packets
+    def write_cmd(self, index):	
+    # Robot's Control Packets
 
-# 		     The left brake command is 
-# 		      1 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-# 		      0010 00 00 00 01 00 00 00 02 00
-# 		 02 was the byte that puts the left break
-# 
-# 		     and the right brake command is
-# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-# 		      0010 00 00 00 01 00 00 00 04 00
-# 		  04 was the byte that puts the left break
-# 
-# 		     Left Wheel forward
-# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-# 		      0010 00 00 00 01 00 00 00 04 0a
-# 		 
-# 		     Right Wheel Forward
-# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-# 		      0010 00 00 00 01 00 00 00 01 0a
-# 		 
-# 		     Left Wheel Backward
-# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-# 		      0010 00 00 00 01 00 00 00 05 0a
-# 		 
-# 		     Right Wheel Backward
-# 		      0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-# 		      0010 00 00 00 01 00 00 00 02 0a
+    # The left brake command is 
+    # 1 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+    # 0010 00 00 00 01 00 00 00 02 00
+    # 02 was the byte that puts the left break
+   
+    # and the right brake command is
+    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+    # 0010 00 00 00 01 00 00 00 04 00
+    # 04 was the byte that puts the left break
  
-		# index is integer which specifies which command to send
-		#extra_input is a javaArray of Bytes
-		
+    # Left Wheel forward
+    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+    # 0010 00 00 00 01 00 00 00 04 0a
+ 		 
+    # Right Wheel Forward
+    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+    # 0010 00 00 00 01 00 00 00 01 0a
+ 		 
+    # Left Wheel Backward
+    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+    # 0010 00 00 00 01 00 00 00 05 0a
+ 		 
+    # Right Wheel Backward
+    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+    # 0010 00 00 00 01 00 00 00 02 0a
+ 
+    # index is integer which specifies which command to send		
         packet_len = 0
         if index == 1:
             packet_len = 22
@@ -203,12 +202,12 @@ class RovCon():
         init_time = time.time()
         delta_time = 0
         while delta_time <= move_time:
-            self.write_cmd(7, 0)
-            self.write_cmd(5, 0)
+            self.write_cmd(7)
+            self.write_cmd(5)
             delta_time = time.time() - init_time
 		# stop tracks
-        self.write_cmd(12, 0)
-        self.write_cmd(13, 0)
+        self.write_cmd(12)
+        self.write_cmd(13)
 
     def move_left_forward(self, distance, speed):
         speed = 1
@@ -216,10 +215,10 @@ class RovCon():
         init_time = time.time()
         delta_time = 0
     #	while delta_time <= move_time:       
-        self.write_cmd(7, 0)
+        self.write_cmd(7)
     #		delta_time = datetime.datetime.now() - delta_time  
 		# stop tracks
-        self.write_cmd(13, 0)
+        self.write_cmd(13)
 
 if __name__ == '__main__':
     try:
