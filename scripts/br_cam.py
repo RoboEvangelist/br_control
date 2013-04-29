@@ -17,18 +17,8 @@ class RovCam():
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
-	# set up rover for communication
-        # append instead of writting everything in one line
-        msg = ['GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: ']
-        msg.append('192.168.1.100:80\r\n')
-        msg.append('User-Agent: WifiCar/1.0 CFNetwork/485.12.7 ')
-        msg.append('Darwin/10.4.0\r\nAccept: */*\r\nAccept-Language: ')
-        msg.append('en-us\r\nAccept-Encoding: gzip, deflate\r\n')
-        msg.append('Connection: keep-alive\r\n\r\n')
-        msg = ''.join(msg)
-
 	# Create new socket for video
-        self.connect_rover()
+        self.connect_video()
 
         m_c = array.array('c')
         m_c.extend(['M', 'O', '_', 'V'])
@@ -50,11 +40,11 @@ class RovCam():
         ldata = list(data)
         id_cp = ldata[25:29]
         m_c.extend(id_cp)
-        #print m_c, identifier of the image(?)
         msg = m_c.tostring()
+        print msg              #, identifier of the image(?)
         self.video_socket.send(msg)
 
-    def connect_rover(self):	
+    def connect_video(self):	
         self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.video_socket.connect((self.host, self.port))
         self.video_socket.setblocking(1)
@@ -103,17 +93,16 @@ class RovCam():
             data = ''
 
 		# Write image to "test.jpg"
-            img = ldata[36:]
+        img = ldata[36:]
         jpgfile = open('test.jpg', 'wb')
         for i in img:
             jpgfile.write(i)
-		# Close file handlers
+        # Close file handlers
         jpgfile.close()
 
-        image = cv2.imread('test.jpg')
+#        image = cv2.imread('test.jpg')
         #cv2.NamedWindow('hola', WINDOW_AUTOSIZE)
         #cv2.ShowImage('robot window', image)
-        cv2.imshow('hola', image)
-        cv2.waitKey(100)
-        cv2.destroyWindow('test.jpg')
-
+#        cv2.imshow('hola', image)
+#        cv2.waitKey(100)
+#        cv2.destroyWindow('test.jpg')
