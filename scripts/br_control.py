@@ -15,8 +15,8 @@ class RovCon():
         self.port = 80
         self.max_tcp_cmd_buffer = 2048
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.init_connection()
         self.final_data = ''
+        self.init_connection()
 
     def init_connection(self):
         self.connect_rover()
@@ -52,6 +52,7 @@ class RovCon():
                 data = self.move_socket.recv(self.max_tcp_cmd_buffer)
             print data            
         self.final_data = data     # last data received is the image data
+        #print "data in move socket: " + self.final_data
 
     def connect_rover(self):	
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -62,6 +63,7 @@ class RovCon():
         self.move_socket.close()
 
     def return_data(self):
+        print "data in move socket: " + self.final_data
         return self.final_data
 
     def write_cmd(self, index):	
@@ -192,6 +194,7 @@ class RovCon():
             cmd_buffer[23] = '\x04'
             cmd_buffer[24] = '\x00'
         msg = cmd_buffer.tostring()
+        print "connection message: " + msg
         self.move_socket.send(msg)
 
     # robot's speed is ~2 feet/second

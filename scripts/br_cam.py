@@ -19,6 +19,8 @@ class RovCam():
     def init_connection(self, data):
 	# Create new socket for video
         self.connect_video()
+	
+        print "data in video socket: " + data
 
         m_c = array.array('c')
         m_c.extend(['M', 'O', '_', 'V'])
@@ -41,7 +43,7 @@ class RovCam():
         id_cp = ldata[25:29]
         m_c.extend(id_cp)
         msg = m_c.tostring()
-        print msg              #, identifier of the image(?)
+        print "connection message: " + msg              #, identifier of the image(?)
         self.video_socket.send(msg)
 
     def connect_video(self):	
