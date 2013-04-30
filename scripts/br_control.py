@@ -52,7 +52,6 @@ class RovCon():
                 data = self.move_socket.recv(self.max_tcp_cmd_buffer)
             print data            
         self.final_data = data     # last data received is the image data
-        #print "data in move socket: " + self.final_data
 
     def connect_rover(self):	
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -63,7 +62,6 @@ class RovCon():
         self.move_socket.close()
 
     def return_data(self):
-        print "data in move socket: " + self.final_data
         return self.final_data
 
     def write_cmd(self, index):	
@@ -194,7 +192,6 @@ class RovCon():
             cmd_buffer[23] = '\x04'
             cmd_buffer[24] = '\x00'
         msg = cmd_buffer.tostring()
-        print "connection message: " + msg
         self.move_socket.send(msg)
 
     # robot's speed is ~2 feet/second
@@ -229,16 +226,16 @@ if __name__ == '__main__':
         rospy.init_node('AC13_robot')
         rover = RovCon() 
         rover_video = br_cam.RovCam(rover.return_data())
-       # rover_video.display_image()
+        #rover_video.display_image()
         distance = 0.5    # feet
         speed = 1         # foot/sec
         while not rospy.is_shutdown(): 
             str = "robot moves %s" % rospy.get_time()
             rospy.loginfo(str)
             pub.publish(String(str))
+            rover_video.display_image()
            # rover.move_forward(distance, speed)
-           # rover_video.display_image()
-            rospy.sleep(0.1)
+            rospy.sleep(2)
 #           counter = counter + 1
 
         rover.disconnect_rover()

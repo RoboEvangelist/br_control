@@ -7,6 +7,7 @@ import cv2
 
 import socket
 import array
+import time
 
 class RovCam(): 
     def __init__(self, data):
@@ -14,6 +15,7 @@ class RovCam():
         self.port = 80
         self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.max_tcp_cmd_buffer = 2048
+        self.max_image_buffer = 231072
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
@@ -43,7 +45,6 @@ class RovCam():
         id_cp = ldata[25:29]
         m_c.extend(id_cp)
         msg = m_c.tostring()
-        print "connection message: " + msg              #, identifier of the image(?)
         self.video_socket.send(msg)
 
     def connect_video(self):	
@@ -94,17 +95,15 @@ class RovCam():
 
             data = ''
 
-		# Write image to "test.jpg"
+        # Write image to "test.jpg"
         img = ldata[36:]
+        img = ''.join(img)
         jpgfile = open('test.jpg', 'wb')
         for i in img:
             jpgfile.write(i)
-        # Close file handlers
         jpgfile.close()
 
-#        image = cv2.imread('test.jpg')
-        #cv2.NamedWindow('hola', WINDOW_AUTOSIZE)
-        #cv2.ShowImage('robot window', image)
-#        cv2.imshow('hola', image)
-#        cv2.waitKey(100)
-#        cv2.destroyWindow('test.jpg')
+#        image = cv2.imread('test.jpg', 1)
+ #       cv2.imshow('hola', image)
+        time.sleep(1) 
+  #      cv2.destroyWindow('test.jpg')
