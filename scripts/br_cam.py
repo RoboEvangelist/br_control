@@ -16,6 +16,11 @@ class RovCam():
         self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.max_tcp_cmd_buffer = 2048
         self.max_image_buffer = 231072
+        self.image_ptr = 0;
+        self.tcp_ptr = 0;
+        self.image_start_position = 0
+        self.image_length = 0
+        self.image_buffer = array.array('c')
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
@@ -104,6 +109,70 @@ class RovCam():
         jpgfile.close()
 
 #        image = cv2.imread('test.jpg', 1)
- #       cv2.imshow('hola', image)
+        cv2.imshow('hola', image)
         time.sleep(1) 
   #      cv2.destroyWindow('test.jpg')
+
+
+
+#     def receive_image:
+#         len = 0
+#         new_ptr = self.tcp_ptr;
+#         imageLength = 0;
+#         fnew = false;
+# 
+#         while (!fnew && new_ptr < self.max_image_buffer - self.max_tcp_cmd_buffer) 
+#         {
+#             len = self.video_socket.recv(self.max_tcp_cmd_buffer)
+# 				# todo: check if this happens too often and exit
+#         if (len <= 0) continue
+# 
+#         f4 = array.array('c')
+# 				
+# 				for (i = 0; i < 4; i++)
+# 					f4[i] = self.image_buffer[new_ptr + i];
+# 				
+# 				if (ImgStart(f4) && (imageLength > 0))
+# 					fnew = true;
+# 				
+# 				if (!fnew) # OLD IMAGE, SO WHAT THE SOCKET GOT WAS A CHUNK OF AN IMAGE
+# 				{
+# 					new_ptr += len;
+# 					image_length = new_ptr - image_ptr;
+# 				} 
+# 				else #NEW IMAGE
+# 				{
+# 						
+# 					SetImageStartPosition(image_ptr + 36);#PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
+# 														#O TAMBN PUEDE SER QUE AL SUMARLE 36 ELIMINAS EL ENCABEZADO DE LA IMG
+# 					SetImageLength(imageLength - 36);
+# 				
+# 					if (new_ptr > maxImageBuffer / 2) 
+# 					{
+# 						# copy first chunk of new arrived image to start of
+# 						# array
+# 						for (int i = 0; i < len; i++)
+# 							imageBuffer[i] = imageBuffer[new_ptr + i];
+# 						image_ptr = 0;
+# 						tcpPtr = len;	
+# 						
+# 					} else 
+# 					{
+# 						image_ptr = new_ptr;
+# 						tcpPtr = new_ptr + len;
+# 					}
+# 					
+# 				}#END ELSE
+# 				
+# 			}#END WHILE
+# 					
+# 			# reset if ptr runs out of boundaries
+# 			if (new_ptr >= maxImageBuffer - maxTCPBuffer) {
+# 				image_ptr = 0;
+# 				tcpPtr = 0;
+# 			}
+# 			
+# 		} catch (Exception eg) {
+# 		 # Log.v("Comunicator ERROR", eg.toString());
+# 		}	
+# 	}
