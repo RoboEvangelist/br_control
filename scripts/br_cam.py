@@ -81,7 +81,8 @@ class RovCam():
  	# For now just get one frame, we have to make this a loop of course
         print 'Get video frame!'
         data = ''
-        ldata = []
+        ldata = array.array('c')
+       # ldata = []
         start = ''
         while len(data) == 0:
             data = self.video_socket.recv(self.max_tcp_cmd_buffer)
@@ -106,12 +107,18 @@ class RovCam():
         jpgfile = open('test.jpg', 'wb')
         for i in img:
             jpgfile.write(i)
+            print i 
         jpgfile.close()
 
-#        image = cv2.imread('test.jpg', 1)
-        cv2.imshow('hola', image)
-        time.sleep(1) 
-  #      cv2.destroyWindow('test.jpg')
+        image = array.array('c')
+        image = cv2.imread('test.jpg', 1)
+        print type(image)
+        image = image[:,-1::-1,:]
+        image = image * 1
+        cv2.imshow(u'Image', image)
+        #time.sleep(1) 
+        cv2.waitKey()
+        #cv2.destroyWindow('test.jpg')
 
 
 
