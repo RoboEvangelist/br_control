@@ -80,11 +80,11 @@ class RovCam():
     def display_image(self):
  	# For now just get one frame, we have to make this a loop of course
         print 'Get video frame!'
-        data = ''
+        data = 0 
         ldata = array.array('c')
        # ldata = []
         start = ''
-        while len(data) == 0:
+        while data == 0:
             data = self.video_socket.recv(self.max_tcp_cmd_buffer)
             list_data = list(data)
             m_c = array.array('c')
@@ -99,40 +99,69 @@ class RovCam():
             else:
                 ldata.extend(list_data)
 
-            data = ''
+            data = 0 
 
         # Write image to "test.jpg"
         img = ldata[36:]
-        img = ''.join(img)
+        #img = ''.join(img)
+        print type(img)
+        print len(img)
         jpgfile = open('test.jpg', 'wb')
         for i in img:
             jpgfile.write(i)
-            print i 
+           # print i 
         jpgfile.close()
-
-        image = array.array('c')
+ 
         image = cv2.imread('test.jpg', 1)
         print type(image)
-        image = image[:,-1::-1,:]
-        image = image * 1
-        cv2.imshow(u'Image', image)
+        #image = image[:,-1::-1,:]
+        #image = image * 1
+        #cv2.imshow(u'Image', image)
         #time.sleep(1) 
-        cv2.waitKey()
+        #cv2.waitKey()
         #cv2.destroyWindow('test.jpg')
 
 
 
+
+    get_raw_image_buffer:        # byte
+
+                return self.image_buffer;
+        }
+
+        public int  GetImageLength(){
+
+                return this.imageLength;
+        }
+
+        public int GetImageStartPosition(){
+
+                return this.imageStartPosition;
+        }
+
+        private void SetImageStartPosition(int start){
+                this.imageStartPosition = start;
+        }
+
+        private void SetImageLength(int len){
+                this.imageLength = len;
+        }
+
+
+
+
+
 #     def receive_image:
-#         len = 0
+#         data = 0
 #         new_ptr = self.tcp_ptr;
 #         imageLength = 0;
-#         fnew = false;
+#         f_new = false;
 # 
-#         while (!fnew && new_ptr < self.max_image_buffer - self.max_tcp_cmd_buffer) 
+#         while (!f_new && new_ptr < self.max_image_buffer - self.max_tcp_cmd_buffer) 
 #         {
-#             len = self.video_socket.recv(self.max_tcp_cmd_buffer)
+#             data = self.video_socket.recv(self.max_tcp_cmd_buffer)
 # 				# todo: check if this happens too often and exit
-#         if (len <= 0) continue
+#         if (data <= 0) continue
 # 
 #         f4 = array.array('c')
 # 				
