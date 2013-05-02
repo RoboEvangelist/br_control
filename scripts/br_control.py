@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('beginner_tutorials')
+import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy
 from std_msgs.msg import String
 
