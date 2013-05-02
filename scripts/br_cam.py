@@ -121,71 +121,61 @@ class RovCam():
         #cv2.waitKey()
         #cv2.destroyWindow('test.jpg')
 
+    def get_raw_image_buffer(self):        # byte
+        return self.image_buffer
 
-
-    get_raw_image_buffer(self):        # byte
-
-                return self.image_buffer
-
-    get_image_length(self):            # int
-
-                return self.imageLength
+    def get_image_length(self):            # int
+        return self.imageLength
         
-    get_image_start_position(self):    #int
+    def get_image_start_position(self):    #int
+        return self.imageStartPosition
 
-                return self.imageStartPosition
-
-    set_image_start_position(start):   # int
-                self.image_start_position = start
+    def set_image_start_position(start):   # int
+        self.image_start_position = start
         
-    set_image_length(data):
-                self.image_length = data
+    def set_image_length(data):
+        self.image_length = data
        
-    def receive_image:
-#        data = 0
-#        new_ptr = self.tcp_ptr
-#        im_length = 0
-#        f_new = false
-# 
-#        while (!f_new && new_ptr < self.max_image_buffer - self.max_tcp_buffer):
-#            data = self.video_socket.recv(self.max_tcp_buffer)
-# 			    # todo: check if this happens too often and exit
-#            if (data <= 0) continue
-#
-#            f4 = array.array('c')
-# 				
-# 				   for (i = 0; i < 4; i++)
-# 					     f4[i] = self.image_buffer[new_ptr + i]
-# 				
-# 				   if (self.img_start(f4) && (im_length > 0))
-# 					     fnew = true
-# 				
-# 				   if (!fnew) # OLD IMAGE, SO WHAT THE SOCKET GOT WAS A CHUNK OF AN IMAGE
-# 				       new_ptr += data
-# 					     im_length = new_ptr - self.image_ptr
-#            else: #NEW IMAGE	
-# 				       self.set_image_start_position(self.image_ptr + 36)#PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
-# 														#O TAMBN PUEDE SER QUE AL SUMARLE 36 ELIMINAS EL ENCABEZADO DE LA IMG
-# 					     self.set_image_length(im_length - 36)
-# 				
-# 					     if (new_ptr > self.max_image_buffer / 2)
-# 						        # copy first chunk of new arrived image to start of
-# 						        # array
-# 						       for (i = 0; i < ; i++)
-# 						           self.image_buffer[i] = self.image_buffer[new_ptr + i]
-# 					         self.image_ptr = 0
-# 					         self.tcp_ptr = data
-#                else:
-# 						       image_ptr = new_ptr
-# 						       self.tcp_ptr = new_ptr + data
-# 					
-# 				  #END ELSE
-# 				
-# 			    #END WHILE
-# 					
-# 			    # reset if ptr runs out of boundaries
-#        if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
-#            self.image_ptr = 0
-#            self.tcp_Ptr = 0
-#
-# 		
+    def receive_image(self):
+        data = 0
+        new_ptr = self.tcp_ptr
+        im_length = 0
+        f_new = False
+ 
+        while (not f_new and new_ptr < self.max_image_buffer - self.max_tcp_buffer):
+            data = self.video_socket.recv(self.max_tcp_buffer)
+ 			    # todo: check if this happens too often and exit
+            if (data <= 0):
+                continue
+
+            f4 = array.array('c')
+ 				
+            for i in ran(0,5):
+                f4[i] = self.image_buffer[new_ptr + i]
+ 				
+            if (self.img_start(f4) and (im_length > 0)):
+                f_new = True
+ 				
+            if (not f_new): # OLD IMAGE, SO WHAT THE SOCKET GOT WAS A CHUNK OF AN IMAGE
+                new_ptr += data
+                im_length = new_ptr - self.image_ptr
+            else: #NEW IMAGE	
+                self.set_image_start_position(self.image_ptr + 36)#PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
+ 														#O TAMBN PUEDE SER QUE AL SUMARLE 36 ELIMINAS EL ENCABEZADO DE LA IMG
+                self.set_image_length(im_length - 36)
+ 				
+                if (new_ptr > self.max_image_buffer / 2)
+ 						        # copy first chunk of new arrived image to start of
+ 						        # array
+                for i in range(0,data):
+                    self.image_buffer[i] = self.image_buffer[new_ptr + i]
+                    self.image_ptr = 0
+                    self.tcp_ptr = data
+                else:
+                    image_ptr = new_ptr
+                    self.tcp_ptr = new_ptr + data
+                    
+     # reset if ptr runs out of boundaries
+        if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
+            self.image_ptr = 0
+            self.tcp_Ptr = 0
