@@ -121,20 +121,23 @@ class RovCam():
         #cv2.waitKey()
         #cv2.destroyWindow('test.jpg')
 
-    def get_raw_image_buffer(self):        # byte
+    def get_raw_image_buffer(self):        # byte, returns image data
         return self.image_buffer
 
     def get_image_length(self):            # int
-        return self.imageLength
+        return self.image_length
         
     def get_image_start_position(self):    #int
-        return self.imageStartPosition
+        return self.image_start_position
 
-    def set_image_start_position(start):   # int
+    def set_image_start_position(self, start):   # int
         self.image_start_position = start
         
-    def set_image_length(data):
+    def set_image_length(self, data):
         self.image_length = data
+
+    def img_start(self, start):
+        return (start[0] == 'M' and start[1] == 'O' and start[2] == '_' and start[3] == 'V')
        
     def receive_image(self):
         data = 0
@@ -148,34 +151,34 @@ class RovCam():
             if (data <= 0):
                 continue
 
-            f4 = array.array('c')
+            f_4 = array.array('c')
  				
-            for i in ran(0,5):
-                f4[i] = self.image_buffer[new_ptr + i]
+            for i in range(0, 5):
+                f_4[i] = self.image_buffer[new_ptr + i]
  				
-            if (self.img_start(f4) and (im_length > 0)):
+            if (self.img_start(f_4) and (im_length > 0)):
                 f_new = True
  				
             if (not f_new): # OLD IMAGE, SO WHAT THE SOCKET GOT WAS A CHUNK OF AN IMAGE
                 new_ptr += data
                 im_length = new_ptr - self.image_ptr
             else: #NEW IMAGE	
-                self.set_image_start_position(self.image_ptr + 36)#PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
- 														#O TAMBN PUEDE SER QUE AL SUMARLE 36 ELIMINAS EL ENCABEZADO DE LA IMG
+                #PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
+                self.set_image_start_position(self.image_ptr + 36)
                 self.set_image_length(im_length - 36)
  				
-                if (new_ptr > self.max_image_buffer / 2)
- 						        # copy first chunk of new arrived image to start of
- 						        # array
-                for i in range(0,data):
-                    self.image_buffer[i] = self.image_buffer[new_ptr + i]
+                if (new_ptr > self.max_image_buffer / 2):
+ 		    # copy first chunk of new arrived image to start of
+ 		    # array
+                    for i in range(0, data):
+                        self.image_buffer[i] = self.image_buffer[new_ptr + i]
                     self.image_ptr = 0
                     self.tcp_ptr = data
                 else:
                     image_ptr = new_ptr
                     self.tcp_ptr = new_ptr + data
                     
-     # reset if ptr runs out of boundaries
+        # reset if ptr runs out of boundaries
         if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
             self.image_ptr = 0
-            self.tcp_Ptr = 0
+            self.tcp_ptr = 0
