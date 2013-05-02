@@ -226,6 +226,7 @@ if __name__ == '__main__':
         rospy.init_node('AC13_robot')
         rover = RovCon() 
         rover_video = br_cam.RovCam(rover.return_data())
+        rover_video.receive_image()
        # rover_video.display_image()
         distance = 0.5    # feet
         speed = 1         # foot/sec
@@ -233,7 +234,8 @@ if __name__ == '__main__':
             str = "robot moves %s" % rospy.get_time()
             rospy.loginfo(str)
             pub.publish(String(str))
-            rover_video.display_image()
+           # rover_video.display_image()
+           # rover_video.receive_image()
            # rover.move_forward(distance, speed)
             rospy.sleep(2)
 #           counter = counter + 1

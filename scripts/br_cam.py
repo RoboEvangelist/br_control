@@ -182,3 +182,11 @@ class RovCam():
         if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
             self.image_ptr = 0
             self.tcp_ptr = 0
+        
+        print type(self.image_buffer)
+        jpgfile = open('test.jpg', 'wb')
+        for i in self.image_buffer:
+            jpgfile.write(i)
+           # print i 
+        jpgfile.close()
+
