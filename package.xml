@@ -12,7 +12,7 @@
 
   <!-- Example: -->
   <author email="luisbill@gmail.com">Luis "Pototo" Bill</author>
-  <author email="berkeley@robotie.com">John "Berkeley" Martinez</auther>
+  <author email="berkeley@robotie.com">John "Berkeley" Martinez</author>
  
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>std_msgs</build_depend>
