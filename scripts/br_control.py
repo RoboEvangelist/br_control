@@ -13,7 +13,7 @@ class RovCon():
     def __init__(self):
         self.host = '192.168.1.100'
         self.port = 80
-        self.max_tcp_cmd_buffer = 2048
+        self.max_tcp_buffer = 2048
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.final_data = ''
         self.init_connection()
@@ -36,7 +36,7 @@ class RovCon():
         print 'Wait for HTML return msg'
         data = ''
         while len(data) == 0:
-            data = self.move_socket.recv(self.max_tcp_cmd_buffer)
+            data = self.move_socket.recv(self.max_tcp_buffer)
         print data
 
 	# We have to close the socket and open it again
@@ -49,7 +49,7 @@ class RovCon():
             print 'Wait for result on ' + str(i) + ' MO command'
             data = ''
             while len(data) == 0:
-                data = self.move_socket.recv(self.max_tcp_cmd_buffer)
+                data = self.move_socket.recv(self.max_tcp_buffer)
             print data            
         self.final_data = data     # last data received is the image data
 
