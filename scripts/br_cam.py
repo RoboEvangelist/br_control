@@ -146,14 +146,16 @@ class RovCam():
         f_new = False
  
         while (not f_new and new_ptr < self.max_image_buffer - self.max_tcp_buffer):
-            data = self.video_socket.recv(self.max_tcp_buffer)
+            while data <= 0:
+                data = self.video_socket.recv(self.max_tcp_buffer)
  			    # todo: check if this happens too often and exit
-            if (data <= 0):
-                continue
+            #if (data <= 0):     # replace for a while loop
+             #   continue
 
             f_4 = array.array('c')
- 				
-            for i in range(0, 5):
+            print len(self.image_buffer)
+            print len(f_4)
+            for i in range(0, 4):
                 f_4[i] = self.image_buffer[new_ptr + i]
  				
             if (self.img_start(f_4) and (im_length > 0)):
