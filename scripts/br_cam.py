@@ -156,10 +156,10 @@ class RovCam():
                 #try
 #                 if img_start(data[0:4]): #(data[i:(i+3)] == 'MO_V'):
                 if (data[i:(i+4)] == 'MO_V'):
-                    print 'got in MO_V mode'
+#                     print 'got in MO_V mode'
                     if not found_start:
                         found_start = True
-                        print "start of picture found"
+#                         print "start of picture found"
                         start_pos = i
                         #crop the data only include stuff after the
                         #start token.
@@ -167,7 +167,7 @@ class RovCam():
                         break
                     elif not found_end:
                         found_end = True
-                        print "end of picture found"
+#                         print "end of picture found"
                         end_pos = i
                         break
 #                 catch e
@@ -179,22 +179,25 @@ class RovCam():
             if (found_start and not found_end):
                 #add the recent data to ldata
                 ldata.extend(list(data))
-                print "adding recent data"
+#                 print "adding recent data"
             if found_end:
                ldata.extend(list(data[0:end_pos]))
-               print "adding data from 0 to end"
+#                print "adding data from 0 to end"
             data = ''
-            time.sleep(1)
+            time.sleep(0.1)
         l_len = len(ldata)
         image_buffer = ldata[36:l_len]
-        print type(image_buffer)
-        print len(image_buffer)
+#         print len(image_buffer)
         jpgfile = open('test.jpg', 'wb')
         for i in image_buffer:
             jpgfile.write(i)
-           # print i 
         jpgfile.close()
  
         image = cv2.imread('test.jpg', 1)
-        print type(image)
+      #  print type(image)
+      #  print "display image"
+        cv2.imshow('Image', image)
+ #       time.sleep(1) 
+       # cv2.waitKey()
+        cv2.destroyWindow('test.jpg')
 

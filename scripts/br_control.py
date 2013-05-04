@@ -231,13 +231,13 @@ if __name__ == '__main__':
         distance = 0.5    # feet
         speed = 1         # foot/sec
         while not rospy.is_shutdown(): 
-            str = "robot moves %s" % rospy.get_time()
-            rospy.loginfo(str)
-            pub.publish(String(str))
+#            str = "robot moves %s" % rospy.get_time()
+ #           rospy.loginfo(str)
+  #          pub.publish(String(str))
            # rover_video.display_image()
-           # rover_video.receive_image()
+            rover_video.receive_image()
            # rover.move_forward(distance, speed)
-            rospy.sleep(2)
+            rospy.sleep(0.3)
 #           counter = counter + 1
 
         rover.disconnect_rover()
