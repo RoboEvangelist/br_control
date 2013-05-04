@@ -237,7 +237,7 @@ if __name__ == '__main__':
            # rover_video.display_image()
             rover_video.receive_image()
            # rover.move_forward(distance, speed)
-            rospy.sleep(0.3)
+            #rospy.sleep(0.3)
 #           counter = counter + 1
 
         rover.disconnect_rover()

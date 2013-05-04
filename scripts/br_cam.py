@@ -2,8 +2,10 @@
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy
 from std_msgs.msg import String
+from cv_bridge import CvBridge, CvBridgeError
 
 import cv2
+#import cv
 
 import socket
 import array
@@ -21,6 +23,7 @@ class RovCam():
         self.image_start_position = 0
         self.image_length = 0
         #self.image_buffer = array.array('c')
+        self.bridge = CvBridge()
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
@@ -76,53 +79,6 @@ class RovCam():
                 cmd_buffer[i + 22] = '\0'     #extra_input[1]
         msg = cmd_buffer.tostring()
         self.video_socket.send(msg) 
-
-    def display_image(self):
- 	# For now just get one frame, we have to make this a loop of course
-        print 'Get video frame!'
-        data = 0 
-        ldata = array.array('c')
-       # ldata = []
-        start = ''
-        while data == 0:
-            data = self.video_socket.recv(self.max_tcp_buffer)
-            list_data = list(data)
-            m_c = array.array('c')
-            m_c.extend (list_data[0:4])
-
-            if (start == ''):
-                start = 'first'
-            else:
-                start = m_c.tostring()
-            if (start == 'MO_V'):
-                break
-            else:
-                ldata.extend(list_data)
-
-            data = 0 
-
-        # Write image to "test.jpg"
-        img = ldata[36:]
-        #img = ''.join(img)
-        print type(img)
-        print len(img)
-        jpgfile = open('test.jpg', 'wb')
-        for i in img:
-            jpgfile.write(i)
-           # print i 
-        jpgfile.close()
- 
-        image = cv2.imread('test.jpg', 1)
-        print type(image)
-        #image = image[:,-1::-1,:]
-        #image = image * 1
-        #cv2.imshow(u'Image', image)
-        #time.sleep(1) 
-        #cv2.waitKey()
-        #cv2.destroyWindow('test.jpg')
-
-#     def get_raw_image_buffer(self):        # byte, returns image data
-#         return self.image_buffer
 
     def get_image_length(self):            # int
         return self.image_length
@@ -193,11 +149,15 @@ class RovCam():
             jpgfile.write(i)
         jpgfile.close()
  
+       # try:
+      #      cv_image = self.bridge.imgmsg_to_cv(image_buffer, "bgr8")
+      #  except CvBridgeError, e:
+      #      print e         
+
         image = cv2.imread('test.jpg', 1)
       #  print type(image)
       #  print "display image"
-        cv2.imshow('Image', image)
- #       time.sleep(1) 
+        cv2.imshow("Image", image)
+        time.sleep(0.05) 
        # cv2.waitKey()
         cv2.destroyWindow('test.jpg')
-
