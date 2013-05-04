@@ -20,7 +20,7 @@ class RovCam():
         self.tcp_ptr = 0
         self.image_start_position = 0
         self.image_length = 0
-        self.image_buffer = array.array('c')
+        #self.image_buffer = array.array('c')
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
@@ -142,30 +142,37 @@ class RovCam():
     def receive_image(self):
         data = 0
         new_ptr = self.tcp_ptr
+        image_buffer = array.array('c')
         im_length = 0
         f_new = False
  
         while (not f_new and new_ptr < self.max_image_buffer - self.max_tcp_buffer):
-            while data <= 0:
-                data = self.video_socket.recv(self.max_tcp_buffer)
+            image_buffer = self.video_socket.recv(self.max_tcp_buffer)
+
  			    # todo: check if this happens too often and exit
-            #if (data <= 0):     # replace for a while loop
-             #   continue
+            if (image_buffer == ''):     # if empty jump back to while loop 
+                continue
 
             f_4 = array.array('c')
-            print len(self.image_buffer)
-            print len(f_4)
-            for i in range(0, 4):
-                f_4[i] = self.image_buffer[new_ptr + i]
+            #image_buffer = list(image_buffer)
+            data = len(image_buffer)
+            print data
+           # print image_buffer
+
+            f_4.extend(image_buffer[0:4])
+            print f_4
+            time.sleep(3)
  				
             if (self.img_start(f_4) and (im_length > 0)):
                 f_new = True
  				
             if (not f_new): # OLD IMAGE, SO WHAT THE SOCKET GOT WAS A CHUNK OF AN IMAGE
+                print "no new image"
                 new_ptr += data
                 im_length = new_ptr - self.image_ptr
             else: #NEW IMAGE	
                 #PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
+                print "getting new image"
                 self.set_image_start_position(self.image_ptr + 36)
                 self.set_image_length(im_length - 36)
  				
@@ -173,7 +180,7 @@ class RovCam():
  		    # copy first chunk of new arrived image to start of
  		    # array
                     for i in range(0, data):
-                        self.image_buffer[i] = self.image_buffer[new_ptr + i]
+                        image_buffer[i] = image_buffer[new_ptr + i]
                     self.image_ptr = 0
                     self.tcp_ptr = data
                 else:
@@ -184,10 +191,9 @@ class RovCam():
         if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
             self.image_ptr = 0
             self.tcp_ptr = 0
-        
-        print type(self.image_buffer)
+
         jpgfile = open('test.jpg', 'wb')
-        for i in self.image_buffer:
+        for i in image_buffer:
             jpgfile.write(i)
            # print i 
         jpgfile.close()
