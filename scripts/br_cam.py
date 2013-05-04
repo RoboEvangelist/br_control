@@ -139,69 +139,49 @@ class RovCam():
     def img_start(self, start):
         return (start[0] == 'M' and start[1] == 'O' and start[2] == '_' and start[3] == 'V')
        
-    def receive_image(self):
-        data = 0
-        new_ptr = self.tcp_ptr
-        image_buffer = array.array('c')
-        im_length = 0
-        f_new = False
- 
-        while (not f_new and new_ptr < self.max_image_buffer - self.max_tcp_buffer):
-            image_buffer = self.video_socket.recv(self.max_tcp_buffer)
-
- 			    # todo: check if this happens too often and exit
-            if (image_buffer == ''):     # if empty jump back to while loop 
+    def receive_image(self):   
+        data = ''
+        ldata = array.array('c')
+        start = ''
+        found_start = False
+        found_end = False
+        start_pos = 0 #current position in ldata
+        end_pos = 0 #position of the end of frame in the current array of data
+        while (not found_end):
+            data = self.video_socket.recv(self.max_tcp_buffer)
+            if(data == ''):
                 continue
-
-            f_4 = array.array('c')
-            #image_buffer = list(image_buffer)
-            data = len(image_buffer)
-            print data
-           # print image_buffer
-
-            f_4.extend(image_buffer[0:4])
-#  				
-            if (self.img_start(f_4) and (im_length > 0)):
-                f_new = True
- 				
-            if (not f_new): # OLD IMAGE, SO WHAT THE SOCKET GOT WAS A CHUNK OF AN IMAGE
-                print "no new image"
-                new_ptr += data
-                im_length = new_ptr - self.image_ptr
-            else: #NEW IMAGE	
-                #PORB 36 ES LA CANTIDAD MAXIMA DE BYTES DE IMAGEN QUE LEES, CADA VEZ
-                print "getting new image"
-                self.set_image_start_position(self.image_ptr + 36)
-                self.set_image_length(im_length - 36)
- 				
-                if (new_ptr > self.max_image_buffer / 2):
- 		    # copy first chunk of new arrived image to start of
- 		    # array
-                    for i in range(0, data):
-                        image_buffer[i] = image_buffer[new_ptr + i]
-                    self.image_ptr = 0
-                    self.tcp_ptr = data
-                else:
-                    image_ptr = new_ptr
-                    self.tcp_ptr = new_ptr + data
-                    
-        time.sleep(2)
-        # reset if ptr runs out of boundaries
-        if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
-            self.image_ptr = 0
-            self.tcp_ptr = 0
-
-        jpgfile = open('test.jpg', 'wb')
-        for i in image_buffer:
-            jpgfile.write(i)
-           # print i 
-        jpgfile.close()
-        image = cv2.imread('test.jpg', 1)
-        print type(image)
-        #image = image[:,-1::-1,:]
-        #image = image * 1
-        #cv2.imshow(u'Image', image)
-        #time.sleep(1) 
-        #cv2.waitKey()
-        #cv2.destroyWindow('test.jpg')
-
+                #check for the message start token 'MO_V'
+            for i in range(0, len(data)-2):
+                #try
+                if (data[i:(i+3)] == 'MO_V'):
+                    if not found_start:
+                        found_start = True
+                        print "start of picture found"
+                        start_pos = i
+                        #crop the data only include stuff after the
+                        #start token.
+                        data = data[start_pos:len(data)]
+                        break
+                    elif not found_end:
+                        found_end = True
+                        print "end of picture found"
+                        end_pos = i
+                        break
+#                 catch e
+#                    disp(e);
+#                    disp(['length of data: ' num2str(length(data))]);
+#                    disp(['try to access: ' num2str(i) ' thru ' num2str(i+3) ]);
+#if you have found the start but not the end (in the
+            #middle of a image frame)
+            if (found_start and not found_end):
+                #add the recent data to ldata
+                ldata.extend(list(data))
+                print "adding recent data"
+            if found_end:
+               ldata.extend(list(data[0:end_pos]))
+               print "adding data from 0 to end"
+            data = ''
+            time.sleep(1)
+    l_len = len(ldata)
+    image_buffer = ldata[36:l_len]
