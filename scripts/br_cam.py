@@ -160,9 +160,7 @@ class RovCam():
            # print image_buffer
 
             f_4.extend(image_buffer[0:4])
-            print f_4
-            time.sleep(3)
- 				
+#  				
             if (self.img_start(f_4) and (im_length > 0)):
                 f_new = True
  				
@@ -187,6 +185,7 @@ class RovCam():
                     image_ptr = new_ptr
                     self.tcp_ptr = new_ptr + data
                     
+        time.sleep(2)
         # reset if ptr runs out of boundaries
         if (new_ptr >= self.max_image_buffer - self.max_tcp_buffer):
             self.image_ptr = 0
@@ -197,4 +196,12 @@ class RovCam():
             jpgfile.write(i)
            # print i 
         jpgfile.close()
+        image = cv2.imread('test.jpg', 1)
+        print type(image)
+        #image = image[:,-1::-1,:]
+        #image = image * 1
+        #cv2.imshow(u'Image', image)
+        #time.sleep(1) 
+        #cv2.waitKey()
+        #cv2.destroyWindow('test.jpg')
 
