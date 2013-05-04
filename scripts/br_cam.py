@@ -151,10 +151,12 @@ class RovCam():
             data = self.video_socket.recv(self.max_tcp_buffer)
             if(data == ''):
                 continue
-                #check for the message start token 'MO_V'
+            #check for the message start token 'MO_V'
             for i in range(0, len(data)-2):
                 #try
-                if (data[i:(i+3)] == 'MO_V'):
+#                 if img_start(data[0:4]): #(data[i:(i+3)] == 'MO_V'):
+                if (data[i:(i+4)] == 'MO_V'):
+                    print 'got in MO_V mode'
                     if not found_start:
                         found_start = True
                         print "start of picture found"
@@ -185,3 +187,14 @@ class RovCam():
             time.sleep(1)
         l_len = len(ldata)
         image_buffer = ldata[36:l_len]
+        print type(image_buffer)
+        print len(image_buffer)
+        jpgfile = open('test.jpg', 'wb')
+        for i in image_buffer:
+            jpgfile.write(i)
+           # print i 
+        jpgfile.close()
+ 
+        image = cv2.imread('test.jpg', 1)
+        print type(image)
+
