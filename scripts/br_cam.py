@@ -121,8 +121,8 @@ class RovCam():
         #cv2.waitKey()
         #cv2.destroyWindow('test.jpg')
 
-    def get_raw_image_buffer(self):        # byte, returns image data
-        return self.image_buffer
+#     def get_raw_image_buffer(self):        # byte, returns image data
+#         return self.image_buffer
 
     def get_image_length(self):            # int
         return self.image_length
@@ -172,7 +172,7 @@ class RovCam():
 #                    disp(e);
 #                    disp(['length of data: ' num2str(length(data))]);
 #                    disp(['try to access: ' num2str(i) ' thru ' num2str(i+3) ]);
-#if you have found the start but not the end (in the
+            #if you have found the start but not the end (in the
             #middle of a image frame)
             if (found_start and not found_end):
                 #add the recent data to ldata
@@ -183,5 +183,5 @@ class RovCam():
                print "adding data from 0 to end"
             data = ''
             time.sleep(1)
-    l_len = len(ldata)
-    image_buffer = ldata[36:l_len]
+        l_len = len(ldata)
+        image_buffer = ldata[36:l_len]
