@@ -5,7 +5,7 @@ from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
 
 import cv2
-#import cv
+import numpy as np
 
 import socket
 import array
@@ -22,8 +22,7 @@ class RovCam():
         self.tcp_ptr = 0
         self.image_start_position = 0
         self.image_length = 0
-        #self.image_buffer = array.array('c')
-        self.bridge = CvBridge()
+        #self.bridge = CvBridge()
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
@@ -140,24 +139,23 @@ class RovCam():
                ldata.extend(list(data[0:end_pos]))
 #                print "adding data from 0 to end"
             data = ''
-            time.sleep(0.1)
+            time.sleep(0.05)
         l_len = len(ldata)
         image_buffer = ldata[36:l_len]
-#         print len(image_buffer)
-        jpgfile = open('test.jpg', 'wb')
-        for i in image_buffer:
-            jpgfile.write(i)
-        jpgfile.close()
+        image_buffer = np.array(image_buffer)   # conver to openCV readable data
+        #jpgfile = open('test.jpg', 'wb')
+       # for i in image_buffer:
+       #     jpgfile.write(i)
+       # jpgfile.close()
  
        # try:
       #      cv_image = self.bridge.imgmsg_to_cv(image_buffer, "bgr8")
       #  except CvBridgeError, e:
       #      print e         
 
-        image = cv2.imread('test.jpg', 1)
-      #  print type(image)
-      #  print "display image"
-        cv2.imshow("Image", image)
-        time.sleep(0.05) 
+        #image = cv2.imread('test.jpg', 1)
+        cv2.imshow("Image", image_buffer)
+        time.sleep(1) 
+        print ''
        # cv2.waitKey()
-        cv2.destroyWindow('test.jpg')
+        cv2.destroyAllWindows()
