@@ -5,6 +5,7 @@ from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
 
 import cv2
+import cv           # eliminate this and stay with cv2
 import numpy as np
 
 import socket
@@ -94,6 +95,27 @@ class RovCam():
     def img_start(self, start):
         return (start[0] == 'M' and start[1] == 'O' and start[2] == '_' and start[3] == 'V')
        
+    def array2cv(self, a):
+        dtype2depth = {
+            'uint8':   cv.IPL_DEPTH_8U,
+            'int8':    cv.IPL_DEPTH_8S,
+            'uint16':  cv.IPL_DEPTH_16U,
+            'int16':   cv.IPL_DEPTH_16S,
+            'int32':   cv.IPL_DEPTH_32S,
+            'float32': cv.IPL_DEPTH_32F,
+            'float64': cv.IPL_DEPTH_64F,
+        }
+        try:
+            nChannels = a.shape[0]
+            print nChannels 
+        except:
+            nChannels = 1
+            print "except"
+            print nChannels
+        cv_im = cv.CreateImageHeader((a.shape[0], 0), dtype2depth[str(a.dtype)], nChannels)
+        cv.SetData(cv_im, a.tostring(), a.dtype.itemsize*nChannels*a.shape[1])
+        return cv_im    
+
     def receive_image(self):   
         data = ''
         ldata = array.array('c')
@@ -143,6 +165,9 @@ class RovCam():
         l_len = len(ldata)
         image_buffer = ldata[36:l_len]
         image_buffer = np.array(image_buffer)   # conver to openCV readable data
+        #print image_buffer.shape[0]
+        image_buffer = self.array2cv(image_buffer)
+        print type(image_buffer)
         #jpgfile = open('test.jpg', 'wb')
        # for i in image_buffer:
        #     jpgfile.write(i)
@@ -154,8 +179,8 @@ class RovCam():
       #      print e         
 
         #image = cv2.imread('test.jpg', 1)
-        cv2.imshow("Image", image_buffer)
+        #cv2.imshow("Image", image_buffer)
         time.sleep(1) 
         print ''
        # cv2.waitKey()
-        cv2.destroyAllWindows()
+        #cv2.destroyAllWindows()
