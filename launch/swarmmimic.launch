@@ -1,0 +1,16 @@
+<launch>
+
+  <group ns="robot1">
+    <node pkg="br_swarm_rover" name="sim" type="br_control.py"/>
+  </group>
+
+  <group ns="robot2">
+    <node pkg="br_swarm_rover" name="sim" type="br_control.py"/>
+  </group>
+
+  <node pkg="br_swarm_rover" name="mimic" type="mimic">
+    <remap from="input" to="turtlesim1/turtle1"/>
+    <remap from="output" to="turtlesim2/turtle1"/>
+  </node>
+
+</launch>
