@@ -143,7 +143,7 @@ class RovCam():
             time.sleep(0.1)
         l_len = len(ldata)
         image_buffer = np.array(ldata[36:l_len])   # conver to openCV readable data
-        #image_buffer = image_buffer.tostring() 
+        image_buffer = image_buffer.tostring() 
         jpgfile = open('test.jpg', 'wb')
         for i in image_buffer:
             jpgfile.write(i)
