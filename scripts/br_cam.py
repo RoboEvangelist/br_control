@@ -4,12 +4,15 @@ import rospy
 from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
 
+import cv
 import cv2
 import numpy as np
 
 import socket
 import array
 import time
+from datetime import datetime
+
 
 class RovCam(): 
     def __init__(self, data):
@@ -140,22 +143,25 @@ class RovCam():
                ldata.extend(list(data[0:end_pos]))
 #                print "adding data from 0 to end"
             data = ''
-            time.sleep(0.1)
         l_len = len(ldata)
-        image_buffer = np.array(ldata[36:l_len])   # conver to openCV readable data
+        # convert to numpy to use with OpenCV
+        image_buffer = np.array(ldata[36:l_len])
+        #image_buffer = np.reshape(image_buffer, (-1, 2))
         image_buffer = image_buffer.tostring() 
-        jpgfile = open('test.jpg', 'wb')
+        image_file = 'test' + str(datetime.now()) + '.jpg' 
+        jpgfile = open(image_file, 'wb')
         for i in image_buffer:
             jpgfile.write(i)
         jpgfile.close()
- 
        # try:
       #      cv_image = self.bridge.imgmsg_to_cv(image_buffer, "bgr8")
       #  except CvBridgeError, e:
       #      print e         
 
-        image = cv2.imread('test.jpg', 1)
-        cv2.imshow("Image", image)
-        print "displaying image"
-        time.sleep(1) 
+        image_buffer = cv2.imread(image_file, 0)
+        print image_buffer
+        cv2.imshow("Image", image_buffer)
+      #  print "displaying image"
+        time.sleep(0.033) 
+      #  cv2.waitKey(0) 
         cv2.destroyAllWindows()
