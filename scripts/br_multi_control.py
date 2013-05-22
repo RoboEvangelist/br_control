@@ -11,7 +11,7 @@ import array
 
 class RovCon(): 
     def __init__(self, networkCard):
-        self.nic = networCard               # nic = network interface card
+        self.nic = networkCard               # nic = network interface card
         self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_buffer = 2048
@@ -56,16 +56,17 @@ class RovCon():
 
     def connect_rover(self):	
         robotIP = '192.168.1.100'
-        nif = socket.gethostbyname(self.nic)          # not sure if this works
+        #nif = socket.gethostbyname(self.nic)          # not sure if this works
+        nif = socket.gethostbyname('192.168.1.1')
         print "nif: "
         print nif
-        nifAddresses = socket.gethostbyaddr(robotIP)
+        nifAddresses = socket.gethostbyaddr('192.168.1.1')#robotIP)
         print "nifAddresses"
-        print nifAdresses
+        print nifAddresses
         #sockaddr = java.net.InetSocketAddress(robotIP, 80); 
             
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.move.settimeout(1000);
+        self.move_socket.settimeout(1000);
         #self.move.bind(java.net.InetSocketAddress(nifAddresses.nextElement(), 0));
 
         self.move_socket.connect((self.host, self.port))
@@ -237,7 +238,7 @@ if __name__ == '__main__':
     try:
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
-        rover = RovCon() 
+        rover = RovCon('wlan0') 
         rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
         distance = 0.5    # feet
