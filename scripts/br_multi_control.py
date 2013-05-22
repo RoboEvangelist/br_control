@@ -55,19 +55,23 @@ class RovCon():
         self.final_data = data     # last data received is the image data
 
     def connect_rover(self):	
-        robotIP = '192.168.1.100'
+        robotIP = '192.168.1.1'
         #nif = socket.gethostbyname(self.nic)          # not sure if this works
-        nif = socket.gethostbyname('192.168.1.1')
+        nif = socket.gethostbyname(robotIP)
         print "nif: "
         print nif
-        nifAddresses = socket.gethostbyaddr('192.168.1.1')#robotIP)
+        nifAddresses = socket.gethostbyaddr(robotIP)
         print "nifAddresses"
         print nifAddresses
         #sockaddr = java.net.InetSocketAddress(robotIP, 80); 
             
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.move_socket.settimeout(1000);
-        #self.move.bind(java.net.InetSocketAddress(nifAddresses.nextElement(), 0));
+        self.move_socket.bind(robotIP);
+        print "getpeername()"
+        print self.move_socket.getpeername()
+        print "getsockname()"
+        print self.move_socket.getsockname()
 
         self.move_socket.connect((self.host, self.port))
         self.move_socket.setblocking(1)
@@ -244,10 +248,10 @@ if __name__ == '__main__':
         distance = 0.5    # feet
         speed = 1         # foot/sec
         while not rospy.is_shutdown(): 
-#            str = "robot moves %s" % rospy.get_time()
+            str = "robot moves %s" % rospy.get_time()
  #           rospy.loginfo(str)
   #          pub.publish(String(str))
-            rover_video.receive_image()
+            #rover_video.receive_image()
            # rover.move_forward(distance, speed)
 
         rover.disconnect_rover()
