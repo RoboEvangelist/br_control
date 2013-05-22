@@ -55,7 +55,7 @@ class RovCon():
         self.final_data = data     # last data received is the image data
 
     def connect_rover(self):	
-        robotIP = '192.168.1.1'
+        robotIP = self.nic
         #nif = socket.gethostbyname(self.nic)          # not sure if this works
         nif = socket.gethostbyname(robotIP)
         print "nif: "
@@ -67,14 +67,19 @@ class RovCon():
             
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.move_socket.settimeout(1000);
-        self.move_socket.bind(robotIP);
+        self.move_socket.bind((robotIP, 0));
         print "getpeername()"
-        print self.move_socket.getpeername()
+        #print self.move_socket.getpeername()
         print "getsockname()"
         print self.move_socket.getsockname()
+        print ""
 
         self.move_socket.connect((self.host, self.port))
         self.move_socket.setblocking(1)
+        print "getpeername()"
+        #print self.move_socket.getpeername()
+        print "getsockname()"
+        print self.move_socket.getsockname()
 
     def disconnect_rover(self):
         self.move_socket.close()
@@ -242,7 +247,7 @@ if __name__ == '__main__':
     try:
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
-        rover = RovCon('wlan0') 
+        rover = RovCon('192.168.1.1') 
         rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
         distance = 0.5    # feet
