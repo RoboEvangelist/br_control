@@ -247,11 +247,12 @@ if __name__ == '__main__':
     try:
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
-        rover = RovCon('192.168.1.1') 
+        rover = RovCon("192.168.1.2") 
         rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
         distance = 0.5    # feet
         speed = 1         # foot/sec
+        rover.move_forward(distance, speed)
         while not rospy.is_shutdown(): 
             str = "robot moves %s" % rospy.get_time()
  #           rospy.loginfo(str)
