@@ -11,6 +11,7 @@ import array
 
 class RovCon(): 
     def __init__(self, networkCard):
+        self.nic = networCard               # nic = network interface card
         self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_buffer = 2048
@@ -54,7 +55,15 @@ class RovCon():
         self.final_data = data     # last data received is the image data
 
     def connect_rover(self):	
+        nif = java.net.NetworkInterface.getByName(obj.nic); 
+        nif = socket.gethostbyname(self.nic)
+        nifAddresses = nif.getInetAddresses();        # card Address
+        sockaddr = java.net.InetSocketAddress('192.168.1.100', 80); 
+            
         self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.move.settimeout(1000);
+        self.move.bind(java.net.InetSocketAddress(nifAddresses.nextElement(), 0));
+
         self.move_socket.connect((self.host, self.port))
         self.move_socket.setblocking(1)
 
