@@ -148,7 +148,8 @@ class RovCam():
         image_buffer = np.array(ldata[36:l_len])
         #image_buffer = np.reshape(image_buffer, (-1, 2))
         image_buffer = image_buffer.tostring() 
-        image_file = 'test' + str(datetime.now()) + '.jpg' 
+        #image_file = 'test' + str(datetime.now()) + '.jpg' 
+        image_file = 'test.jpg'
         jpgfile = open(image_file, 'wb')
         for i in image_buffer:
             jpgfile.write(i)
@@ -158,10 +159,10 @@ class RovCam():
       #  except CvBridgeError, e:
       #      print e         
 
-        image_buffer = cv2.imread(image_file, 0)
-        print image_buffer
-        cv2.imshow("Image", image_buffer)
+#        image_buffer = cv2.imread(image_file, 0)
+ #       print image_buffer
+  #      cv2.imshow("Image", image_buffer)
       #  print "displaying image"
         time.sleep(0.033) 
       #  cv2.waitKey(0) 
-        cv2.destroyAllWindows()
+   #     cv2.destroyAllWindows()

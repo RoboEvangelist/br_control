@@ -12,10 +12,10 @@ import array
 class RovCon(): 
     def __init__(self, networkCard):
         self.nic = networkCard               # nic = network interface card
-        self.host = '192.168.1.100'
+        self.host = "192.168.1.100"
         self.port = 80
         self.max_tcp_buffer = 2048
-        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.move_socket = socket.socket(socket.AF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
         self.final_data = ''
         self.init_connection()
 
@@ -34,11 +34,11 @@ class RovCon():
         self.move_socket.send(msg)
 
 	# Get the return message
-        print 'Wait for HTML return msg'
+        print ('Wait for HTML return msg')
         data = ''
         while len(data) == 0:
             data = self.move_socket.recv(self.max_tcp_buffer)
-        print data
+        print (data)
 
 	# We have to close the socket and open it again
         self.disconnect_rover()
@@ -47,39 +47,30 @@ class RovCon():
         # send MO_O commands
         for i in range(1, 4):
             self.write_cmd(i)
-            print 'Wait for result on ' + str(i) + ' MO command'
+            print ('Wait for result on ' + str(i) + ' MO command')
             data = ''
             while len(data) == 0:
                 data = self.move_socket.recv(self.max_tcp_buffer)
-            print data            
+            print (data)            
         self.final_data = data     # last data received is the image data
 
     def connect_rover(self):	
         robotIP = self.nic
-        #nif = socket.gethostbyname(self.nic)          # not sure if this works
-        nif = socket.gethostbyname(robotIP)
-        print "nif: "
-        print nif
-        nifAddresses = socket.gethostbyaddr(robotIP)
-        print "nifAddresses"
-        print nifAddresses
+        
+        #nif = socket.gethostbyname(robotIP)
+       # nifAddresses = socket.gethostbyaddr(robotIP)
+        #print "nifAddresses"
+        #print nifAddresses
         #sockaddr = java.net.InetSocketAddress(robotIP, 80); 
             
-        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.move_socket = socket.socket(socket.AF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
         self.move_socket.settimeout(1000);
-        self.move_socket.bind((robotIP, 0));
-        print "getpeername()"
-        #print self.move_socket.getpeername()
-        print "getsockname()"
-        print self.move_socket.getsockname()
-        print ""
+        self.move_socket.bind((robotIP, ));
+        print (self.move_socket.getsockname())
 
         self.move_socket.connect((self.host, self.port))
         self.move_socket.setblocking(1)
-        print "getpeername()"
-        #print self.move_socket.getpeername()
-        print "getsockname()"
-        print self.move_socket.getsockname()
+        print (self.move_socket.getsockname())
 
     def disconnect_rover(self):
         self.move_socket.close()
@@ -247,12 +238,12 @@ if __name__ == '__main__':
     try:
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
-        rover = RovCon("192.168.1.2") 
+        rover = RovCon("wlan0") 
         rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
         distance = 0.5    # feet
         speed = 1         # foot/sec
-        rover.move_forward(distance, speed)
+        #rover.move_forward(distance, speed)
         while not rospy.is_shutdown(): 
             str = "robot moves %s" % rospy.get_time()
  #           rospy.loginfo(str)
