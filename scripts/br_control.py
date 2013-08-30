@@ -222,6 +222,20 @@ class RovCon():
 
 if __name__ == '__main__':
     try:
+        # create file to save ROS server address
+        from tempfile import NamedTemporaryFile
+        address_file = NamedTemporaryFile(delete=False)
+        with NamedTemporaryFile() as address_file:
+            # store ROS server address
+            #TODO: change the local host part to a normal address
+            import os
+            address = os.environ['ROS_MASTER_URI']
+            address = address.replace('localhost', 'pototo-G46VW')
+            address_file.write(address)
+            address_file.seek(0)
+            print('ROS address: ', address_file.readline())
+            # might not need to close file, but check later
+
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
         rover = RovCon() 
@@ -231,10 +245,10 @@ if __name__ == '__main__':
         speed = 1         # foot/sec
         while not rospy.is_shutdown(): 
 #            str = "robot moves %s" % rospy.get_time()
- #           rospy.loginfo(str)
-  #          pub.publish(String(str))
-            rover_video.receive_image()
-           # rover.move_forward(distance, speed)
+#            rospy.loginfo(str)
+#            pub.publish(String(str))
+#            rover_video.receive_image()
+            rover.move_forward(distance, speed)
 
         rover.disconnect_rover()
         rover_video.disconnect_video()
