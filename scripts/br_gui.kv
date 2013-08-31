@@ -2,51 +2,28 @@
 #:import kivy kivy
 #:import win kivy.core.window
 
-FloatLayout:
-    canvas:
-        Color:
-            rgb: 1, 1, 1
+#:kivy 1.7.1
+#
+# To load this file, Kivy looks if there is a Kv ﬁle with
+# the same name as your App class in lowercase, minus
+# "App" if it ends with "App". E.g: KivyAsteroid -> kivy.kv
+
+<DisplayImage, FloatLayout>:
+    cols: 2
+    row: 2
+    canvas.before:
         Rectangle:
+        # background image
+        #source: '/home/atbe/dev/users/billclar/AsteroidCapturePkg-billclar1/src/AsteroidCapture/demos/gui_interaction/gui_images/asteroid-retrieval-1920.jpg'
             source: 'background.jpg'
+            pos: self.pos
             size: self.size
-
-    BoxLayout:
-        padding: 10
-        spacing: 10
-        size_hint: 1, None
-        pos_hint: {'top': 1}
-        height: 44
-        Image:
-            size_hint: None, None
-            size: 24, 24
-            source: 'background.jpg'
-        Label:
-            height: 24
-            text_size: self.width, None
-            color: (1, 1, 1, .8)
-            text: 'Kivy %s - Pictures' % kivy.__version__
-
-<Picture>:
-    # each time a picture is created, the image can delay the loading
-    # as soon as the image is loaded, ensure that the center is changed
-    # to the center of the screen.
-    on_size: self.center = win.Window.center
-    size: image.size
-    size_hint: None, None
-
-    Image:
-        id: image
-        source: root.source
-
-        # create initial image to be 400 pixels width
-        size: 400, 400 / self.image_ratio
-
-        # add shadow background
-        canvas.before:
-            Color:
-                rgba: 1,1,1,1
-            BorderImage:
-                source: 'shadow32.png'
-                border: (36,36,36,36)
-                size:(self.width+72, self.height+72)
-                pos: (-36,-36)
+    # button to connect client to server
+    Button:
+        id: connect_client
+        text: 'press to star simulation'
+        # play with the size, or change this to a menu instead
+        size_hint: 0.2, 0.1
+        pos_hint: {'center_x':.1, 'center_y': .95}
+        # root is the DisplayImage class
+        on_press: root.schedule_client()  #bind button to function"

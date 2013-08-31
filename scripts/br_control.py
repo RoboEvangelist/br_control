@@ -232,6 +232,7 @@ if __name__ == '__main__':
             address = os.environ['ROS_MASTER_URI']
             address = address.replace('localhost', 'pototo-G46VW')
             address_file.write(address)
+            # must use seek() before reading the file
             address_file.seek(0)
             print('ROS address: ', address_file.readline())
             # might not need to close file, but check later
