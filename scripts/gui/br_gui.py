@@ -61,32 +61,6 @@ class ControlClass(FloatLayout):
         # original image size (from server)
         self.ori_im_width = 1280.0
         self.ori_im_height = 720.0
-        # TODO: make sure that aspect ratio is kept on the server
-        # side as well, in order to avoid conflict between Pygame
-        # and the "object clicking" functionality
-
-#    def parser_arguments(self):
-#        ''
-#        Gets the parsing arguments for the simulation
-#        '''
-#        import argparse
-#        parser = argparse.ArgumentParser('asteroid_sim_client')
-#        parser.add_argument('--round-trip-time-delay', type=float,
-#                default=0., help='time delay for client to emulate')
-#        parser.add_argument('--joystick', action='store_true',
-#                help='use joystick instead of keyboard')
-#        parser.add_argument('--render',
-#                help='render image to file then exit immediately')
-#        parser.add_argument('--server-uri',
-#                default='http://localhost:54321',
-#                help='URI of server')
-#        parser.add_argument('--no-image-updates',
-#                dest='image_updates', action='store_false',
-#                help='disable image display updates')
-#        parser.add_argument('--joystick-id', type=int, default=0,
-#                help='select a joystick')
-#        parser.add_argument('--hostname', help='meta-server address')
-#        return parser.parse_args()
 
     def schedule_client(self, *args):
         '''

@@ -22,9 +22,15 @@ class RovCon():
         self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_buffer = 2048
-        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.final_data = ''
-        self.init_connection()
+
+        try:
+            self.move_socket = \
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.final_data = ''
+            self.init_connection()
+        except socket.error:
+            from sys import exit
+            exit()
 
     def init_connection(self):
         self.connect_rover()
@@ -62,7 +68,8 @@ class RovCon():
         self.final_data = data     # last data received is the image data
 
     def connect_rover(self):	
-        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.move_socket = \
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.move_socket.connect((self.host, self.port))
         self.move_socket.setblocking(1)
 
@@ -231,21 +238,14 @@ class RovCon():
 if __name__ == '__main__':
     try:
         # create file to save ROS server address
-        print('argument: ', arg.file)
-#        from tempfile import NamedTemporaryFile
-#        address_file = NamedTemporaryFile(delete=False)
-        address_file = open(arg.file, 'w+r')
-#        with NamedTemporaryFile() as address_file:
+        address_file = open(arg.file, 'w+b')
         # store ROS server address
         #TODO: change the local host part to a normal address
         import os
         address = os.environ['ROS_MASTER_URI']
         address = address.replace('localhost', 'pototo-G46VW')
         address_file.write(address)
-        # must use seek() before reading the file
-        address_file.seek(0)
-        print('ROS address: ', address_file.readline())
-        # might not need to close file, but check later
+        address_file.close()
 
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
