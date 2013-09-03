@@ -9,6 +9,14 @@ import socket
 import time
 import array
 
+# meta_server.py creats the file where the server/ROS shall write its
+# address, then the name is passed as an argument here
+import argparse
+parser = argparse.ArgumentParser('br_rover_client')
+parser.add_argument('file', type=str,
+    default=None, help='temporary file to store server uri')
+arg = parser.parse_args()
+
 class RovCon(): 
     def __init__(self):
         self.host = '192.168.1.100'
@@ -223,19 +231,21 @@ class RovCon():
 if __name__ == '__main__':
     try:
         # create file to save ROS server address
-        from tempfile import NamedTemporaryFile
-        address_file = NamedTemporaryFile(delete=False)
-        with NamedTemporaryFile() as address_file:
-            # store ROS server address
-            #TODO: change the local host part to a normal address
-            import os
-            address = os.environ['ROS_MASTER_URI']
-            address = address.replace('localhost', 'pototo-G46VW')
-            address_file.write(address)
-            # must use seek() before reading the file
-            address_file.seek(0)
-            print('ROS address: ', address_file.readline())
-            # might not need to close file, but check later
+        print('argument: ', arg.file)
+#        from tempfile import NamedTemporaryFile
+#        address_file = NamedTemporaryFile(delete=False)
+        address_file = open(arg.file, 'w+r')
+#        with NamedTemporaryFile() as address_file:
+        # store ROS server address
+        #TODO: change the local host part to a normal address
+        import os
+        address = os.environ['ROS_MASTER_URI']
+        address = address.replace('localhost', 'pototo-G46VW')
+        address_file.write(address)
+        # must use seek() before reading the file
+        address_file.seek(0)
+        print('ROS address: ', address_file.readline())
+        # might not need to close file, but check later
 
         pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')

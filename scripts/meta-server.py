@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-import xmlrpclib
 import subprocess
 from time import sleep
 
@@ -30,7 +29,11 @@ def startProcess():
     # commands to start roscore and the rovers ROS program
     threads = []                # stores active threads
     roscore_cmd = ['roscore']
-    br_cmd = ['rosrun', 'br_swarm_rover', 'br_control.py']
+    from tempfile import NamedTemporaryFile
+    address_file = NamedTemporaryFile(delete=False)
+    # pass temp file name as argument to br_swarm_rover
+    uri_file = address_file.name
+    br_cmd = ['rosrun', 'br_swarm_rover', 'br_control.py', uri_file]
     from threading import Thread
     roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
         subprocess.Popen(roscore_cmd)))
@@ -56,6 +59,8 @@ def getServerAddress():
     Meta-server calls this function when when requesting
     ROS server's address
     '''
+    import tempfile
+    tempfile.name
 
 
 if __name__ == '__main__':
