@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import xmlrpclib
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import subprocess
 from time import sleep
@@ -15,7 +16,6 @@ def startProcess():
     roscore_cmd = ['roscore']
     from tempfile import NamedTemporaryFile
     address_file = NamedTemporaryFile(delete=False)
-    print('type: ', type(address_file))
     # pass temp file name as argument to br_swarm_rover
     uri_file = address_file.name
     br_cmd = ['rosrun', 'br_swarm_rover', 'br_control.py', uri_file]
@@ -40,8 +40,7 @@ def startProcess():
     while not line:
         address_file.seek(0)
         line =  address_file.readline()
-    print('address in meta-server: ', line)
-    return START_ROS_ROVER       #threads
+    return line       #threads
 
 def getServerAddress(file_name):
     '''
@@ -54,10 +53,12 @@ def getServerAddress(file_name):
 if __name__ == '__main__':
     threads = START_ROS_ROVER
     thread_started = False
+    server = SimpleXMLRPCServer(("localhost", 8000))
+    server.register_function(startProcess, "startProcess")
     while True:
         try:
             if not thread_started:
-                threads = startProcess() 
+                server.handle_request() 
                 thread_started = True
         except BaseException:
             print('exiting ROS program')
