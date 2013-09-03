@@ -15,20 +15,23 @@ from kivy.clock import Clock
 from kivy.core.image import ImageData
 from kivy.graphics.texture import Texture
 from kivy.logger import Logger
+
+# FIXME this shouldn't be necessary
 from kivy.base import EventLoop
 EventLoop.ensure_window()
-# FIXME this shouldn't be necessary
 #from kivy.core.window import Window
 
+# maybe not necessary
 from pygame.image import tostring
 
-class AsteroidSimClientInterface():
+class KeyboardInterface():
     def __init__(self, server_uri, update_image):
 
         self.__has_control = True
 
     def hasControl(self):
-        '''Return True if user wants to send control commands.
+        '''Return True if user wants to send control commands with
+        keyboard.
         Tab key and shift-tab toggle this.
         '''
         # Check if control flag should be toggled.
@@ -51,7 +54,7 @@ class ControlClass(FloatLayout):
         it this way
         '''
         super(ControlClass, self).__init__(**kwargs)
-        self._args = self.parser_arguments()
+#        self._args = self.parser_arguments()
         self.started = False     # true if client connected
         self.client = None       # server client object
 
@@ -62,28 +65,28 @@ class ControlClass(FloatLayout):
         # side as well, in order to avoid conflict between Pygame
         # and the "object clicking" functionality
 
-    def parser_arguments(self):
-        '''
-        Gets the parsing arguments for the simulation
-        '''
-        import argparse
-        parser = argparse.ArgumentParser('asteroid_sim_client')
-        parser.add_argument('--round-trip-time-delay', type=float,
-                default=0., help='time delay for client to emulate')
-        parser.add_argument('--joystick', action='store_true',
-                help='use joystick instead of keyboard')
-        parser.add_argument('--render',
-                help='render image to file then exit immediately')
-        parser.add_argument('--server-uri',
-                default='http://localhost:54321',
-                help='URI of server')
-        parser.add_argument('--no-image-updates',
-                dest='image_updates', action='store_false',
-                help='disable image display updates')
-        parser.add_argument('--joystick-id', type=int, default=0,
-                help='select a joystick')
-        parser.add_argument('--hostname', help='meta-server address')
-        return parser.parse_args()
+#    def parser_arguments(self):
+#        ''
+#        Gets the parsing arguments for the simulation
+#        '''
+#        import argparse
+#        parser = argparse.ArgumentParser('asteroid_sim_client')
+#        parser.add_argument('--round-trip-time-delay', type=float,
+#                default=0., help='time delay for client to emulate')
+#        parser.add_argument('--joystick', action='store_true',
+#                help='use joystick instead of keyboard')
+#        parser.add_argument('--render',
+#                help='render image to file then exit immediately')
+#        parser.add_argument('--server-uri',
+#                default='http://localhost:54321',
+#                help='URI of server')
+#        parser.add_argument('--no-image-updates',
+#                dest='image_updates', action='store_false',
+#                help='disable image display updates')
+#        parser.add_argument('--joystick-id', type=int, default=0,
+#                help='select a joystick')
+#        parser.add_argument('--hostname', help='meta-server address')
+#        return parser.parse_args()
 
     def schedule_client(self, *args):
         '''
@@ -97,12 +100,9 @@ class ControlClass(FloatLayout):
         '''
         hostname = "vostro"
         # Keep trying in case server is not up yet
-        print('before true statement')
         if not self.started:
-            print('before while')
             count = 0
             while True:
-                print('beggining of while')
                 import socket
                 try:
                     from xmlrpclib import ServerProxy
@@ -112,20 +112,17 @@ class ControlClass(FloatLayout):
                     ros_uri = prox.getHostAddress()
                     Logger.info('Server Address\n <%s>', ros_uri)
 #                    self.client = \
-#                    AsteroidSimClientInterface(ros_uri,
+#                    KeyboardInterface(ros_uri,
 #                    self._args.image_updates)
                     self.started = True
                     Logger.info('Client Connected...')
                     break
                 except socket.error:
-                    print('in exception')
                     count += 1
                     import time
                     time.sleep(.1)
 
-                print('before count')
-                if count > 5:
-                    print('in count')
+                if count > 100:
                     waiting = 'Waiting for meta server at %s'
                     uri="http://" + hostname + ":12345"
                     Logger.info(waiting, uri)
