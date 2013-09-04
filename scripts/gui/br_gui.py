@@ -72,7 +72,7 @@ class ControlClass(FloatLayout):
         '''
         initializes the client connection, and gets image data
         '''
-        hostname = "localhost"
+        hostname = "0.0.0.0"
         # Keep trying in case server is not up yet
         if not self.started:
             count = 0
@@ -81,7 +81,8 @@ class ControlClass(FloatLayout):
                 try:
                     from xmlrpclib import ServerProxy
                     # connect to meta server first
-                    prox = ServerProxy("http://" + hostname+":8000")
+                    prox = \
+                        ServerProxy("http://" + hostname + ":12345")
                     # get servers address from the meta server
                     ros_uri = prox.startProcess()
                     Logger.info('Server Address\n <%s>', ros_uri)

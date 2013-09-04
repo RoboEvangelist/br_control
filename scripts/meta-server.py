@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import xmlrpclib
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import subprocess
 from time import sleep
@@ -53,11 +52,12 @@ def getServerAddress(file_name):
 if __name__ == '__main__':
     threads = START_ROS_ROVER
     thread_started = False
-    server = SimpleXMLRPCServer(("localhost", 8000))
+    server = SimpleXMLRPCServer(("0.0.0.0", 12345))
     server.register_function(startProcess, "startProcess")
     while True:
         try:
             if not thread_started:
+                print('\nwaiting for a client to connect...\n\n')
                 server.handle_request() 
                 thread_started = True
         except BaseException:

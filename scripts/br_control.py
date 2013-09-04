@@ -243,7 +243,7 @@ if __name__ == '__main__':
         #TODO: change the local host part to a normal address
         import os
         address = os.environ['ROS_MASTER_URI']
-        address = address.replace('localhost', 'pototo-G46VW')
+#        address = address.replace('localhost', 'pototo-G46VW')
         address_file.write(address)
         address_file.close()
 
