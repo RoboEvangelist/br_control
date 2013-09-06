@@ -27,3 +27,14 @@
         pos_hint: {'center_x':.1, 'center_y': .95}
         # root is the DisplayImage class
         on_press: root.schedule_client()  #bind button to function"
+
+    # button to connect drive the rover(s) forward
+    Button:
+        id: drive_forward
+        text: 'press to star simulation'
+        # play with the size, or change this to a menu instead
+        size_hint: 0.2, 0.1
+        pos_hint: {'center_x':4.1, 'center_y': .95}
+        # root is the DisplayImage class
+        on_press: root.move_forward()  #bind button to function"
+        on_release: root.stop_moving()
