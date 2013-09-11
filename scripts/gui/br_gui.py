@@ -8,6 +8,7 @@ kivy.require('1.7.1')
 
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
+from std_msgs.msg import String
 
 #from os.path import join, dirname
 from kivy.uix.floatlayout import FloatLayout
@@ -63,7 +64,48 @@ class ControlClass(FloatLayout):
         # original image size (from server)
         self._ori_im_width = 1280.0
         self._ori_im_height = 720.0
-        self._move_forward
+
+    def call_stop_track(self, *args):
+        '''
+        calls the move forward service to move robot forward
+        '''
+        rospy.wait_for_service('stop_tracks')
+        try:
+            stop_track = rospy.ServiceProxy('stop_tracks', str)
+            resp1 = stop_track()
+#            return resp1.sum
+        except rospy.ServiceException, e:
+            print "Stop Tracks Service call failed: %s"%e
+
+    def schedule_stop_track(self, *args):
+        '''
+        calls the move forward on a loop
+        '''
+        trigger = Clock.create_trigger(self.call_stop_track)
+        # later
+        trigger()
+
+    def call_move_forward(self, *args):
+        '''
+        calls the move forward service to move robot forward
+        '''
+        rospy.wait_for_service('move_forward')
+        try:
+#            move_forward = rospy.ServiceProxy('move_forward', str)
+            move_forward = rospy.ServiceProxy('print_test', str)
+            resp1 = move_forward('forward')
+            Logger.info(resp1)
+#            return resp1.sum
+        except rospy.ServiceException, e:
+            print "Move forwad Service call failed: %s"%e
+
+    def schedule_move_forward(self, *args):
+        '''
+        calls the move forward on a loop
+        '''
+        trigger = Clock.create_trigger(self.call_move_forward)
+        # later
+        trigger()
 
     def schedule_client(self, *args):
         '''
@@ -105,11 +147,12 @@ class ControlClass(FloatLayout):
                     uri="http://" + hostname + ":12345"
                     Logger.info(waiting, uri)
         try:
+            print('testing')
 #            self._client.processClients() # get all pygame events
             # TODO: get image string data from br_cam.py
             # size of all incoming images
 #            im_size = self._client.getImageSize()
-            retrieve = self._client.retrieveImage()
+#            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
 #            buf = tostring(retrieve, 'RGB', True)
 #            imdata = ImageData(im_size[0], im_size[1],

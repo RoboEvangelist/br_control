@@ -9,8 +9,8 @@
 # "App" if it ends with "App". E.g: KivyAsteroid -> kivy.kv
 
 <ControlClass, FloatLayout>:
-    cols: 2
-    row: 2
+    cols: 4
+    row: 4
     canvas.before:
         Rectangle:
         # background image
@@ -31,10 +31,10 @@
     # button to connect drive the rover(s) forward
     Button:
         id: drive_forward
-        text: 'press to star simulation'
+        text: 'move forward'
         # play with the size, or change this to a menu instead
         size_hint: 0.2, 0.1
-        pos_hint: {'center_x':4.1, 'center_y': .95}
+        pos_hint: {'center_x':.5, 'center_y': .95}
         # root is the DisplayImage class
-        on_press: root.move_forward()  #bind button to function"
-        on_release: root.stop_moving()
+        on_press: root.schedule_move_forward()  #bind button to function"
+        on_release: root.schedule_stop_track()

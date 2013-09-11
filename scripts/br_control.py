@@ -211,29 +211,39 @@ class RovCon():
 
     # robot's speed is ~2 feet/second
 
-    def move_forward(self, distance, speed):
-        speed = 2
-        move_time = distance/speed
-        init_time = time.time()
-        delta_time = 0
-        while delta_time <= move_time:
+    def move_forward(self, move):#distance, speed):
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'forward':
             self.write_cmd(7)
             self.write_cmd(5)
-            delta_time = time.time() - init_time
-		# stop tracks
-        self.write_cmd(12)
-        self.write_cmd(13)
+        else:
+            self.stop_tracks()
+#        while delta_time <= move_time:
+#            self.write_cmd(7)
+#            self.write_cmd(5)
+#            delta_time = time.time() - init_time
 
-    def move_left_forward(self, distance, speed):
-        speed = 1
-        move_time = distance/speed
-        init_time = time.time()
-        delta_time = 0
+    def move_left_forward(self, move):#distance, speed):
+#        speed = 1
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
     #	while delta_time <= move_time:       
         self.write_cmd(7)
     #		delta_time = datetime.datetime.now() - delta_time  
 		# stop tracks
         self.write_cmd(13)
+
+    def stop_tracks(self):
+        self.write_cmd(12)
+        self.write_cmd(13)
+    
+    def print_test(self, msg):
+        print("the message is: ", msg)
 
 if __name__ == '__main__':
     try:
@@ -255,11 +265,15 @@ if __name__ == '__main__':
        # rover_video.receive_image()
         distance = 0.5    # feet
         speed = 1         # foot/sec
-        while not rospy.is_shutdown(): 
+#        s = rospy.Service('move_forward', String, rover.move_forward)
+#        s = rospy.Service('stop_tracks', String, rover.stop_tracks)
+        s = rospy.Service('print_test', String, rover.print_test)
+        rospy.spin()
+#        while not rospy.is_shutdown(): 
 #            str = "robot moves %s" % rospy.get_time()
 #            rospy.loginfo(str)
 #            pub.publish(String(str))
-            rover_video.receive_image()
+#            rover_video.receive_image()
 #            rover.move_forward(distance, speed)
 
         rover.disconnect_rover()
