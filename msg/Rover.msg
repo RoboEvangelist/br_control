@@ -1,0 +1,9 @@
+int64 num
+string move_forwards
+string move_back
+string move_left
+string move_right
+string stop_move
+string robot_name
+uint8 age
+uint32 score

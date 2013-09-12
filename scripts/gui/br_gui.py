@@ -67,7 +67,7 @@ class ControlClass(FloatLayout):
 
     def call_stop_track(self, *args):
         '''
-        calls the move forward service to move robot forward
+        calls tllhe move forward service to move robot forward
         '''
         rospy.wait_for_service('stop_tracks')
         try:
@@ -89,15 +89,13 @@ class ControlClass(FloatLayout):
         '''
         calls the move forward service to move robot forward
         '''
-        rospy.wait_for_service('move_forward')
+        rospy.wait_for_service('print_test')
         try:
 #            move_forward = rospy.ServiceProxy('move_forward', str)
-            move_forward = rospy.ServiceProxy('print_test', str)
-            resp1 = move_forward('forward')
-            Logger.info(resp1)
-#            return resp1.sum
+            print_test = rospy.ServiceProxy('print_test', str)
+            print_test('forward')
         except rospy.ServiceException, e:
-            print "Move forwad Service call failed: %s"%e
+            print "Move forward Service call failed: %s"%e
 
     def schedule_move_forward(self, *args):
         '''

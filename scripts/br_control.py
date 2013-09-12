@@ -22,6 +22,7 @@ class RovCon():
         self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_buffer = 2048
+        self.move_forward = False
 
         try:
             self.move_socket = \
@@ -210,6 +211,8 @@ class RovCon():
         self.move_socket.send(msg)
 
     # robot's speed is ~2 feet/second
+    def getForwardBool(self):
+        return self.move_forward
 
     def move_forward(self, move):#distance, speed):
 #        speed = 2
@@ -242,8 +245,9 @@ class RovCon():
         self.write_cmd(12)
         self.write_cmd(13)
     
-    def print_test(self, msg):
-        print("the message is: ", msg)
+    def print_test(self, move_bool):
+        if move_bool:
+            self.move_forward = "forward"
 
 if __name__ == '__main__':
     try:
@@ -268,6 +272,8 @@ if __name__ == '__main__':
 #        s = rospy.Service('move_forward', String, rover.move_forward)
 #        s = rospy.Service('stop_tracks', String, rover.stop_tracks)
         s = rospy.Service('print_test', String, rover.print_test)
+        if rover.getForwardBool():
+            print('forward')
         rospy.spin()
 #        while not rospy.is_shutdown(): 
 #            str = "robot moves %s" % rospy.get_time()
