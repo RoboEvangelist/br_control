@@ -80,6 +80,7 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('stop'))
+            Logger.info('stop')
         except rospy.ServiceException, e:
             print "Stop Tracks Service call failed: %s"%e
 
@@ -97,6 +98,7 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('forward'))
+            Logger.info('forward')
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
 
