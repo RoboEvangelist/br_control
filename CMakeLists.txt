@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
-## See http://ros.org/doc/groovy/api/catkin/html/user_guide/setup_dot_py.html
+## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
 
 #######################################
@@ -22,13 +22,13 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
-   Rover.msg
+   Message1.msg
  )
 
 ## Generate services in the 'srv' folder
  add_service_files(
    FILES
-   Rover.srv
+   Service.srv
  )
 
 ## Generate added messages and services with any dependencies listed here
@@ -42,13 +42,14 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
 ###################################
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
+## INCLUDE_DIRS: uncomment this if you package contains header files
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES br_swarm_rover
-#  CATKIN_DEPENDS rospy std_msgs
+#  CATKIN_DEPENDS message_generation roscpp rospy std_msgs
 #  DEPENDS system_lib
   CATKIN_DEPENDS message_runtime
 )
@@ -59,7 +60,10 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+# include_directories(include)
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
 
 ## Declare a cpp library
 # add_library(br_swarm_rover
@@ -83,7 +87,7 @@ catkin_package(
 #############
 
 # all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/groovy/api/catkin/html/adv_user_guide/variables.html
+# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination

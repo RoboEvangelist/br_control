@@ -247,7 +247,8 @@ class RovCon():
     
     def print_test(self, move_bool):
         if move_bool:
-            self.move_forward = "forward"
+            print(move_bool)
+#            self.move_forward = "forward"
 
 if __name__ == '__main__':
     try:
@@ -262,16 +263,13 @@ if __name__ == '__main__':
 #        address_file.write(address)
 #        address_file.close()
 
-        pub = rospy.Publisher('chatter', String)
+#        pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
         rover = RovCon() 
         rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
         distance = 0.5    # feet
         speed = 1         # foot/sec
-#        s = rospy.Service('move_forward', String, rover.move_forward)
-#        s = rospy.Service('stop_tracks', String, rover.stop_tracks)
-        s = rospy.Service('print_test', String, rover.print_test)
         if rover.getForwardBool():
             print('forward')
         rospy.spin()
