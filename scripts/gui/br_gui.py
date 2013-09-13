@@ -79,7 +79,7 @@ class ControlClass(FloatLayout):
         calls tllhe move forward service to move robot forward
         '''
         try:
-            print('stop')
+            self._pub.publish(String('stop'))
         except rospy.ServiceException, e:
             print "Stop Tracks Service call failed: %s"%e
 
@@ -96,8 +96,7 @@ class ControlClass(FloatLayout):
         calls the move forward service to move robot forward
         '''
         try:
-            self._pub.publish(String('hola'))
-            print('publishing')
+            self._pub.publish(String('forward'))
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
 
