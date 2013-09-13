@@ -67,7 +67,7 @@ class ControlClass(FloatLayout):
 
         # variables for publishing movement
         self._rospy = rospy
-        self._pub = self._rospy.Publisher('mover', String)
+        self._pub = self._rospy.Publisher('move', String)
         self._rospy.init_node('client')
 #        from threading import Thread
 #        roscore_thread = \

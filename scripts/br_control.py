@@ -268,12 +268,10 @@ if __name__ == '__main__':
 
 #        pub = rospy.Publisher('chatter', String)
         rospy.init_node('AC13_robot')
-        rospy.Subscriber('move', String, rover.print_test)
+        rospy.Subscriber("move", String, rover.print_test)
 
         distance = 0.5    # feet
         speed = 1         # foot/sec
-        if rover.getForwardBool():
-            print('forward')
         rospy.spin()
 #        while not rospy.is_shutdown(): 
 #            str = "robot moves %s" % rospy.get_time()
