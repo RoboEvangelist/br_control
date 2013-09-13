@@ -19,9 +19,9 @@ def startProcess():
     uri_file = address_file.name
     br_cmd = ['rosrun', 'br_swarm_rover', 'br_control.py', uri_file]
     from threading import Thread
-    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
-        subprocess.Popen(roscore_cmd)))
-    roscore_thread.start()
+#    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
+#        subprocess.Popen(roscore_cmd)))
+#    roscore_thread.start()
     rover_started = False    # true if rover program started
     sleep(3)
     while not rover_started:

@@ -65,15 +65,21 @@ class ControlClass(FloatLayout):
         self._ori_im_width = 1280.0
         self._ori_im_height = 720.0
 
+        # variables for publishing movement
+        self._rospy = rospy
+        self._pub = self._rospy.Publisher('mover', String)
+        self._rospy.init_node('client')
+#        from threading import Thread
+#        roscore_thread = \
+#            Thread(target=lambda: self._rospy.init_node('client'))
+#        roscore_thread.start()
+
     def call_stop_track(self, *args):
         '''
         calls tllhe move forward service to move robot forward
         '''
-        rospy.wait_for_service('stop_tracks')
         try:
-            stop_track = rospy.ServiceProxy('stop_tracks', str)
-            resp1 = stop_track()
-#            return resp1.sum
+            print('stop')
         except rospy.ServiceException, e:
             print "Stop Tracks Service call failed: %s"%e
 
@@ -89,11 +95,9 @@ class ControlClass(FloatLayout):
         '''
         calls the move forward service to move robot forward
         '''
-        rospy.wait_for_service('print_test')
         try:
-#            move_forward = rospy.ServiceProxy('move_forward', str)
-            print_test = rospy.ServiceProxy('print_test', str)
-            print_test('forward')
+            self._pub.publish(String('hola'))
+            print('publishing')
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
 
@@ -101,6 +105,7 @@ class ControlClass(FloatLayout):
         '''
         calls the move forward on a loop
         '''
+        # this function only when button is pressed
         trigger = Clock.create_trigger(self.call_move_forward)
         # later
         trigger()
@@ -109,7 +114,11 @@ class ControlClass(FloatLayout):
         '''
         starts the thead to to run the server simulation
         '''
-        Clock.schedule_interval(self.start_server, 1.0 / 25.0)
+#        Clock.schedule_interval(self.start_server, 1.0 / 25.0)
+        trigger = Clock.create_trigger(self.start_server)
+        # later
+        trigger()
+
 
     def start_server(self, dt):
         '''
