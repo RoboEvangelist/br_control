@@ -12,12 +12,13 @@ def startProcess():
     The function is called when a client connects to the meta-server
     '''
     # commands to start roscore and the rovers ROS program
-    roscore_cmd = ['roscore']
+#    roscore_cmd = ['roscore']
     from tempfile import NamedTemporaryFile
     address_file = NamedTemporaryFile(delete=False)
     # pass temp file name as argument to br_swarm_rover
     uri_file = address_file.name
-    br_cmd = ['rosrun', 'br_swarm_rover', 'br_control.py', uri_file]
+    br_cmd = ['rosrun', 'br_swarm_rover', 'br_single_control.py',
+                uri_file]
     from threading import Thread
 #    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
 #        subprocess.Popen(roscore_cmd)))
