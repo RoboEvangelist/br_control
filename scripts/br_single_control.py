@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+'''
+This is the main file that the meta-server calls when you want you
+run just one robot at the time
+'''
+
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy
 from std_msgs.msg import String
@@ -39,10 +44,13 @@ if __name__ == '__main__':
         speed = 1         # foot/sec
         str = "robot moves %s" % rospy.get_time()
         rospy.loginfo(str)
-        rospy.spin()
-#        while not rospy.is_shutdown(): 
-#            str = "robot moves %s" % rospy.get_time()
-#            rospy.loginfo(str)
+#        rospy.spin()
+        from threading import Thread
+        spin_thread = Thread(target=lambda: rospy.spin())
+        spin_thread.start()
+        while not rospy.is_shutdown(): 
+            str = "robot moves %s" % rospy.get_time()
+            rospy.loginfo(str)
 #            rover_video.receive_image()
 #            rover.move_forward(distance, speed)
 

@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+'''
+This files runs indefinitelly  in a computer and waits for a client
+to request connection to a/the robot(s)
+'''
+
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import subprocess
 from time import sleep

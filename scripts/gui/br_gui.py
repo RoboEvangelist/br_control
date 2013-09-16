@@ -76,7 +76,7 @@ class ControlClass(FloatLayout):
 
     def call_stop_track(self, *args):
         '''
-        calls tllhe move forward service to move robot forward
+        publishes the stop command to stop a robot robot
         '''
         try:
             self._pub.publish(String('stop'))
@@ -86,7 +86,7 @@ class ControlClass(FloatLayout):
 
     def schedule_stop_track(self, *args):
         '''
-        calls the move forward on a loop
+        calls the stop track on a loop
         '''
         trigger = Clock.create_trigger(self.call_stop_track)
         # later
