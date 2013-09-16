@@ -40,11 +40,8 @@ if __name__ == '__main__':
         rospy.init_node('AC13_robot')
         rospy.Subscriber("move", String, rover.print_test)
 
-        distance = 0.5    # feet
-        speed = 1         # foot/sec
-        str = "robot moves %s" % rospy.get_time()
-        rospy.loginfo(str)
-#        rospy.spin()
+#        distance = 0.5    # feet
+#        speed = 1         # foot/sec
         from threading import Thread
         spin_thread = Thread(target=lambda: rospy.spin())
         spin_thread.start()
@@ -52,9 +49,8 @@ if __name__ == '__main__':
 #            str = "robot moves %s" % rospy.get_time()
  #           rospy.loginfo(str)
             buf = rover_video.receive_image()
-            print(buf)
+            pub.publish(String(buf))
             sleep(0.033)
-#            rover.move_forward(distance, speed)
 
 #        rover.disconnect_rover()
 #        rover_video.disconnect_video()
