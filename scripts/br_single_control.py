@@ -35,9 +35,8 @@ if __name__ == '__main__':
 
         rover = RovCon() 
         rover_video = br_cam.RovCam(rover.return_data())
-       # rover_video.receive_image()
 
-#        pub = rospy.Publisher('image', String)
+        pub = rospy.Publisher('image', String) # robot camera data
         rospy.init_node('AC13_robot')
         rospy.Subscriber("move", String, rover.print_test)
 
