@@ -8,9 +8,7 @@ import numpy as np
 
 import socket
 import array
-import time
-
-from pygame.image import tostring
+#import time
 
 class RovCam(): 
     def __init__(self, data):
@@ -147,7 +145,7 @@ class RovCam():
         # convert to numpy to use with OpenCV
         image_buffer = np.array(ldata[36:l_len])
         #image_buffer = np.reshape(image_buffer, (-1, 2))
-        image_buffer = tostring(image_buffer, 'RGB', True) 
+        image_buffer = image_buffer.tostring() 
 #        print('\n',image_buffer, '\n\n')
         #image_file = 'test' + str(datetime.now()) + '.jpg' 
 #        image_file = 'test.jpg'
@@ -164,7 +162,7 @@ class RovCam():
 #        print image_buffer
 #        cv2.imshow("Image", image_buffer)
 #        print "displaying image"
-        time.sleep(0.033) 
+#        time.sleep(0.033) 
         return image_buffer
       #  cv2.waitKey(0) 
    #     cv2.destroyAllWindows()

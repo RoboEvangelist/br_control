@@ -10,6 +10,7 @@ from std_msgs.msg import String
 
 import br_cam
 from br_control import RovCon
+from time import sleep
 
 # meta_server.py creates the file where the ROS shall write its
 # address, then the name is passed as an argument here
@@ -50,9 +51,10 @@ if __name__ == '__main__':
         spin_thread.start()
         while not rospy.is_shutdown(): 
 #            str = "robot moves %s" % rospy.get_time()
-#            rospy.loginfo(str)
+ #           rospy.loginfo(str)
             buf = rover_video.receive_image()
             print(buf)
+            sleep(0.033)
 #            rover.move_forward(distance, speed)
 
 #        rover.disconnect_rover()
