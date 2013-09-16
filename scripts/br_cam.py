@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 import roslib; roslib.load_manifest('br_swarm_rover')
-import rospy
-from std_msgs.msg import String
-from cv_bridge import CvBridge, CvBridgeError
+#import rospy
+#from std_msgs.msg import String
+#from cv_bridge import CvBridge, CvBridgeError
 
-import cv
-import cv2
 import numpy as np
 
 import socket
 import array
 import time
-from datetime import datetime
 
+from pygame.image import tostring
 
 class RovCam(): 
     def __init__(self, data):
         self.host = '192.168.1.100'
         self.port = 80
-        self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.video_socket =\
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.max_tcp_buffer = 2048
         self.max_image_buffer = 231072
         self.image_ptr = 0
@@ -58,7 +57,8 @@ class RovCam():
         self.video_socket.send(msg)
 
     def connect_video(self):	
-        self.video_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.video_socket =\
+                 socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.video_socket.connect((self.host, self.port))
         self.video_socket.setblocking(1)
 
@@ -101,7 +101,7 @@ class RovCam():
         data = ''
         ldata = array.array('c')
         image_buffer = array.array('c')
-        start = ''
+#        start = ''
         found_start = False
         found_end = False
         start_pos = 0 #current position in ldata
@@ -147,8 +147,8 @@ class RovCam():
         # convert to numpy to use with OpenCV
         image_buffer = np.array(ldata[36:l_len])
         #image_buffer = np.reshape(image_buffer, (-1, 2))
-        image_buffer = image_buffer.tostring() 
-        print('\n',image_buffer, '\n\n')
+        image_buffer = tostring(image_buffer, 'RGB', True) 
+#        print('\n',image_buffer, '\n\n')
         #image_file = 'test' + str(datetime.now()) + '.jpg' 
 #        image_file = 'test.jpg'
 #        jpgfile = open(image_file, 'wb')
@@ -164,7 +164,7 @@ class RovCam():
 #        print image_buffer
 #        cv2.imshow("Image", image_buffer)
 #        print "displaying image"
-#        time.sleep(0.033) 
-        time.sleep(1) 
+        time.sleep(0.033) 
+        return image_buffer
       #  cv2.waitKey(0) 
    #     cv2.destroyAllWindows()

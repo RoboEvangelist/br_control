@@ -53,7 +53,8 @@ class RovCon():
             while len(data) == 0:
                 data = self.move_socket.recv(self.max_tcp_buffer)
             print data            
-        self.final_data = data     # last data received is the image data
+        # last data received is the image data
+        self.final_data = data
 
     def connect_rover(self):	
         self.move_socket = \

@@ -36,7 +36,7 @@ if __name__ == '__main__':
         rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
 
-#        pub = rospy.Publisher('chatter', String)
+#        pub = rospy.Publisher('image', String)
         rospy.init_node('AC13_robot')
         rospy.Subscriber("move", String, rover.print_test)
 
@@ -49,9 +49,10 @@ if __name__ == '__main__':
         spin_thread = Thread(target=lambda: rospy.spin())
         spin_thread.start()
         while not rospy.is_shutdown(): 
-            str = "robot moves %s" % rospy.get_time()
-            rospy.loginfo(str)
-#            rover_video.receive_image()
+#            str = "robot moves %s" % rospy.get_time()
+#            rospy.loginfo(str)
+            buf = rover_video.receive_image()
+            print(buf)
 #            rover.move_forward(distance, speed)
 
 #        rover.disconnect_rover()
