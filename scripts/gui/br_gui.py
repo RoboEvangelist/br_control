@@ -154,6 +154,11 @@ class ControlClass(FloatLayout):
                     waiting = 'Waiting for meta server at %s'
                     uri="http://" + hostname + ":12345"
                     Logger.info(waiting, uri)
+
+    def display_raw_image(self, dt):
+        '''
+        Display the normal image coming straight from the rover
+        '''
         try:
             print('testing')
 #            self._client.processClients() # get all pygame events

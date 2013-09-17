@@ -6,8 +6,10 @@ import array
 
 class RovCon(): 
     def __init__(self):
+        # all Brookstone rovers v1.0 have same host and port numbers
         self.host = '192.168.1.100'
         self.port = 80
+
         self.max_tcp_buffer = 2048
         self._forward = False
 
@@ -21,6 +23,9 @@ class RovCon():
             exit()
 
     def init_connection(self):
+        '''
+        Main file that initias connectio to a rover
+        '''
         self.connect_rover()
 
 	# set up rover for communication
@@ -35,11 +40,11 @@ class RovCon():
         self.move_socket.send(msg)
 
 	# Get the return message
-        print 'Wait for HTML return msg'
+        print ('Wait for HTML return msg')
         data = ''
         while len(data) == 0:
             data = self.move_socket.recv(self.max_tcp_buffer)
-        print data
+        print ('returned data', data)
 
 	# We have to close the socket and open it again
         self.disconnect_rover()
@@ -48,56 +53,73 @@ class RovCon():
         # send MO_O commands
         for i in range(1, 4):
             self.write_cmd(i)
-            print 'Wait for result on ' + str(i) + ' MO command'
+            print ('Wait for result on ' + str(i) + ' MO command')
             data = ''
             while len(data) == 0:
                 data = self.move_socket.recv(self.max_tcp_buffer)
-            print data            
+            print ('returned data', data)
         # last data received is the image data
         self.final_data = data
 
     def connect_rover(self):	
-        self.move_socket = \
-            socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.move_socket.connect((self.host, self.port))
-        self.move_socket.setblocking(1)
+        '''
+        Sets connection to the specified host and port
+        '''
+        try:
+            self.move_socket = \
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.move_socket.connect((self.host, self.port))
+            self.move_socket.setblocking(1)
+        except socket.error:
+            print('connection error...exiting connection node')
 
     def disconnect_rover(self):
+        '''
+        Terminates main connection to rover
+        '''
         self.move_socket.close()
 
     def return_data(self):
+        '''
+        returns an ID necessary for the video socket
+        to initiate video socket connection with rover
+        '''
         return self.final_data
 
     def write_cmd(self, index):	
-    # Robot's Control Packets
+        ''' 
+        Us this function to sends commands to robot 
+        (e.g., move tracks)
+        '''
+        # Robot's Control Packets
 
-    # The left brake command is 
-    # 1 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-    # 0010 00 00 00 01 00 00 00 02 00
-    # 02 was the byte that puts the left break
-   
-    # and the right brake command is
-    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-    # 0010 00 00 00 01 00 00 00 04 00
-    # 04 was the byte that puts the left break
- 
-    # Left Wheel forward
-    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-    # 0010 00 00 00 01 00 00 00 04 0a
- 		 
-    # Right Wheel Forward
-    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-    # 0010 00 00 00 01 00 00 00 01 0a
- 		 
-    # Left Wheel Backward
-    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-    # 0010 00 00 00 01 00 00 00 05 0a
- 		 
-    # Right Wheel Backward
-    # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
-    # 0010 00 00 00 01 00 00 00 02 0a
- 
-    # index is integer which specifies which command to send		
+        # The left brake command is 
+        # 1 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+        # 0010 00 00 00 01 00 00 00 02 00
+        # 02 was the byte that puts the left break
+       
+        # and the right brake command is
+        # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+        # 0010 00 00 00 01 00 00 00 04 00
+        # 04 was the byte that puts the left break
+     
+        # Left Wheel forward
+        # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+        # 0010 00 00 00 01 00 00 00 04 0a
+             
+        # Right Wheel Forward
+        # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+        # 0010 00 00 00 01 00 00 00 01 0a
+             
+        # Left Wheel Backward
+        # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+        # 0010 00 00 00 01 00 00 00 05 0a
+             
+        # Right Wheel Backward
+        # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
+        # 0010 00 00 00 01 00 00 00 02 0a
+     
+        # index is integer which specifies which command to send		
         packet_len = 0
         if index == 1:
             packet_len = 22
@@ -200,9 +222,16 @@ class RovCon():
 
     # robot's speed is ~2 feet/second
     def getForwardBool(self):
+        '''
+        This function not be that useful
+        '''
         return self._forward
 
     def move_forward(self, move):#distance, speed):
+        '''
+        Initiate move forward commands (moves both tracks)
+        '''
+        # TODO: implement PWD function for speed
 #        speed = 2
 #        move_time = distance/speed
 #        init_time = time.time()
@@ -219,6 +248,9 @@ class RovCon():
 #            delta_time = time.time() - init_time
 
     def move_left_forward(self, move):#distance, speed):
+        '''
+        Moves the left track only
+        '''
 #        speed = 1
 #        move_time = distance/speed
 #        init_time = time.time()
@@ -230,10 +262,16 @@ class RovCon():
         self.write_cmd(13)
 
     def stop_tracks(self):
+        '''
+        Stop tracks from moving
+        '''
         self.write_cmd(12)
         self.write_cmd(13)
     
     def print_test(self, move_bool):
+        '''
+        I'm using this function for testing only
+        '''
         self._forward = move_bool.data
         if 'forward' in self._forward:
             self.move_forward('forward')
