@@ -1,14 +1,16 @@
 #!/usr/bin/env python
+'''
+This node deals with the rover's camera. It gets image data
+and publishes is so that other nodes can use it.
+'''
+
 import roslib; roslib.load_manifest('br_swarm_rover')
-#import rospy
-#from std_msgs.msg import String
 #from cv_bridge import CvBridge, CvBridgeError
 
 import numpy as np
 
 import socket
 import array
-#import time
 
 class RovCam(): 
     def __init__(self, data):

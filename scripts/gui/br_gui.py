@@ -40,7 +40,8 @@ class KeyboardInterface():
         # Check if control flag should be toggled.
         import pygame
         if pygame.key.get_pressed()[pygame.K_TAB]:
-            self.__has_control = not (pygame.key.get_mods() & pygame.KMOD_LSHIFT)
+            self.__has_control = not (pygame.key.get_mods() &
+                                    pygame.KMOD_LSHIFT)
 
             if self.__has_control:
                 print('Take control')
@@ -68,7 +69,7 @@ class ControlClass(FloatLayout):
         # variables for publishing movement
         self._rospy = rospy
         self._pub = self._rospy.Publisher('move', String)
-        self._rospy.init_node('client')
+        self._rospy.init_node('br_gui')
 #        from threading import Thread
 #        roscore_thread = \
 #            Thread(target=lambda: self._rospy.init_node('client'))
@@ -119,7 +120,6 @@ class ControlClass(FloatLayout):
         trigger = Clock.create_trigger(self.start_server)
         # later
         trigger()
-
 
     def start_server(self, dt):
         '''

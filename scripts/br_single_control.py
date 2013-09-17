@@ -15,7 +15,7 @@ from time import sleep
 # meta_server.py creates the file where the ROS shall write its
 # address, then the name is passed as an argument here
 import argparse
-parser = argparse.ArgumentParser('br_rover_client')
+parser = argparse.ArgumentParser('br_single_control')
 parser.add_argument('file', type=str,
     default=None, help='temporary file to store server uri')
 arg = parser.parse_args()
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         rover_video = br_cam.RovCam(rover.return_data())
 
         pub = rospy.Publisher('image', String) # robot camera data
-        rospy.init_node('AC13_robot')
+        rospy.init_node('br_single_control')
         rospy.Subscriber("move", String, rover.print_test)
 
 #        distance = 0.5    # feet
