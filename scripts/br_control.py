@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+'''
+This file is used when you want to control a single robot 
+i.e., the first rover that computer connects to
+'''
+
+
 import roslib; roslib.load_manifest('br_swarm_rover')
 
 import socket
@@ -11,7 +17,6 @@ class RovCon():
         self.port = 80
 
         self.max_tcp_buffer = 2048
-        self._forward = False
 
         try:
             self.move_socket = \
@@ -119,7 +124,7 @@ class RovCon():
         # 0000 4d 4f 5f 4f fa 00 00 00 00 00 00 00 00 00 00 02
         # 0010 00 00 00 01 00 00 00 02 0a
      
-        # index is integer which specifies which command to send		
+        # index is specifies which command to send		
         packet_len = 0
         if index == 1:
             packet_len = 22
@@ -187,7 +192,7 @@ class RovCon():
             cmd_buffer[19] = '\x01'
             cmd_buffer[23] = '\x01'
             cmd_buffer[24] = '\x0a'
-        elif index == 8:    # right whell backward
+        elif index == 8:    # right wheel backward
             cmd_buffer[4] = '\xfa'
             cmd_buffer[15] = '\x02'
             cmd_buffer[19] = '\x01'
@@ -221,12 +226,9 @@ class RovCon():
         self.move_socket.send(msg)
 
     # robot's speed is ~2 feet/second
-    def getForwardBool(self):
-        '''
-        This function not be that useful
-        '''
-        return self._forward
-
+    # commands go as:
+    #                 self.write_cmd(left track)
+    #                 self.write_cmd(right track)
     def move_forward(self, move):#distance, speed):
         '''
         Initiate move forward commands (moves both tracks)
@@ -238,28 +240,134 @@ class RovCon():
 #        delta_time = 0
         
         if move == 'forward':
-            self.write_cmd(7)
+#        while delta_time <= move_time:
             self.write_cmd(5)
+            self.write_cmd(7)
+#            delta_time = time.time() - init_time
         else:
             self.stop_tracks()
+
+    def move_backward(self, move):#distance, speed):
+        '''
+        Move robot backwards (moves both tracks)
+        '''
+        # TODO: implement PWD function for speed
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'backwad':
 #        while delta_time <= move_time:
-#            self.write_cmd(7)
-#            self.write_cmd(5)
+            self.write_cmd(6)
+            self.write_cmd(8)
 #            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
+
+    def turn_left(self, move):#distance, speed):
+        '''
+        Move robot backwards (moves both tracks)
+        '''
+        # TODO: implement PWD function for speed
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'turn left':
+#        while delta_time <= move_time:
+            self.write_cmd(6)
+            self.write_cmd(7)
+#            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
+
+    def turn_right(self, move):#distance, speed):
+        '''
+        Move robot backwards (moves both tracks)
+        '''
+        # TODO: implement PWD function for speed
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'turn right':
+#        while delta_time <= move_time:
+            self.write_cmd(5)
+            self.write_cmd(8)
+#            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
 
     def move_left_forward(self, move):#distance, speed):
         '''
         Moves the left track only
         '''
-#        speed = 1
+        # TODO: implement PWD function for speed
+#        speed = 2
 #        move_time = distance/speed
 #        init_time = time.time()
 #        delta_time = 0
-    #	while delta_time <= move_time:       
-        self.write_cmd(7)
-    #		delta_time = datetime.datetime.now() - delta_time  
-		# stop tracks
-        self.write_cmd(13)
+        
+        if move == 'forward left':
+#        while delta_time <= move_time:
+            self.write_cmd(5)
+#            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
+
+    def move_right_forward(self, move):#distance, speed):
+        '''
+        Moves the right track only
+        '''
+        # TODO: implement PWD function for speed
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'forward right':
+#        while delta_time <= move_time:
+            self.write_cmd(7)
+#            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
+
+    def move_left_backward(self, move):#distance, speed):
+        '''
+        Moves the left track only
+        '''
+        # TODO: implement PWD function for speed
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'backward left':
+#        while delta_time <= move_time:
+            self.write_cmd(6)
+#            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
+
+    def move_right_backward(self, move):#distance, speed):
+        '''
+        Moves the right track only
+        '''
+        # TODO: implement PWD function for speed
+#        speed = 2
+#        move_time = distance/speed
+#        init_time = time.time()
+#        delta_time = 0
+        
+        if move == 'backward right':
+#        while delta_time <= move_time:
+            self.write_cmd(8)
+#            delta_time = time.time() - init_time
+        else:
+            self.stop_tracks()
 
     def stop_tracks(self):
         '''
@@ -272,8 +380,7 @@ class RovCon():
         '''
         I'm using this function for testing only
         '''
-        self._forward = move_bool.data
-        if 'forward' in self._forward:
+        if 'forward' in move_bool.data:
             self.move_forward('forward')
         else:
             self.stop_tracks()
