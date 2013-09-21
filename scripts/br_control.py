@@ -229,7 +229,7 @@ class RovCon():
     # commands go as:
     #                 self.write_cmd(left track)
     #                 self.write_cmd(right track)
-    def move_forward(self, move):#distance, speed):
+    def move_forward(self):#distance, speed):
         '''
         Initiate move forward commands (moves both tracks)
         '''
@@ -239,15 +239,12 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'forward':
 #        while delta_time <= move_time:
-            self.write_cmd(5)
-            self.write_cmd(7)
+        self.write_cmd(5)
+        self.write_cmd(7)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def move_backward(self, move):#distance, speed):
+    def move_backward(self):#distance, speed):
         '''
         Move robot backwards (moves both tracks)
         '''
@@ -257,15 +254,12 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'backwad':
 #        while delta_time <= move_time:
-            self.write_cmd(6)
-            self.write_cmd(8)
+        self.write_cmd(6)
+        self.write_cmd(8)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def turn_left(self, move):#distance, speed):
+    def turn_left(self):#distance, speed):
         '''
         Move robot backwards (moves both tracks)
         '''
@@ -275,15 +269,12 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'turn left':
 #        while delta_time <= move_time:
-            self.write_cmd(6)
-            self.write_cmd(7)
+        self.write_cmd(6)
+        self.write_cmd(7)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def turn_right(self, move):#distance, speed):
+    def turn_right(self):#distance, speed):
         '''
         Move robot backwards (moves both tracks)
         '''
@@ -293,15 +284,12 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'turn right':
 #        while delta_time <= move_time:
-            self.write_cmd(5)
-            self.write_cmd(8)
+        self.write_cmd(5)
+        self.write_cmd(8)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def move_left_forward(self, move):#distance, speed):
+    def move_left_forward(self):#distance, speed):
         '''
         Moves the left track only
         '''
@@ -311,14 +299,11 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'forward left':
 #        while delta_time <= move_time:
-            self.write_cmd(5)
+        self.write_cmd(5)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def move_right_forward(self, move):#distance, speed):
+    def move_right_forward(self):#distance, speed):
         '''
         Moves the right track only
         '''
@@ -328,14 +313,11 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'forward right':
 #        while delta_time <= move_time:
-            self.write_cmd(7)
+        self.write_cmd(7)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def move_left_backward(self, move):#distance, speed):
+    def move_left_backward(self):#distance, speed):
         '''
         Moves the left track only
         '''
@@ -345,14 +327,11 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'backward left':
 #        while delta_time <= move_time:
-            self.write_cmd(6)
+        self.write_cmd(6)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
-    def move_right_backward(self, move):#distance, speed):
+    def move_right_backward(self):#distance, speed):
         '''
         Moves the right track only
         '''
@@ -362,12 +341,9 @@ class RovCon():
 #        init_time = time.time()
 #        delta_time = 0
         
-        if move == 'backward right':
 #        while delta_time <= move_time:
-            self.write_cmd(8)
+        self.write_cmd(8)
 #            delta_time = time.time() - init_time
-        else:
-            self.stop_tracks()
 
     def stop_tracks(self):
         '''
@@ -376,11 +352,25 @@ class RovCon():
         self.write_cmd(12)
         self.write_cmd(13)
     
-    def print_test(self, move_bool):
+    def set_move(self, move_bool):
         '''
-        I'm using this function for testing only
+        Tells robot where to move based on the published command
         '''
         if 'forward' in move_bool.data:
-            self.move_forward('forward')
+            self.move_forward()
+        elif 'backward' in move_bool.data:
+            self.move_backward()
+        elif 'turn left' in move_bool.data:
+            self.turn_left()
+        elif 'turn right' in move_bool.data:
+            self.turn_right()
+        elif 'left forward' in move_bool.data:
+            self.move_left_forward()
+        elif 'right forward' in move_bool.data:
+            self.move_right_forward()
+        elif 'left backward' in move_bool.data:
+            self.move_left_backward()
+        elif 'right backward' in move_bool.data:
+            self.move_right_backward()
         else:
             self.stop_tracks()

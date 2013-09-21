@@ -12,17 +12,17 @@ import br_cam
 from br_control import RovCon
 from time import sleep
 
-# meta_server.py creates the file where the ROS shall write its
-# address, then the name is passed as an argument here
+# meta_server.py creates the file where the shall write its network
+# address, then the address is passed as an argument here
 import argparse
 parser = argparse.ArgumentParser('br_single_control')
-parser.add_argument('file', type=str,
-    default=None, help='temporary file to store server uri')
+parser.add_argument('file', type=str, default=None,
+                    help='temporary file to store server uri')
 arg = parser.parse_args()
 
 if __name__ == '__main__':
     try:
-        # create file to save ROS server address
+        # open file to save ROS server address
         address_file = open(arg.file, 'w+b')
         # store ROS server address
         #TODO: change the local host part to a normal address
@@ -38,10 +38,12 @@ if __name__ == '__main__':
 
         pub = rospy.Publisher('image', String) # robot camera data
         rospy.init_node('br_single_control')
-        rospy.Subscriber("move", String, rover.print_test)
-
 #        distance = 0.5    # feet
 #        speed = 1         # foot/sec
+        #TODO: also obtain speed and distance
+        rospy.Subscriber("move", String, rover.set_move)
+
+        # thread to run the publishers
         from threading import Thread
         spin_thread = Thread(target=lambda: rospy.spin())
         spin_thread.start()
@@ -52,8 +54,6 @@ if __name__ == '__main__':
             pub.publish(String(buf))
             sleep(0.033)
 
-#        rover.disconnect_rover()
-#        rover_video.disconnect_video()
     except rospy.ROSInterruptException:
         rover.disconnect_rover()
         rover_video.disconnect_video()
