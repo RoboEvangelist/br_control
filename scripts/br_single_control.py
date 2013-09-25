@@ -40,10 +40,11 @@ if __name__ == '__main__':
         rospy.init_node('br_single_control')
 #        distance = 0.5    # feet
 #        speed = 1         # foot/sec
+        # obtain publshed move command
         #TODO: also obtain speed and distance
         rospy.Subscriber("move", String, rover.set_move)
 
-        # thread to run the publishers
+        # thread to run the subscriber
         from threading import Thread
         spin_thread = Thread(target=lambda: rospy.spin())
         spin_thread.start()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
-Client specifically for controller several rovers
+Client specifically for controlling several rovers
 '''
 
 import kivy
@@ -33,7 +33,8 @@ class KeyboardInterface():
         self.__has_control = True
 
     def hasControl(self):
-        '''Return True if user wants to send control commands with
+        '''
+        Return True if user wants to send control commands with
         keyboard.
         Tab key and shift-tab toggle this.
         '''
@@ -67,13 +68,19 @@ class ControlClass(FloatLayout):
         self._ori_im_height = 720.0
 
         # variables for publishing movement
-        self._rospy = rospy
-        self._pub = self._rospy.Publisher('move', String)
-        self._rospy.init_node('br_gui')
+        self._pub = rospy.Publisher('move', String)
+        rospy.init_node('br_gui')
+        self._im_string = ''      # image string
 #        from threading import Thread
 #        roscore_thread = \
-#            Thread(target=lambda: self._rospy.init_node('client'))
+#            Thread(target=lambda: rospy.init_node('client'))
 #        roscore_thread.start()
+
+    def get_image_data(self, image_string):
+        '''
+        obtains the published image data
+        '''
+        self._im_string = image_string
 
     def call_stop_track(self, *args):
         '''
@@ -85,14 +92,6 @@ class ControlClass(FloatLayout):
         except rospy.ServiceException, e:
             print "Stop Tracks Service call failed: %s"%e
 
-    def schedule_stop_track(self, *args):
-        '''
-        calls the stop track on a loop
-        '''
-        trigger = Clock.create_trigger(self.call_stop_track)
-        # later
-        trigger()
-
     def call_move_forward(self, *args):
         '''
         calls the move forward service to move robot forward
@@ -102,24 +101,6 @@ class ControlClass(FloatLayout):
             Logger.info('forward')
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
-
-    def schedule_move_forward(self, *args):
-        '''
-        calls the move forward on a loop
-        '''
-        # this function only when button is pressed
-        trigger = Clock.create_trigger(self.call_move_forward)
-        # later
-        trigger()
-
-    def schedule_client(self, *args):
-        '''
-        starts the thead to to run the server simulation
-        '''
-#        Clock.schedule_interval(self.start_server, 1.0 / 25.0)
-        trigger = Clock.create_trigger(self.start_server)
-        # later
-        trigger()
 
     def start_server(self, dt):
         '''
@@ -144,6 +125,10 @@ class ControlClass(FloatLayout):
 #                    self._args.image_updates)
                     self._started = True
                     Logger.info('Client Connected...')
+                    # use double quote for subscriber name
+                    rospy.Subscriber("image", String,
+                                        self.get_image_data)
+                    rospy.spin()
                     break
                 except socket.error:
                     count += 1
@@ -205,6 +190,34 @@ class ControlClass(FloatLayout):
 #        self._client.quit()
         from sys import exit
         exit()
+
+    # create threads down here
+
+    def schedule_stop_track(self, *args):
+        '''
+        calls the stop track on a loop
+        '''
+        trigger = Clock.create_trigger(self.call_stop_track)
+        # later
+        trigger()
+
+    def schedule_move_forward(self, *args):
+        '''
+        calls the move forward on a loop
+        '''
+        # this function only when button is pressed
+        trigger = Clock.create_trigger(self.call_move_forward)
+        # later
+        trigger()
+
+    def schedule_client(self, *args):
+        '''
+        starts the thead to to run the server simulation
+        '''
+#        Clock.schedule_interval(self.start_server, 1.0 / 25.0)
+        trigger = Clock.create_trigger(self.start_server)
+        # later
+        trigger()
 
 class KivyGui(App):
     def build(self):
