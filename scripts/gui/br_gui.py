@@ -210,12 +210,11 @@ class ControlClass(FloatLayout):
         '''
         starts the thead to to run the server simulation
         '''
-#        Clock.schedule_interval(self.start_server, 1.0 / 25.0)
         trigger = Clock.create_trigger(self.start_server)
         # later
         trigger()
         # schedule image display thread
-        Clock.schedule_interval(self.display_raw_image, 1.0)
+        Clock.schedule_interval(self.display_raw_image, 1.0 / 25.0)
 
 class KivyGui(App):
     def build(self):
