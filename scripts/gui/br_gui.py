@@ -141,14 +141,13 @@ class ControlClass(FloatLayout):
         '''
         try:
             print('testing')
-            print(self._im_string)
-            
 #            self._client.processClients() # get all pygame events
             # assum size of all incoming images is 320x240
 #            im_size = self._client.getImageSize()
 #            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
 #            buf = tostring(retrieve, 'RGB', True)
+#            import pdb; pdb.set_trace()
             imdata = ImageData(self._im_width, self._im_height,
                                'rgb', self._im_string)
             tex = Texture.create_from_data(imdata)
@@ -215,11 +214,15 @@ class ControlClass(FloatLayout):
         # later
         trigger()
         # schedule image display thread
-        Clock.schedule_interval(self.display_raw_image, 1.0 / 25.0)
+        Clock.schedule_interval(self.display_raw_image, 1.0)
 
 class KivyGui(App):
-    def build(self):
-        return ControlClass()
+    try:
+        def build(self):
+            return ControlClass()
+    except BaseException:
+        from sys import exit
+        exit()
 
 if __name__ == '__main__':
     KivyGui().run()
