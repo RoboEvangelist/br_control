@@ -60,8 +60,8 @@ class ControlClass(FloatLayout):
         self._client = None       # server client object
 
         # original image size (from server)
-        self._ori_im_width = 1280.0
-        self._ori_im_height = 720.0
+        self._im_width = 1280.0
+        self._im_height = 720.0
 
         # variables for publishing movement
         self._pub = rospy.Publisher('move', String)
@@ -143,43 +143,45 @@ class ControlClass(FloatLayout):
             print('testing')
             print(self._im_string)
 #            self._client.processClients() # get all pygame events
-            # TODO: get image string data from br_cam.py
-            # size of all incoming images
+            # size of all incoming images assum is this for now
+            self._im_width = 1280.0
+            self._im_height = 720.0
 #            im_size = self._client.getImageSize()
 #            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
 #            buf = tostring(retrieve, 'RGB', True)
-#            imdata = ImageData(im_size[0], im_size[1],
-#                               'rgb', buf)
-#            tex = Texture.create_from_data(imdata)
+            imdata = ImageData(self._im_width, self._im_height,
+                               'rgb', self._im_string)
+            tex = Texture.create_from_data(imdata)
+
+            # calculate new image size
+            aspect_ratio = self._ori_im_height / self._ori_im_width
+            w = 3.0*self.width/4.0      # desired width
+            h = aspect_ratio * w        # desired height
 #
-#            # calculate new image size
-#            aspect_ratio = self._ori_im_height / self._ori_im_width
-#            w = 3.0*self.width/4.0      # desired width
-#            h = aspect_ratio * w        # desired height
-#
-#            # image's origin starts from buttom left
-#            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
-#
-#            # transform image's bottom origin to the top left
-#            # which agrees with the mouse's origin
-#            x_0 = pos_x
-#            y_0 = self.height - (h + pos_y)
-#            im_translation = []
-#            im_translation.append(x_0)
-#            im_translation.append(y_0)
-#
-#            # size difference ratio between GUI window and picture
-#            im_translation.append(self.width/w)    # x ratio
-#            im_translation.append(self.height/h)   # y ratio
+            # image's origin starts from buttom left
+            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
+
+            # transform image's bottom origin to the top left
+            # which agrees with the mouse's origin
+            x_0 = pos_x
+            y_0 = self.height - (h + pos_y)
+            im_translation = []
+            im_translation.append(x_0)
+            im_translation.append(y_0)
+
+            # size difference ratio between GUI window and picture
+            im_translation.append(self.width/w)    # x ratio
+            im_translation.append(self.height/h)   # y ratio
 #            self._client.setMouseRatio(im_translation)
 #            self.canvas.clear()   # clear to upate canvas
-#            with self.canvas:     #display image
-#                Rectangle(texture=tex,
-#                      pos= (pos_x, pos_y),
-#                      size=(w, h))
+            with self.canvas:     #display image
+                Rectangle(texture=tex,
+                      pos= (pos_x, pos_y),
+                      size=(w, h))
         except BaseException:
-            Logger.warning('closing simulation connection')
+            Logger.warning('Error gettin image frame')
+            pass
     #        self.stop_connection()
 
     def stop_connection(self):
