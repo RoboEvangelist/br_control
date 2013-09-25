@@ -59,7 +59,6 @@ class ControlClass(FloatLayout):
         it this way
         '''
         super(ControlClass, self).__init__(**kwargs)
-#        self._args = self.parser_arguments()
         self._started = False     # true if client connected
         self._client = None       # server client object
 
@@ -71,10 +70,6 @@ class ControlClass(FloatLayout):
         self._pub = rospy.Publisher('move', String)
         rospy.init_node('br_gui')
         self._im_string = ''      # image string
-#        from threading import Thread
-#        roscore_thread = \
-#            Thread(target=lambda: rospy.init_node('client'))
-#        roscore_thread.start()
 
     def get_image_data(self, image_string):
         '''
@@ -146,6 +141,7 @@ class ControlClass(FloatLayout):
         '''
         try:
             print('testing')
+            print(self._im_string)
 #            self._client.processClients() # get all pygame events
             # TODO: get image string data from br_cam.py
             # size of all incoming images
@@ -184,7 +180,7 @@ class ControlClass(FloatLayout):
 #                      size=(w, h))
         except BaseException:
             Logger.warning('closing simulation connection')
-            self.stop_connection()
+    #        self.stop_connection()
 
     def stop_connection(self):
 #        self._client.quit()
@@ -218,6 +214,8 @@ class ControlClass(FloatLayout):
         trigger = Clock.create_trigger(self.start_server)
         # later
         trigger()
+        # schedule image display thread
+        Clock.schedule_interval(self.display_raw_image, 1.0)
 
 class KivyGui(App):
     def build(self):
