@@ -24,9 +24,6 @@ from kivy.base import EventLoop
 EventLoop.ensure_window()
 #from kivy.core.window import Window
 
-# maybe not necessary
-from pygame.image import tostring
-
 class KeyboardInterface():
     def __init__(self, server_uri, update_image):
 
@@ -123,7 +120,10 @@ class ControlClass(FloatLayout):
                     # use double quote for subscriber name
                     rospy.Subscriber("image", String,
                                         self.get_image_data)
-                    rospy.spin()
+                    from threading import Thread
+                    spin_thread = Thread(target=lambda: rospy.spin())
+                    spin_thread.start()
+#                    rospy.spin()
                     break
                 except socket.error:
                     count += 1
