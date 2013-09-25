@@ -60,8 +60,8 @@ class ControlClass(FloatLayout):
         self._client = None       # server client object
 
         # original image size (from server)
-        self._im_width = 1280.0
-        self._im_height = 720.0
+        self._im_width = 320.0
+        self._im_height = 240.0
 
         # variables for publishing movement
         self._pub = rospy.Publisher('move', String)
@@ -142,10 +142,9 @@ class ControlClass(FloatLayout):
         try:
             print('testing')
             print(self._im_string)
+            
 #            self._client.processClients() # get all pygame events
-            # size of all incoming images assum is this for now
-            self._im_width = 1280.0
-            self._im_height = 720.0
+            # assum size of all incoming images is 320x240
 #            im_size = self._client.getImageSize()
 #            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
