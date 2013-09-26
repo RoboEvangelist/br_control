@@ -154,36 +154,36 @@ class ControlClass(FloatLayout):
 #            size = (320, 240)
 #            imdata = Image.fromstring('RGB', size, self._im_string)
             print(imdata)
-            print('hola')
-            tex = Texture.create_from_data(imdata)
-            print('after text')
-            # calculate new image size
-            aspect_ratio = self._ori_im_height / self._ori_im_width
-            w = 3.0*self.width/4.0      # desired width
-            h = aspect_ratio * w        # desired height
+#            print('hola')
+#            tex = Texture.create_from_data(imdata)
+#            print('after text')
+#            # calculate new image size
+#            aspect_ratio = self._ori_im_height / self._ori_im_width
+#            w = 3.0*self.width/4.0      # desired width
+#            h = aspect_ratio * w        # desired height
+
+#            # image's origin starts from buttom left
+#            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
 #
-            # image's origin starts from buttom left
-            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
-
-            # transform image's bottom origin to the top left
-            # which agrees with the mouse's origin
-            x_0 = pos_x
-            y_0 = self.height - (h + pos_y)
-            im_translation = []
-            im_translation.append(x_0)
-            im_translation.append(y_0)
-
-            # size difference ratio between GUI window and picture
-            im_translation.append(self.width/w)    # x ratio
-            im_translation.append(self.height/h)   # y ratio
-#            self._client.setMouseRatio(im_translation)
-#            self.canvas.clear()   # clear to upate canvas
-            with self.canvas:     #display image
-                Rectangle(texture=tex,
-                      pos= (pos_x, pos_y),
-                      size=(w, h))
+#            # transform image's bottom origin to the top left
+#            # which agrees with the mouse's origin
+#            x_0 = pos_x
+#            y_0 = self.height - (h + pos_y)
+#            im_translation = []
+#            im_translation.append(x_0)
+#            im_translation.append(y_0)
+#
+#            # size difference ratio between GUI window and picture
+#            im_translation.append(self.width/w)    # x ratio
+#            im_translation.append(self.height/h)   # y ratio
+##            self._client.setMouseRatio(im_translation)
+##            self.canvas.clear()   # clear to upate canvas
+#            with self.canvas:     #display image
+#                Rectangle(texture=tex,
+#                      pos= (pos_x, pos_y),
+#                      size=(w, h))
         except BaseException:
-            Logger.warning('Error gettin image frame')
+            Logger.warning('Error getting image frame')
             pass
     #        self.stop_connection()
 
