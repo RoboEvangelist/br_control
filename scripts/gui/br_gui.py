@@ -10,6 +10,8 @@ import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
 from std_msgs.msg import String
 
+import Image
+
 #from os.path import join, dirname
 from kivy.uix.floatlayout import FloatLayout
 from kivy.app import App
@@ -146,12 +148,15 @@ class ControlClass(FloatLayout):
 #            im_size = self._client.getImageSize()
 #            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
-#            buf = tostring(retrieve, 'RGB', True)
 #            import pdb; pdb.set_trace()
             imdata = ImageData(self._im_width, self._im_height,
-                               'rgb', self._im_string)
+                               'rgb', bytearray(self._im_string.data))
+#            size = (320, 240)
+#            imdata = Image.fromstring('RGB', size, self._im_string)
+            print(imdata)
+            print('hola')
             tex = Texture.create_from_data(imdata)
-
+            print('after text')
             # calculate new image size
             aspect_ratio = self._ori_im_height / self._ori_im_width
             w = 3.0*self.width/4.0      # desired width
