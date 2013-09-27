@@ -10,17 +10,19 @@ import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
 from std_msgs.msg import String
 
-import Image
+from  Image import open
 import StringIO
 
 #from os.path import join, dirname
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
 from kivy.app import App
 from kivy.graphics import Rectangle
 from kivy.clock import Clock
 from kivy.core.image import ImageData
 from kivy.graphics.texture import Texture
 from kivy.logger import Logger
+from kivy.core.image.img_pygame import ImageLoaderPygame
 
 # FIXME this shouldn't be necessary
 from kivy.base import EventLoop
@@ -157,20 +159,20 @@ class ControlClass(FloatLayout):
             buff = StringIO.StringIO() #buffer where image is stored
             buff.write(self._im_string.data)
             buff.seek(0)
-            Image.open(buff)
-            size = (320, 240)
-#            imdata = Image.fromstring('RGB', size, buff)
-#            print(imdata)
-#            tex = Texture.create_from_data(buff)
-#            print(tex)
+            imdata = ImageLoaderPygame(buff)._data #returns ImageData
+            print(imdata)
+#            size = (320, 240)
+#            from pygame.image import tostring
+            tex = Texture.create_from_data(imdata)
+            print(tex)
 #            print('after text')
 #            # calculate new image size
-            aspect_ratio = size[1] / size[0]
-            w = 3.0*self.width/4.0      # desired width
-            h = aspect_ratio * w        # desired height
+#            aspect_ratio = size[1] / size[0]
+#            w = 3.0*self.width/4.0      # desired width
+#            h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
-            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
+#            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
 #
 #            # transform image's bottom origin to the top left
 #            # which agrees with the mouse's origin
@@ -185,10 +187,11 @@ class ControlClass(FloatLayout):
 #            im_translation.append(self.height/h)   # y ratio
 ##            self._client.setMouseRatio(im_translation)
 ##            self.canvas.clear()   # clear to upate canvas
-            with self.canvas:     #display image
-                Rectangle(texture= Image.open(buff),
-                      pos= (pos_x, pos_y),
-                      size=(w, h))
+#            print(Image.open(buff))
+#            with self.canvas:     #display image
+#            Image(source = buff,
+#                  pos= (pos_x, pos_y))
+#                      size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
             pass
