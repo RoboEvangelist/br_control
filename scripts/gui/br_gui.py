@@ -159,20 +159,20 @@ class ControlClass(FloatLayout):
             buff = StringIO.StringIO() #buffer where image is stored
             buff.write(self._im_string.data)
             buff.seek(0)
-            imdata = ImageLoaderPygame(buff)._data #returns ImageData
+            imdata = ImageLoaderPygame(buff).texture #_data #returns ImageData
             print(imdata)
-#            size = (320, 240)
+            size = (320, 240)
 #            from pygame.image import tostring
-            tex = Texture.create_from_data(imdata)
-            print(tex)
+#            tex = Texture.create_from_data(imdata)
+#            print(tex)
 #            print('after text')
 #            # calculate new image size
-#            aspect_ratio = size[1] / size[0]
-#            w = 3.0*self.width/4.0      # desired width
-#            h = aspect_ratio * w        # desired height
+            aspect_ratio = size[1] / size[0]
+            w = 3.0*self.width/4.0      # desired width
+            h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
-#            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
+            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
 #
 #            # transform image's bottom origin to the top left
 #            # which agrees with the mouse's origin
@@ -189,8 +189,8 @@ class ControlClass(FloatLayout):
 ##            self.canvas.clear()   # clear to upate canvas
 #            print(Image.open(buff))
 #            with self.canvas:     #display image
-#            Image(source = buff,
-#                  pos= (pos_x, pos_y))
+#                Rectangle(source = imdata,
+#                  pos= (pos_x, pos_y),
 #                      size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
