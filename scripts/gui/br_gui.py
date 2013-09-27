@@ -190,7 +190,7 @@ class ControlClass(FloatLayout):
 ##            self._client.setMouseRatio(im_translation)
             self.canvas.clear()   # clear to upate canvas
             with self.canvas:     #display image
-                Rectangle(tecture = imdata,
+                Rectangle(texture = imdata,
                   pos= (pos_x, pos_y),
                       size=(w, h))
         except BaseException:
@@ -230,7 +230,7 @@ class ControlClass(FloatLayout):
         # later
         trigger()
         # schedule image display thread
-        Clock.schedule_interval(self.display_raw_image, 1.0)
+        Clock.schedule_interval(self.display_raw_image, 1.0 / 30.0)
 
 class KivyGui(App):
     try:
