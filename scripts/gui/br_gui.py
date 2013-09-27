@@ -157,20 +157,20 @@ class ControlClass(FloatLayout):
             buff = StringIO.StringIO() #buffer where image is stored
             buff.write(self._im_string.data)
             buff.seek(0)
-            print(Image.open(buff))
-#            size = (320, 240)
+            Image.open(buff)
+            size = (320, 240)
 #            imdata = Image.fromstring('RGB', size, buff)
 #            print(imdata)
 #            tex = Texture.create_from_data(buff)
 #            print(tex)
 #            print('after text')
 #            # calculate new image size
-#            aspect_ratio = self._ori_im_height / self._ori_im_width
-#            w = 3.0*self.width/4.0      # desired width
-#            h = aspect_ratio * w        # desired height
+            aspect_ratio = size[1] / size[0]
+            w = 3.0*self.width/4.0      # desired width
+            h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
-#            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
+            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
 #
 #            # transform image's bottom origin to the top left
 #            # which agrees with the mouse's origin
@@ -185,10 +185,10 @@ class ControlClass(FloatLayout):
 #            im_translation.append(self.height/h)   # y ratio
 ##            self._client.setMouseRatio(im_translation)
 ##            self.canvas.clear()   # clear to upate canvas
-#            with self.canvas:     #display image
-#                Rectangle(texture=tex,
-#                      pos= (pos_x, pos_y),
-#                      size=(w, h))
+            with self.canvas:     #display image
+                Rectangle(texture= Image.open(buff),
+                      pos= (pos_x, pos_y),
+                      size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
             pass
