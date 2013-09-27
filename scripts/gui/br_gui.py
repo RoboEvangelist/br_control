@@ -145,37 +145,24 @@ class ControlClass(FloatLayout):
         Display the normal image coming straight from the rover
         '''
         try:
-            print('testing')
-#            self._client.processClients() # get all pygame events
             # assum size of all incoming images is 320x240
-#            im_size = self._client.getImageSize()
-#            retrieve = self._client.retrieveImage()
-#            # convert pygame surface to Kivy data
-#            imdata = ImageData(self._im_width, self._im_height,
-#                               'rgb', bytearray(self._im_string.data))
 #            import pdb; pdb.set_trace()
-#            print(self._im_string.data.decode("base64"))
-#            buff = self._im_string.data.decode("base64")
-            buff = StringIO.StringIO() #buffer where image is stored
+            # get published image image str and store it in a buffer
+            buff = StringIO.StringIO()
             buff.write(self._im_string.data)
             buff.seek(0)
-            imdata = ImageLoaderPygame(buff).texture #_data #returns ImageData
-#            print(imdata)
+            # open buffer file and extract image texture
+            imdata = ImageLoaderPygame(buff).texture
             size = (320, 240)
-#            from pygame.image import tostring
-#            tex = Texture.create_from_data(imdata)
-#            print(tex)
-#            print('after text')
 #            # calculate new image size
             aspect_ratio = size[0] / size[1]
-#            w = 3.0*self.width/4.0      # desired width
-#            h = aspect_ratio * w        # desired height
             w = self.width/3.0      # desired width
             h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
             (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
-#
+            
+            # use this part to implement mouse clicking
 #            # transform image's bottom origin to the top left
 #            # which agrees with the mouse's origin
 #            x_0 = pos_x
@@ -188,11 +175,12 @@ class ControlClass(FloatLayout):
 #            im_translation.append(self.width/w)    # x ratio
 #            im_translation.append(self.height/h)   # y ratio
 ##            self._client.setMouseRatio(im_translation)
-            self.canvas.clear()   # clear to upate canvas
+            # TODO: create a canvas just for the image and 
+            # clear only that canvas
+#            self.canvas.clear() 
             with self.canvas:     #display image
-                Rectangle(texture = imdata,
-                  pos= (pos_x, pos_y),
-                      size=(w, h))
+                Rectangle(texture = imdata, pos= (pos_x, pos_y),
+                                      size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
             pass
