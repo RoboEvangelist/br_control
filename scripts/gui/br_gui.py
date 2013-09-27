@@ -148,13 +148,13 @@ class ControlClass(FloatLayout):
 #            im_size = self._client.getImageSize()
 #            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
+            print(self._im_string.data)
+#            imdata = ImageData(self._im_width, self._im_height,
+#                               'rgb', bytearray(self._im_string.data))
 #            import pdb; pdb.set_trace()
-            imdata = ImageData(self._im_width, self._im_height,
-                               'rgb', bytearray(self._im_string.data))
-#            size = (320, 240)
-#            imdata = Image.fromstring('RGB', size, self._im_string)
+            size = (320, 240)
+            imdata = Image.fromstring('RGB', size, bytearray(self._im_string.data))
             print(imdata)
-#            print('hola')
 #            tex = Texture.create_from_data(imdata)
 #            print('after text')
 #            # calculate new image size
