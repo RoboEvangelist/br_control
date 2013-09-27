@@ -168,7 +168,9 @@ class ControlClass(FloatLayout):
 #            print('after text')
 #            # calculate new image size
             aspect_ratio = size[1] / size[0]
-            w = 3.0*self.width/4.0      # desired width
+#            w = 3.0*self.width/4.0      # desired width
+#            h = aspect_ratio * w        # desired height
+            w = 2.0*self.width/3.0      # desired width
             h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
@@ -186,12 +188,11 @@ class ControlClass(FloatLayout):
 #            im_translation.append(self.width/w)    # x ratio
 #            im_translation.append(self.height/h)   # y ratio
 ##            self._client.setMouseRatio(im_translation)
-##            self.canvas.clear()   # clear to upate canvas
-#            print(Image.open(buff))
-#            with self.canvas:     #display image
-#                Rectangle(source = imdata,
-#                  pos= (pos_x, pos_y),
-#                      size=(w, h))
+            self.canvas.clear()   # clear to upate canvas
+            with self.canvas:     #display image
+                Rectangle(tecture = imdata,
+                  pos= (pos_x, pos_y))#,
+                      size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
             pass
