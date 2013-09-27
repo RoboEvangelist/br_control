@@ -160,17 +160,17 @@ class ControlClass(FloatLayout):
             buff.write(self._im_string.data)
             buff.seek(0)
             imdata = ImageLoaderPygame(buff).texture #_data #returns ImageData
-            print(imdata)
+#            print(imdata)
             size = (320, 240)
 #            from pygame.image import tostring
 #            tex = Texture.create_from_data(imdata)
 #            print(tex)
 #            print('after text')
 #            # calculate new image size
-            aspect_ratio = size[1] / size[0]
+            aspect_ratio = size[0] / size[1]
 #            w = 3.0*self.width/4.0      # desired width
 #            h = aspect_ratio * w        # desired height
-            w = 2.0*self.width/3.0      # desired width
+            w = self.width/3.0      # desired width
             h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
@@ -191,7 +191,7 @@ class ControlClass(FloatLayout):
             self.canvas.clear()   # clear to upate canvas
             with self.canvas:     #display image
                 Rectangle(tecture = imdata,
-                  pos= (pos_x, pos_y))#,
+                  pos= (pos_x, pos_y),
                       size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
