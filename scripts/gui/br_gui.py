@@ -157,7 +157,7 @@ class ControlClass(FloatLayout):
             buff = StringIO.StringIO() #buffer where image is stored
             buff.write(self._im_string.data)
             buff.seek(0)
-            print(type(Image.open(buff)))
+            print(Image.open(buff))
 #            size = (320, 240)
 #            imdata = Image.fromstring('RGB', size, buff)
 #            print(imdata)
