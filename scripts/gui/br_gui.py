@@ -11,6 +11,7 @@ import rospy
 from std_msgs.msg import String
 
 import Image
+import StringIO
 
 #from os.path import join, dirname
 from kivy.uix.floatlayout import FloatLayout
@@ -151,10 +152,17 @@ class ControlClass(FloatLayout):
 #            imdata = ImageData(self._im_width, self._im_height,
 #                               'rgb', bytearray(self._im_string.data))
 #            import pdb; pdb.set_trace()
-            size = (320, 240)
-            imdata = Image.fromstring('RGB', size, bytearray(self._im_string.data))
-            print(imdata)
-#            tex = Texture.create_from_data(imdata)
+#            print(self._im_string.data.decode("base64"))
+#            buff = self._im_string.data.decode("base64")
+            buff = StringIO.StringIO() #buffer where image is stored
+            buff.write(self._im_string.data)
+            buff.seek(0)
+            print(type(Image.open(buff)))
+#            size = (320, 240)
+#            imdata = Image.fromstring('RGB', size, buff)
+#            print(imdata)
+#            tex = Texture.create_from_data(buff)
+#            print(tex)
 #            print('after text')
 #            # calculate new image size
 #            aspect_ratio = self._ori_im_height / self._ori_im_width
