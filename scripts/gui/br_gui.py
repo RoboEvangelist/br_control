@@ -148,7 +148,6 @@ class ControlClass(FloatLayout):
 #            im_size = self._client.getImageSize()
 #            retrieve = self._client.retrieveImage()
 #            # convert pygame surface to Kivy data
-            print(self._im_string.data)
 #            imdata = ImageData(self._im_width, self._im_height,
 #                               'rgb', bytearray(self._im_string.data))
 #            import pdb; pdb.set_trace()
