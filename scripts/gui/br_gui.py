@@ -99,15 +99,84 @@ class ControlClass(FloatLayout):
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
 
+    def call_move_backward(self, *args):
+        '''
+        calls the move backward service to move
+        '''
+        try:
+            self._pub.publish(String('backward'))
+            Logger.info('backward')
+        except rospy.ServiceException, e:
+            print "Move backward Service call failed: %s"%e
+
+    def call_turn_left(self, *args):
+        '''
+        calls the turn left service to move robot
+        '''
+        try:
+            self._pub.publish(String('turn left'))
+            Logger.info('turn left')
+        except rospy.ServiceException, e:
+            print "Move turn left Service call failed: %s"%e
+
+    def call_turn_right(self, *args):
+        '''
+        calls the turn right service to move
+        '''
+        try:
+            self._pub.publish(String('turn right'))
+            Logger.info('turn right')
+        except rospy.ServiceException, e:
+            print "Move turn right Service call failed: %s"%e
+
+    def call_left_forward(self, *args):
+        '''
+        calls the turn left forward service to move
+        '''
+        try:
+            self._pub.publish(String('left forward'))
+            Logger.info('left forward')
+        except rospy.ServiceException, e:
+            print "Move left forward Service call failed: %s"%e
+
+    def call_right_forward(self, *args):
+        '''
+        calls the turn right forward service to move
+        '''
+        try:
+            self._pub.publish(String('right forward'))
+            Logger.info('right forward')
+        except rospy.ServiceException, e:
+            print "Move right forward Service call failed: %s"%e
+
+    def call_left_backward(self, *args):
+        '''
+        calls the turn left backward service to move
+        '''
+        try:
+            self._pub.publish(String('left backward'))
+            Logger.info('left backward')
+        except rospy.ServiceException, e:
+            print "Move left backward Service call failed: %s"%e
+
+    def call_right_backward(self, *args):
+        '''
+        calls the turn right backward service to move
+        '''
+        try:
+            self._pub.publish(String('right backward'))
+            Logger.info('right backward')
+        except rospy.ServiceException, e:
+            print "Move right backward Service call failed: %s"%e
+
     def start_server(self, dt):
         '''
         initializes the client connection, and gets image data
         '''
         hostname = "0.0.0.0"
-        # Keep trying in case server is not up yet
         if not self._started:
             count = 0
-            while True:
+            while True:  # Keep trying in case server is not up yet
                 import socket
                 try:
                     from xmlrpclib import ServerProxy
@@ -128,7 +197,6 @@ class ControlClass(FloatLayout):
                     from threading import Thread
                     spin_thread = Thread(target=lambda: rospy.spin())
                     spin_thread.start()
-#                    rospy.spin()
                     break
                 except socket.error:
                     count += 1
@@ -147,7 +215,7 @@ class ControlClass(FloatLayout):
         try:
             # assum size of all incoming images is 320x240
 #            import pdb; pdb.set_trace()
-            # get published image image str and store it in a buffer
+            # get published image str and store it in a buffer
             buff = StringIO.StringIO()
             buff.write(self._im_string.data)
             buff.seek(0)
