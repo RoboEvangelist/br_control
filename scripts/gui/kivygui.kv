@@ -31,38 +31,70 @@
     Button:
         id: drive_forward
         text: 'move forward'
-        # play with the size, or change this to a menu instead
         size_hint: 0.15, 0.1
         pos_hint: {'center_x':.5, 'center_y': .95}
-        on_press: root.schedule_move_forward()  #bind button to function"
+        on_press: root.schedule_move_forward()
         on_release: root.schedule_stop_track()
 
     # move backwards button
     Button:
         id: drive_backward
         text: 'move backward'
-        # play with the size, or change this to a menu instead
         size_hint: 0.15, 0.1
         pos_hint: {'center_x':.5, 'center_y': 0.70}
-        on_press: root.schedule_move_backward()  #bind button to function"
+        on_press: root.schedule_move_backward()
         on_release: root.schedule_stop_track()
 
     # turn left button
     Button:
         id: turn_left
         text: 'left'
-        # play with the size, or change this to a menu instead
         size_hint: 0.07, 0.15
         pos_hint: {'center_x':.38, 'center_y': 0.825}
-        on_press: root.schedule_turn_left()  #bind button to function"
+        on_press: root.schedule_turn_left()
         on_release: root.schedule_stop_track()
 
     # turn right button
     Button:
         id: turn_right
         text: 'right'
-        # play with the size, or change this to a menu instead
         size_hint: 0.07, 0.15
         pos_hint: {'center_x':.62, 'center_y': 0.825}
-        on_press: root.schedule_turn_right()  #bind button to function"
+        on_press: root.schedule_turn_right()
+        on_release: root.schedule_stop_track()
+
+    # turn left forward
+    Button:
+        id: left_forward
+        text: 'left F'
+        size_hint: 0.07, 0.08
+        pos_hint: {'center_x':.38, 'center_y': 0.95}
+        on_press: root.schedule_left_forward()
+        on_release: root.schedule_stop_track()
+
+    # turn right forward
+    Button:
+        id: righ_forward
+        text: 'right F'
+        size_hint: 0.07, 0.08
+        pos_hint: {'center_x':.62, 'center_y': 0.95}
+        on_press: root.schedule_right_forward()
+        on_release: root.schedule_stop_track()
+
+    # turn left backward
+    Button:
+        id: left_backward
+        text: 'left B'
+        size_hint: 0.07, 0.08
+        pos_hint: {'center_x':.38, 'center_y': 0.7}
+        on_press: root.schedule_left_backward()
+        on_release: root.schedule_stop_track()
+
+    # turn right backward
+    Button:
+        id: righ_forward
+        text: 'right B'
+        size_hint: 0.07, 0.08
+        pos_hint: {'center_x':.62, 'center_y': 0.7}
+        on_press: root.schedule_right_backward()
         on_release: root.schedule_stop_track()
