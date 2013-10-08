@@ -13,8 +13,7 @@
     row: 4
     canvas.before:
         Rectangle:
-        # background image
-        #source: '/home/atbe/dev/users/billclar/AsteroidCapturePkg-billclar1/src/AsteroidCapture/demos/gui_interaction/gui_images/asteroid-retrieval-1920.jpg'
+            # background image
             source: 'Bionix-Robot.jpg'
             pos: self.pos
             size: self.size
@@ -25,7 +24,6 @@
         # play with the size, or change this to a menu instead
         size_hint: 0.2, 0.1
         pos_hint: {'center_x':.1, 'center_y': .95}
-        # root is the DisplayImage class
         on_press: root.schedule_client()  #bind button to function"
 
     # button to connect drive the rover(s) forward
@@ -33,8 +31,27 @@
         id: drive_forward
         text: 'move forward'
         # play with the size, or change this to a menu instead
-        size_hint: 0.2, 0.1
+        size_hint: 0.15, 0.1
         pos_hint: {'center_x':.5, 'center_y': .95}
-        # root is the DisplayImage class
         on_press: root.schedule_move_forward()  #bind button to function"
+        on_release: root.schedule_stop_track()
+
+    # button to connect drive the rover(s) backwards
+    Button:
+        id: drive_backward
+        text: 'move backward'
+        # play with the size, or change this to a menu instead
+        size_hint: 0.15, 0.1
+        pos_hint: {'center_x':.5, 'center_y': 0.70}
+        on_press: root.schedule_move_backward()  #bind button to function"
+        on_release: root.schedule_stop_track()
+
+    # button to turn the rover(s) left
+    Button:
+        id: turn_left
+        text: 'left'
+        # play with the size, or change this to a menu instead
+        size_hint: 0.15, 0.15
+        pos_hint: {'center_x':.5, 'center_y': 0.80}
+        on_press: root.schedule_turn_left()  #bind button to function"
         on_release: root.schedule_stop_track()

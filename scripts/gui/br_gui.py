@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 '''
-Client specifically for controlling several rovers
+Client specifically for controlling several rovers and gather data
+from the rovers
 '''
 
 import kivy
@@ -10,24 +11,18 @@ import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
 from std_msgs.msg import String
 
-from  Image import open
 import StringIO
 
-#from os.path import join, dirname
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.image import Image
 from kivy.app import App
 from kivy.graphics import Rectangle
 from kivy.clock import Clock
-from kivy.core.image import ImageData
-from kivy.graphics.texture import Texture
 from kivy.logger import Logger
 from kivy.core.image.img_pygame import ImageLoaderPygame
 
 # FIXME this shouldn't be necessary
 from kivy.base import EventLoop
 EventLoop.ensure_window()
-#from kivy.core.window import Window
 
 class KeyboardInterface():
     def __init__(self, server_uri, update_image):
@@ -275,6 +270,24 @@ class ControlClass(FloatLayout):
         '''
         # this function only when button is pressed
         trigger = Clock.create_trigger(self.call_move_forward)
+        # later
+        trigger()
+
+    def schedule_move_backward(self, *args):
+        '''
+        calls the move backward on a loop
+        '''
+        # this function only when button is pressed
+        trigger = Clock.create_trigger(self.call_move_backward)
+        # later
+        trigger()
+
+    def schedule_turn_left(self, *args):
+        '''
+        calls the turn left on a loop
+        '''
+        # this function only when button is pressed
+        trigger = Clock.create_trigger(self.call_turn_left)
         # later
         trigger()
 
