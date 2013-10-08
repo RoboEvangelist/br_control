@@ -58,4 +58,6 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         rover.disconnect_rover()
         rover_video.disconnect_video()
-        pass
+#        pass
+        from sys import exit
+        exit()

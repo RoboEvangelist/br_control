@@ -104,12 +104,18 @@ class ControlClass(FloatLayout):
         except rospy.ServiceException, e:
             print "Move backward Service call failed: %s"%e
 
+    # TODO: fix the issue when (e.g. 'turn left' and 'left') commands
+    # are interpreted as the same when python is analysing the
+    # string being publish
+    # initials are being used instead of complete words as a
+    # work-around the problem
+
     def call_turn_left(self, *args):
         '''
         calls the turn left service to move robot
         '''
         try:
-            self._pub.publish(String('turn left'))
+            self._pub.publish(String('TuLef'))
             Logger.info('turn left')
         except rospy.ServiceException, e:
             print "Move turn left Service call failed: %s"%e
@@ -119,7 +125,7 @@ class ControlClass(FloatLayout):
         calls the turn right service to move
         '''
         try:
-            self._pub.publish(String('turn right'))
+            self._pub.publish(String('TuRi'))
             Logger.info('turn right')
         except rospy.ServiceException, e:
             print "Move turn right Service call failed: %s"%e
@@ -129,7 +135,7 @@ class ControlClass(FloatLayout):
         calls the turn left forward service to move
         '''
         try:
-            self._pub.publish(String('left forward'))
+            self._pub.publish(String('LefFor'))
             Logger.info('left forward')
         except rospy.ServiceException, e:
             print "Move left forward Service call failed: %s"%e
@@ -139,7 +145,7 @@ class ControlClass(FloatLayout):
         calls the turn right forward service to move
         '''
         try:
-            self._pub.publish(String('right forward'))
+            self._pub.publish(String('RiFor'))
             Logger.info('right forward')
         except rospy.ServiceException, e:
             print "Move right forward Service call failed: %s"%e
@@ -149,7 +155,7 @@ class ControlClass(FloatLayout):
         calls the turn left backward service to move
         '''
         try:
-            self._pub.publish(String('left backward'))
+            self._pub.publish(String('LefBa'))
             Logger.info('left backward')
         except rospy.ServiceException, e:
             print "Move left backward Service call failed: %s"%e
@@ -159,7 +165,7 @@ class ControlClass(FloatLayout):
         calls the turn right backward service to move
         '''
         try:
-            self._pub.publish(String('right backward'))
+            self._pub.publish(String('RiBa'))
             Logger.info('right backward')
         except rospy.ServiceException, e:
             print "Move right backward Service call failed: %s"%e

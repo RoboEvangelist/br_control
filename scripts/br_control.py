@@ -74,7 +74,8 @@ class RovCon():
             self.move_socket.connect((self.host, self.port))
             self.move_socket.setblocking(1)
         except socket.error:
-            print('connection error...exiting connection node')
+            print('Connection error. Make sure robot is on')
+            print('Exiting connection node...')
 
     def disconnect_rover(self):
         '''
@@ -350,25 +351,26 @@ class RovCon():
         self.write_cmd(12)
         self.write_cmd(13)
     
-    def set_move(self, move_bool):
+    def set_move(self, move_order):
         '''
         Tells robot where to move based on the published command
         '''
-        if 'forward' in move_bool.data:
+        print(move_order.data)
+        if 'forward' in move_order.data:
             self.move_forward()
-        elif 'backward' in move_bool.data:
+        elif 'backward' in move_order.data:
             self.move_backward()
-        elif 'turn left' in move_bool.data:
+        elif 'turn_left' in move_order.data:
             self.turn_left()
-        elif 'turn right' in move_bool.data:
+        elif 'turn_right' in move_order.data:
             self.turn_right()
-        elif 'left forward' in move_bool.data:
+        elif 'left_forward' in move_order.data:
             self.move_left_forward()
-        elif 'right forward' in move_bool.data:
+        elif 'right_forward' in move_order.data:
             self.move_right_forward()
-        elif 'left backward' in move_bool.data:
+        elif 'left_backward' in move_order.data:
             self.move_left_backward()
-        elif 'right backward' in move_bool.data:
+        elif 'right_backward' in move_order.data:
             self.move_right_backward()
         else:
             self.stop_tracks()
