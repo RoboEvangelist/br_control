@@ -17,6 +17,7 @@
             source: 'Bionix-Robot.jpg'
             pos: self.pos
             size: self.size
+
     # button to connect client to server
     Button:
         id: connect_client
@@ -26,7 +27,7 @@
         pos_hint: {'center_x':.1, 'center_y': .95}
         on_press: root.schedule_client()  #bind button to function"
 
-    # button to connect drive the rover(s) forward
+    # move forward button
     Button:
         id: drive_forward
         text: 'move forward'
@@ -36,7 +37,7 @@
         on_press: root.schedule_move_forward()  #bind button to function"
         on_release: root.schedule_stop_track()
 
-    # button to connect drive the rover(s) backwards
+    # move backwards button
     Button:
         id: drive_backward
         text: 'move backward'
@@ -46,7 +47,7 @@
         on_press: root.schedule_move_backward()  #bind button to function"
         on_release: root.schedule_stop_track()
 
-    # button to turn the rover(s) left
+    # turn left button
     Button:
         id: turn_left
         text: 'left'
@@ -54,4 +55,14 @@
         size_hint: 0.07, 0.15
         pos_hint: {'center_x':.38, 'center_y': 0.825}
         on_press: root.schedule_turn_left()  #bind button to function"
+        on_release: root.schedule_stop_track()
+
+    # turn right button
+    Button:
+        id: turn_right
+        text: 'right'
+        # play with the size, or change this to a menu instead
+        size_hint: 0.07, 0.15
+        pos_hint: {'center_x':.62, 'center_y': 0.825}
+        on_press: root.schedule_turn_right()  #bind button to function"
         on_release: root.schedule_stop_track()

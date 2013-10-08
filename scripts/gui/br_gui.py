@@ -256,6 +256,17 @@ class ControlClass(FloatLayout):
 
     # create threads down here
 
+    def schedule_client(self, *args):
+        '''
+        starts the thead to to run the server simulation
+        '''
+        # called only when button is pressed
+        trigger = Clock.create_trigger(self.start_server)
+        # later
+        trigger()
+        # schedule image display thread
+        Clock.schedule_interval(self.display_raw_image, 1.0 / 30.0)
+
     def schedule_stop_track(self, *args):
         '''
         calls the stop track on a loop
@@ -268,7 +279,7 @@ class ControlClass(FloatLayout):
         '''
         calls the move forward on a loop
         '''
-        # this function only when button is pressed
+        # this function is called only when button is pressed
         trigger = Clock.create_trigger(self.call_move_forward)
         # later
         trigger()
@@ -286,20 +297,55 @@ class ControlClass(FloatLayout):
         '''
         calls the turn left on a loop
         '''
-        # this function only when button is pressed
+        # this function is called only when button is pressed
         trigger = Clock.create_trigger(self.call_turn_left)
         # later
         trigger()
 
-    def schedule_client(self, *args):
+    def schedule_turn_right(self, *args):
         '''
-        starts the thead to to run the server simulation
+        calls the turn left on a loop
         '''
-        trigger = Clock.create_trigger(self.start_server)
+        # this function is called only when button is pressed
+        trigger = Clock.create_trigger(self.call_turn_right)
         # later
         trigger()
-        # schedule image display thread
-        Clock.schedule_interval(self.display_raw_image, 1.0 / 30.0)
+
+    def schedule_left_forward(self, *args):
+        '''
+        calls the left forward on a loop
+        '''
+        # this function is called only when button is pressed
+        trigger = Clock.create_trigger(self.call_left_forward)
+        # later
+        trigger()
+
+    def schedule_right_forward(self, *args):
+        '''
+        calls the right forward on a loop
+        '''
+        # this function is called only when button is pressed
+        trigger = Clock.create_trigger(self.call_right_forward)
+        # later
+        trigger()
+
+    def schedule_left_backward(self, *args):
+        '''
+        calls the left backward on a loop
+        '''
+        # this function is called only when button is pressed
+        trigger = Clock.create_trigger(self.call_left_backward)
+        # later
+        trigger()
+
+    def schedule_right_backward(self, *args):
+        '''
+        calls the right backward on a loop
+        '''
+        # this function is called only when button is pressed
+        trigger = Clock.create_trigger(self.call_right_backward)
+        # later
+        trigger()
 
 class KivyGui(App):
     try:
