@@ -655,7 +655,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  =
+INPUT                  = "~/Documents/Dropbox/PuTo_from_Berkeley_Collaboration/Programming/ROS/catkin_ws/src/br_swarm_rover/scripts" "/home/pototo/Documents/Dropbox/PuTo_from_Berkeley_Collaboration/Programming/ROS/catkin_ws/src/br_swarm_rover/scripts/gui"
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
