@@ -299,7 +299,7 @@ class RovCon():
 #        delta_time = 0
         
 #        while delta_time <= move_time:
-        self.write_cmd(5)
+        self.write_cmd(7)
 #            delta_time = time.time() - init_time
 
     def move_right_forward(self):#distance, speed):
@@ -313,7 +313,7 @@ class RovCon():
 #        delta_time = 0
         
 #        while delta_time <= move_time:
-        self.write_cmd(7)
+        self.write_cmd(5)
 #            delta_time = time.time() - init_time
 
     def move_left_backward(self):#distance, speed):
@@ -327,7 +327,7 @@ class RovCon():
 #        delta_time = 0
         
 #        while delta_time <= move_time:
-        self.write_cmd(6)
+        self.write_cmd(8)
 #            delta_time = time.time() - init_time
 
     def move_right_backward(self):#distance, speed):
@@ -341,7 +341,7 @@ class RovCon():
 #        delta_time = 0
         
 #        while delta_time <= move_time:
-        self.write_cmd(8)
+        self.write_cmd(6)
 #            delta_time = time.time() - init_time
 
     def stop_tracks(self):
@@ -357,20 +357,21 @@ class RovCon():
         '''
         print(move_order.data)
         if 'forward' in move_order.data:
+            print('forward')
             self.move_forward()
         elif 'backward' in move_order.data:
             self.move_backward()
-        elif 'turn_left' in move_order.data:
+        elif 'TuLef' in move_order.data:
             self.turn_left()
-        elif 'turn_right' in move_order.data:
+        elif 'TuRi' in move_order.data:
             self.turn_right()
-        elif 'left_forward' in move_order.data:
+        elif 'LefFor' in move_order.data:
             self.move_left_forward()
-        elif 'right_forward' in move_order.data:
+        elif 'RiFor' in move_order.data:
             self.move_right_forward()
-        elif 'left_backward' in move_order.data:
+        elif 'LefBa' in move_order.data:
             self.move_left_backward()
-        elif 'right_backward' in move_order.data:
+        elif 'RiBa' in move_order.data:
             self.move_right_backward()
         else:
             self.stop_tracks()
