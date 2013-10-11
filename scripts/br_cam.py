@@ -28,7 +28,10 @@ class RovCam():
         self.init_connection(data)     #image id is taken from data 
 
     def init_connection(self, data):
-	# Create new socket for video
+        """
+        Starts connection to rovers camera
+        """
+        # Create new socket for video
         self.connect_video()
 	
         print "data in video socket: " + data
@@ -57,16 +60,26 @@ class RovCam():
         self.video_socket.send(msg)
 
     def connect_video(self):	
+        """
+        Initiates the video socket and sets it up to blocking
+        """
         self.video_socket =\
                  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.video_socket.connect((self.host, self.port))
         self.video_socket.setblocking(1)
 
     def disconnect_video(self):
+        """
+        Stops communication with the rover's camera
+        """
         self.video_socket.close()
 
     def write_cmd(self, extra_input):	
-#	    Robot's Control Packets
+        """
+        Sends the respective commands to the robot to initiate 
+        camera connection
+        """
+        # Robot's Control Packets
         packet_len = 26                          # length of the video buffer
         cmd_buffer = array.array('c')
         cmd_buffer.extend(['M', 'O', '_', 'V'])
@@ -83,21 +96,41 @@ class RovCam():
         self.video_socket.send(msg) 
 
     def get_image_length(self):            # int
+        """
+        Returns the length of the image data gathered
+        Length vairies based on data corruption and resolution
+        """
         return self.image_length
         
     def get_image_start_position(self):    #int
+        """
+        Returns the position in the rover's data packet where the
+        image data starts
+        """
         return self.image_start_position
 
     def set_image_start_position(self, start):   # int
+        """
+        Set the position where the image data should start
+        """
         self.image_start_position = start
         
     def set_image_length(self, data):
+        """
+        Set the desired length of the image data
+        """
         self.image_length = data
 
     def img_start(self, start):
         return (start[0] == 'M' and start[1] == 'O' and start[2] == '_' and start[3] == 'V')
 
     def receive_image(self):   
+        """
+        Retrives image data coming from the rover and then
+        transforms it to numpy and string data for further
+        manupulation with OpenCV and Kivy and returns the final
+        data
+        """
         data = ''
         ldata = array.array('c')
         image_buffer = array.array('c')
@@ -105,15 +138,14 @@ class RovCam():
         found_start = False
         found_end = False
         start_pos = 0 #current position in ldata
-        end_pos = 0 #position of the end of frame in the current array of data
+        #position of the end of frame in the current array of data
+        end_pos = 0
         while (not found_end):
             data = self.video_socket.recv(self.max_tcp_buffer)
             if(data == ''):
                 continue
             #check for the message start token 'MO_V'
             for i in range(0, len(data)-2):
-                #try
-#                 if img_start(data[0:4]): #(data[i:(i+3)] == 'MO_V'):
                 if (data[i:(i+4)] == 'MO_V'):
 #                     print 'got in MO_V mode'
                     if not found_start:
@@ -129,10 +161,6 @@ class RovCam():
 #                         print "end of picture found"
                         end_pos = i
                         break
-#                 catch e
-#                    disp(e);
-#                    disp(['length of data: ' num2str(length(data))]);
-#                    disp(['try to access: ' num2str(i) ' thru ' num2str(i+3) ]);
             #if you have found the start but not the end (in the
             #middle of a image frame)
             if (found_start and not found_end):
@@ -144,27 +172,10 @@ class RovCam():
 #                print "adding data from 0 to end"
             data = ''
         l_len = len(ldata)
-        # convert to numpy to use with OpenCV
+        # convert to numpy to use with OpenCV, etc.
         image_buffer = np.array(ldata[36:l_len])
-        #image_buffer = np.reshape(image_buffer, (-1, 2))
         image_buffer = image_buffer.tostring() 
-#        print('\n',image_buffer, '\n\n')
         #image_file = 'test' + str(datetime.now()) + '.jpg' 
 #        image_file = 'test.jpg'
-#        jpgfile = open(image_file, 'wb')
-#        for i in image_buffer:
-#            jpgfile.write(i)
-#        jpgfile.close()
-#        try:
-#            cv_image = self.bridge.imgmsg_to_cv(image_buffer, "bgr8")
-#        except CvBridgeError, e:
-#            print e         
-
-#        image_buffer = cv2.imread(image_file, 0)
-#        print image_buffer
-#        cv2.imshow("Image", image_buffer)
-#        print "displaying image"
 #        time.sleep(0.033) 
         return image_buffer
-      #  cv2.waitKey(0) 
-   #     cv2.destroyAllWindows()

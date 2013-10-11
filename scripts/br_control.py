@@ -31,7 +31,7 @@ class RovCon():
         '''
         self.connect_rover()
 
-	# set up rover for communication
+        # set up rover for communication
         msg = ['GET /check_user.cgi?user=AC13&pwd=AC13 HTTP/1.1\r\nHost: '] 
         msg.append('192.168.1.100:80\r\n')
         msg.append('User-Agent: WifiCar/1.0 CFNetwork/485.12.7 ')
@@ -42,14 +42,14 @@ class RovCon():
 
         self.move_socket.send(msg)
 
-	# Get the return message
+        # Get the return message
         print ('Wait for HTML return msg')
         data = ''
         while len(data) == 0:
             data = self.move_socket.recv(self.max_tcp_buffer)
         print ('returned data', data)
 
-	# We have to close the socket and open it again
+        # We have to close the socket and open it again
         self.disconnect_rover()
         self.connect_rover()
 
