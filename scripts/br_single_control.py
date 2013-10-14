@@ -14,6 +14,11 @@ from time import sleep
 
 # meta_server.py creates the file where the shall write its network
 # address, then the address is passed as an argument here
+# TODO: may be able to do something directly like;
+# python fibo.py <arguments> (on command line)
+# import sys  (inside script)
+#    fib(int(sys.argv[1]))
+# to enter argument instead of using argparser
 import argparse
 parser = argparse.ArgumentParser('br_single_control')
 parser.add_argument('file', type=str, default=None,
