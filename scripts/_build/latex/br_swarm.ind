@@ -1,0 +1,8 @@
+\begin{theindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter B
+  \item br\_cam (module), \hyperpage{9}
+  \item br\_control (module), \hyperpage{7}
+
+\end{theindex}

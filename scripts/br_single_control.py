@@ -24,23 +24,27 @@ if __name__ == '__main__':
     try:
         # open file to save ROS server address
         address_file = open(arg.file, 'w+b')
+
         # store ROS server address
         #TODO: change the local host part to a normal address
         # for now the wanted address is exported manually in the
         # .bashrc file
         import os
-        address = os.environ['ROS_MASTER_URI']
-        address_file.write(address)
+        # obtain ROS address
+        address_file.write(os.environ['ROS_MASTER_URI'])
+        # allow meta-server read the file to obtain the address
         address_file.close()
 
+        # initiate rover connection and video streaming
         rover = RovCon() 
         rover_video = br_cam.RovCam(rover.return_data())
 
-        pub = rospy.Publisher('image', String) # robot camera data
+        # publish robot camera data
+        pub = rospy.Publisher('image', String)
         rospy.init_node('br_single_control')
 #        distance = 0.5    # feet
 #        speed = 1         # foot/sec
-        # obtain publshed move command
+        # obtain published move command
         #TODO: also obtain speed and distance
         rospy.Subscriber("move", String, rover.set_move)
 
@@ -53,7 +57,7 @@ if __name__ == '__main__':
  #           rospy.loginfo(str)
             buf = rover_video.receive_image()
             pub.publish(String(buf))
-            sleep(0.033)
+            sleep(0.033) # manually given image frame rate
 
     except rospy.ROSInterruptException:
         rover.disconnect_rover()
