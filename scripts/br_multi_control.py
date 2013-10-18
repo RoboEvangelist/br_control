@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('br_swarm_rover')
-import rospy
-from std_msgs.msg import String
-
-import br_cam
+#import roslib; roslib.load_manifest('br_swarm_rover')
+#import rospy
+#from std_msgs.msg import String
+#
+#import br_cam
 
 import socket
 import time
@@ -12,10 +12,11 @@ import array
 class RovCon(): 
     def __init__(self, networkCard):
         self.nic = networkCard               # nic = network interface card
-        self.host = "192.168.1.100"
+        self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_buffer = 2048
-        self.move_socket = socket.socket(socket.AF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+        self.move_socket = socket.socket(socket.AF_INET, 
+                                         socket.SOCK_STREAM)
         self.final_data = ''
         self.init_connection()
 
@@ -63,9 +64,10 @@ class RovCon():
         #print nifAddresses
         #sockaddr = java.net.InetSocketAddress(robotIP, 80); 
             
-        self.move_socket = socket.socket(socket.AF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+        self.move_socket = socket.socket(socket.AF_INET, 
+                                         socket.SOCK_STREAM)
         self.move_socket.settimeout(1000);
-        self.move_socket.bind((robotIP, ));
+        self.move_socket.bind((robotIP, 0));
         print (self.move_socket.getsockname())
 
         self.move_socket.connect((self.host, self.port))
@@ -235,23 +237,27 @@ class RovCon():
         self.write_cmd(13)
 
 if __name__ == '__main__':
-    try:
-        pub = rospy.Publisher('chatter', String)
-        rospy.init_node('AC13_robot')
-        rover = RovCon("wlan0") 
-        rover_video = br_cam.RovCam(rover.return_data())
+#    try:
+#        pub = rospy.Publisher('chatter', String)
+#        rospy.init_node('AC13_robot')
+    rover = RovCon('192.168.1.1') 
+#        rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
-        distance = 0.5    # feet
-        speed = 1         # foot/sec
+    distance = 0.5    # feet
+    speed = 1         # foot/sec
         #rover.move_forward(distance, speed)
-        while not rospy.is_shutdown(): 
-            str = "robot moves %s" % rospy.get_time()
+#        while not rospy.is_shutdown(): 
+    while True: 
+#            str = "robot moves %s" % rospy.get_time()
  #           rospy.loginfo(str)
   #          pub.publish(String(str))
             #rover_video.receive_image()
-           # rover.move_forward(distance, speed)
+        rover.move_forward(distance, speed)
 
-        rover.disconnect_rover()
-        rover_video.disconnect_video()
-    except rospy.ROSInterruptException:
-        pass
+#        rover.disconnect_rover()
+#        rover_video.disconnect_video()
+#    except rospy.ROSInterruptException:
+#    except BaseException:
+   #     rover.disconnect_rover()
+#        rover_video.disconnect_video()
+#        pass

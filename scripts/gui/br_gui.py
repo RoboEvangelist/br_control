@@ -4,6 +4,8 @@ Client specifically for controlling several rovers and gather data
 from the rovers
 '''
 
+import __future__
+
 import kivy
 kivy.require('1.7.1')
 

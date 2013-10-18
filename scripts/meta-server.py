@@ -22,6 +22,8 @@ def startProcess():
     address_file = NamedTemporaryFile(delete=False)
     # pass temp file name as argument to br_swarm_rover
     uri_file = address_file.name
+    # TODO: run this in a loop start a node per robot available
+    # Another argument of br_cmd shall be the NIC network name
     br_cmd = ['rosrun', 'br_swarm_rover', 'br_single_control.py',
                 uri_file]
     from threading import Thread
