@@ -240,6 +240,8 @@ if __name__ == '__main__':
 #    try:
 #        pub = rospy.Publisher('chatter', String)
 #        rospy.init_node('AC13_robot')
+    import netifaces
+    netifaces.ifaddresses('wlan0')[2][0]['addr']
     rover = RovCon('192.168.1.1') 
 #        rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
