@@ -64,10 +64,10 @@ class RovCon():
         #print nifAddresses
         #sockaddr = java.net.InetSocketAddress(robotIP, 80); 
             
-        self.move_socket = socket.socket(socket.AF_INET, 
-                                         socket.SOCK_STREAM)
+        self.move_socket = socket.socket(socket.AF_CAN, 
+                                         socket.SOCK_RAW, socket.CAN_RAW)
         self.move_socket.settimeout(1000);
-        self.move_socket.bind((robotIP, 0));
+        self.move_socket.bind((robotIP,));
         print (self.move_socket.getsockname())
 
         self.move_socket.connect((self.host, self.port))
@@ -240,9 +240,10 @@ if __name__ == '__main__':
 #    try:
 #        pub = rospy.Publisher('chatter', String)
 #        rospy.init_node('AC13_robot')
-    import netifaces
-    netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
-    rover = RovCon('192.168.1.1') 
+#    import netifaces
+#    netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+    rover = RovCon('wlan0') 
+   # rover2 = RovCon('192.168.1.1') 
 #        rover_video = br_cam.RovCam(rover.return_data())
        # rover_video.receive_image()
     distance = 0.5    # feet
@@ -255,6 +256,7 @@ if __name__ == '__main__':
   #          pub.publish(String(str))
             #rover_video.receive_image()
         rover.move_forward(distance, speed)
+    #    rover2.move_forward(distance, speed)
 
 #        rover.disconnect_rover()
 #        rover_video.disconnect_video()

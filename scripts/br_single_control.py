@@ -10,11 +10,12 @@ from std_msgs.msg import String
 
 import br_cam
 from br_control import RovCon
+
 from time import sleep
 
-# meta_server.py creates the file where the shall write its network
+# meta_server.py creates the file where ROS shall write its network
 # address, then the address is passed as an argument here
-# TODO: may be able to do something directly like;
+# TODO: may be able to do something directly like:
 # python fibo.py <arguments> (on command line)
 # import sys  (inside script)
 #    fib(int(sys.argv[1]))

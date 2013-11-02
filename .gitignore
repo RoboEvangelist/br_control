@@ -5,6 +5,9 @@
 *.pyc
 *.jpeg
 *.jpg
+*.cpp~
+talker.cpp
+listener.cpp
 
 #to ignore folders use -
 #example/

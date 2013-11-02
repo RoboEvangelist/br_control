@@ -65,6 +65,12 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(talker src/talker.cpp)
+target_link_libraries(talker ${catkin_LIBRARIES})
+
+add_executable(listener src/listener.cpp)
+target_link_libraries(listener ${catkin_LIBRARIES})
+
 ## Declare a cpp library
 # add_library(br_swarm_rover
 #   src/${PROJECT_NAME}/br_swarm_rover.cpp
@@ -76,6 +82,8 @@ include_directories(
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(br_swarm_rover_node br_swarm_rover_generate_messages_cpp)
+ add_dependencies(talker br_swarm_rover_generate_messages_cpp)
+ add_dependencies(talker ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(br_swarm_rover_node

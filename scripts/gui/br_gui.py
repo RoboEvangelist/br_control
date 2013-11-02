@@ -4,8 +4,6 @@ Client specifically for controlling several rovers and gather data
 from the rovers
 '''
 
-import __future__
-
 import kivy
 kivy.require('1.7.1')
 
@@ -213,10 +211,10 @@ class ControlClass(FloatLayout):
 
     def display_raw_image(self, dt):
         '''
-        Display the normal image coming straight from the rover
+        Display the normal image comming straight from the rover
         '''
         try:
-            # assum size of all incoming images is 320x240
+            # assume size of all incoming images is 320x240
 #            import pdb; pdb.set_trace()
             # get published image str and store it in a buffer
             buff = StringIO.StringIO()
@@ -233,7 +231,8 @@ class ControlClass(FloatLayout):
 #            # image's origin starts from buttom left
             (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
             
-            # use this part to implement mouse clicking
+            # use this part to implement mouse clicking on detected
+            # objects
 #            # transform image's bottom origin to the top left
 #            # which agrees with the mouse's origin
 #            x_0 = pos_x
@@ -266,7 +265,7 @@ class ControlClass(FloatLayout):
 
     def schedule_client(self, *args):
         '''
-        starts the thead to to run the server simulation
+        starts the thead to run the server simulation
         '''
         # called only when button is pressed
         trigger = Clock.create_trigger(self.start_server)

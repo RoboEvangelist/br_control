@@ -9,7 +9,7 @@ import subprocess
 from time import sleep
 
 
-START_ROS_ROVER = []    # stores roscor and rover program
+START_ROS_ROVER = []    # stores roscore and rover program
 
 def startProcess():
     '''
@@ -51,7 +51,7 @@ def startProcess():
 
 def getServerAddress(file_name):
     '''
-    Meta-server calls this function when when requesting
+    Meta-server calls this function when requesting
     ROS server's address
     '''
     import tempfile
