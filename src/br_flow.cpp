@@ -3,6 +3,9 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
  
 using namespace cv;
 using namespace std; 
@@ -10,8 +13,8 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	// Load two images and allocate other structures
-	Mat imgA = imread("images/1.png", CV_LOAD_IMAGE_GRAYSCALE);
-	Mat imgB = imread("images/3.png", CV_LOAD_IMAGE_GRAYSCALE);
+	Mat imgA = imread("im1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+	Mat imgB = imread("im2.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 	
 	Size img_sz = imgA.size();
 	Mat imgC(img_sz,1);

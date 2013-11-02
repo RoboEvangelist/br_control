@@ -4,7 +4,9 @@ project(br_swarm_rover)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation)
+find_package(
+    catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
+    sensor_msgs cv_bridge image_transport)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -71,6 +73,9 @@ target_link_libraries(talker ${catkin_LIBRARIES})
 add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
 
+add_executable(br_flow src/br_flow.cpp)
+target_link_libraries(br_flow ${catkin_LIBRARIES})
+
 ## Declare a cpp library
 # add_library(br_swarm_rover
 #   src/${PROJECT_NAME}/br_swarm_rover.cpp
@@ -84,6 +89,8 @@ target_link_libraries(listener ${catkin_LIBRARIES})
 # add_dependencies(br_swarm_rover_node br_swarm_rover_generate_messages_cpp)
  add_dependencies(talker br_swarm_rover_generate_messages_cpp)
  add_dependencies(talker ${catkin_EXPORTED_TARGETS})
+ add_dependencies(br_flow br_swarm_rover_generate_messages_cpp)
+ add_dependencies(br_flow ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(br_swarm_rover_node
