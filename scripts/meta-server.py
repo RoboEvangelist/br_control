@@ -49,6 +49,26 @@ def startProcess():
         line =  address_file.readline()
     return line       #threads
 
+def findConnectedRobot():
+    '''
+    Finds which robots are connected to the computer and returns the
+    addresses of the NIC they are connected to
+    '''
+    robot_address = []  # gets NIC address
+    import netifaces 
+    # get the list of availble NIC's
+    for card in netifaces.interfaces():
+        # get all NIC addresses
+        temp =\
+            netifaces.\
+                ifaddresses(str(card))[netifaces.AF_INET][0]['addr']
+        temp2 = temp.split('.')
+        # see if address matches common address given to NIC when
+        # NIC is connected to a robot
+        if temp2[0] == '192' and int(temp2[3]) < 50:
+            robot_address.append(temp)
+    return robot_address
+            
 def getServerAddress(file_name):
     '''
     Meta-server calls this function when requesting

@@ -15,8 +15,9 @@ class RovCon():
         self.host = '192.168.1.100'
         self.port = 80
         self.max_tcp_buffer = 2048
-        self.move_socket = socket.socket(socket.AF_INET, 
-                                         socket.SOCK_STREAM)
+#        self.move_socket = socket.socket(socket.AF_INET, 
+#                                         socket.SOCK_STREAM)
+        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.final_data = ''
         self.init_connection()
 
@@ -64,8 +65,10 @@ class RovCon():
         #print nifAddresses
         #sockaddr = java.net.InetSocketAddress(robotIP, 80); 
             
-        self.move_socket = socket.socket(socket.AF_CAN, 
-                                         socket.SOCK_RAW, socket.CAN_RAW)
+#        self.move_socket = socket.socket(socket.AF_CAN, 
+#                                         socket.SOCK_RAW, socket.CAN_RAW)
+        self.move_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.move_socket.setsockopt(socket.SOL_SOCKET, 25, 'wlan0')
         self.move_socket.settimeout(1000);
         self.move_socket.bind((robotIP,));
         print (self.move_socket.getsockname())
