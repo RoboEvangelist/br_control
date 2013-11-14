@@ -22,6 +22,8 @@ def startProcess():
     address_file = NamedTemporaryFile(delete=False)
     # pass temp file name as argument to br_swarm_rover
     uri_file = address_file.name
+    findConnectedRobot()
+    
     # TODO: run this in a loop start a node per robot available
     # Another argument of br_cmd shall be the NIC network name
     br_cmd = ['rosrun', 'br_swarm_rover', 'br_single_control.py',
@@ -42,7 +44,6 @@ def startProcess():
         except BaseException:
             print('trying to connect to rover(s)')
             pass
-#    address_file = open(uri_file, 'r+b')
     line = None
     while not line:
         address_file.seek(0)
@@ -54,20 +55,24 @@ def findConnectedRobot():
     Finds which robots are connected to the computer and returns the
     addresses of the NIC they are connected to
     '''
-    robot_address = []  # gets NIC address
+    robot_address = []  # stores NIC address
     import netifaces 
     # get the list of availble NIC's
     for card in netifaces.interfaces():
-        # get all NIC addresses
-        temp =\
-            netifaces.\
-                ifaddresses(str(card))[netifaces.AF_INET][0]['addr']
-        temp2 = temp.split('.')
-        # see if address matches common address given to NIC when
-        # NIC is connected to a robot
-        if temp2[0] == '192' and int(temp2[3]) < 50:
-            robot_address.append(temp)
-    return robot_address
+        try:
+            # get all NIC addresses
+            temp = netifaces.ifaddresses(\
+                    card)[netifaces.AF_INET][0]['addr']
+            temp2 = temp.split('.')
+            print(temp2)
+#            # see if address matches common address given to NIC when
+#            # NIC is connected to a robot
+            if temp2[0] == '192' and int(temp2[3]) < 30:
+                print('appending address: ' + temp)
+                robot_address.append(temp)
+                print("after appending")
+        except BaseException:
+            pass
             
 def getServerAddress(file_name):
     '''

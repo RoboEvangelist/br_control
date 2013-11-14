@@ -5,6 +5,8 @@ i.e., the first rover that computer connects to
 '''
 import roslib; roslib.load_manifest('br_swarm_rover')
 
+import netifaces
+
 import socket
 import array
 
