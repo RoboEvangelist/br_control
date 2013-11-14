@@ -22,7 +22,11 @@ def startProcess():
     address_file = NamedTemporaryFile(delete=False)
     # pass temp file name as argument to br_swarm_rover
     uri_file = address_file.name
-    findConnectedRobot()
+    robot_address = []
+    # TODO: put findConnectedRobot() in the main function
+    # and include it as argument for startProcess()
+    robot_address = findConnectedRobot()
+    print(str(len(robot_address)) + ' robots are connected')
     
     # TODO: run this in a loop start a node per robot available
     # Another argument of br_cmd shall be the NIC network name
@@ -73,6 +77,7 @@ def findConnectedRobot():
                 print("after appending")
         except BaseException:
             pass
+    return robot_address
             
 def getServerAddress(file_name):
     '''
