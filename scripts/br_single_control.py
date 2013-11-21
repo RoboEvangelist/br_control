@@ -24,8 +24,8 @@ import argparse
 parser = argparse.ArgumentParser('br_single_control')
 parser.add_argument('file', type=str, default=None,
                     help='temporary file to store server uri')
-#parser.add_argument('robot_address', type=str, default=None,
-#                    help='address of NICs connect to robots')
+parser.add_argument('robot_address', type=str, default=None,
+                    help='address of NICs connect to robots')
 arg = parser.parse_args()
 
 if __name__ == '__main__':
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         address_file.close()
 
         # initiate rover connection and video streaming
-        rover = RovCon() 
+        rover = RovCon(arg.robot_address) 
         rover_video = br_cam.RovCam(rover.return_data())
 
         # publish robot camera data

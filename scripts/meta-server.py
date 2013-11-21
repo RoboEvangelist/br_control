@@ -30,8 +30,10 @@ def startProcess():
     
     # TODO: run this in a loop start a node per robot available
     # Another argument of br_cmd shall be the NIC network name
-    br_cmd = ['rosrun', 'br_swarm_rover', 'br_single_control.py',
-                uri_file]
+#    br_cmd = []
+#    for address in robot_address:
+#        br_cmd.append(['rosrun', 'br_swarm_rover', 
+#                'br_single_control.py', uri_file, address])
     from threading import Thread
 #    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
 #        subprocess.Popen(roscore_cmd)))
@@ -40,10 +42,14 @@ def startProcess():
     sleep(3)
     while not rover_started:
         try:
-            rover_thread = \
-                Thread(target=lambda: START_ROS_ROVER.append(
-                    subprocess.Popen(br_cmd)))
-            rover_thread.start()
+            # start a thread per robot
+            for address in robot_address:
+                br_cmd = ['rosrun', 'br_swarm_rover', 
+                        'br_single_control.py', uri_file, address]
+                rover_thread = \
+                    Thread(target=lambda: START_ROS_ROVER.append(
+                        subprocess.Popen(br_cmd)))
+                rover_thread.start()
             rover_started = True
         except BaseException:
             print('trying to connect to rover(s)')

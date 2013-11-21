@@ -5,13 +5,13 @@ i.e., the first rover that computer connects to
 '''
 import roslib; roslib.load_manifest('br_swarm_rover')
 
-import netifaces
-
 import socket
 import array
 
 class RovCon(): 
-    def __init__(self):
+    def __init__(self, networkCard):
+        self.nic = networkCard
+
         # all Brookstone rovers v1.0 have same host and port numbers
         self.host = '192.168.1.100'
         self.port = 80
@@ -73,6 +73,7 @@ class RovCon():
         try:
             self.move_socket = \
                 socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.move_socket.bind((self.nic, 0))       # bind to NIC
             self.move_socket.connect((self.host, self.port))
             self.move_socket.setblocking(1)
         except socket.error:
