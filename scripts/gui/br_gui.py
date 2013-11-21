@@ -14,6 +14,7 @@ from std_msgs.msg import String
 import StringIO
 
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.widget import Widget
 from kivy.app import App
 from kivy.graphics import Rectangle
 from kivy.clock import Clock
@@ -58,6 +59,8 @@ class ControlClass(FloatLayout):
         super(ControlClass, self).__init__(**kwargs)
         self._started = False     # true if client connected
         self._client = None       # server client object
+
+        self.wid = Widget()
 
         # original image size (from server)
         self._im_width = 320.0
@@ -247,9 +250,10 @@ class ControlClass(FloatLayout):
 ##            self._client.setMouseRatio(im_translation)
             # TODO: create a canvas just for the image and 
             # clear only that canvas
-#            self.canvas.clear() 
-            with self.canvas:     #display image
-                Rectangle(texture = imdata, pos= (pos_x, pos_y),
+            self.add(self.wid)
+            self.wid.canvas.clear() 
+            with self.wid.canvas:     #display image
+                rect = Rectangle(texture = imdata, pos= (pos_x, pos_y),
                                       size=(w, h))
         except BaseException:
             Logger.warning('Error getting image frame')
