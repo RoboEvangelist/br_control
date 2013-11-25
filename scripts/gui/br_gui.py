@@ -70,6 +70,11 @@ class ControlClass(FloatLayout):
 
         self.wid = Widget()
 
+<<<<<<< HEAD
+>>>>>>> 67e3018f0cd02cb9a7aba13832f9a0d2bc691702
+=======
+        self.wid = Widget()
+
 >>>>>>> 67e3018f0cd02cb9a7aba13832f9a0d2bc691702
         # original image size (from server)
         self._im_width = 320.0
@@ -260,14 +265,20 @@ class ControlClass(FloatLayout):
             # TODO: create a canvas just for the image and 
             # clear only that canvas
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.norm_im_widget.canvas.clear() 
             with self.norm_im_widget.canvas:     #display image
                 Rectangle(texture = imdata, pos= (pos_x, pos_y),
 =======
+=======
+>>>>>>> 67e3018f0cd02cb9a7aba13832f9a0d2bc691702
             self.add(self.wid)
             self.wid.canvas.clear() 
             with self.wid.canvas:     #display image
                 rect = Rectangle(texture = imdata, pos= (pos_x, pos_y),
+<<<<<<< HEAD
+>>>>>>> 67e3018f0cd02cb9a7aba13832f9a0d2bc691702
+=======
 >>>>>>> 67e3018f0cd02cb9a7aba13832f9a0d2bc691702
                                       size=(w, h))
         except BaseException:

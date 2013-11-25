@@ -26,7 +26,7 @@ def startProcess():
     # TODO: put findConnectedRobot() in the main function
     # and include it as argument for startProcess()
     robot_address = findConnectedRobot()
-    print(str(len(robot_address)) + ' robots are connected')
+    print(str(len(robot_address)) + ' robots are connected \n')
     
     # TODO: run this in a loop start a node per robot available
     # Another argument of br_cmd shall be the NIC network name
@@ -74,13 +74,11 @@ def findConnectedRobot():
             temp = netifaces.ifaddresses(\
                     card)[netifaces.AF_INET][0]['addr']
             temp2 = temp.split('.')
-            print(temp2)
 #            # see if address matches common address given to NIC when
 #            # NIC is connected to a robot
             if temp2[0] == '192' and int(temp2[3]) < 30:
                 print('appending address: ' + temp)
                 robot_address.append(temp)
-                print("after appending")
         except BaseException:
             pass
     return robot_address
