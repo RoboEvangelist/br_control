@@ -19,7 +19,6 @@ from kivy.graphics import Rectangle
 from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.core.image.img_pygame import ImageLoaderPygame
-
 from kivy.uix.widget import Widget
 
 # FIXME this shouldn't be necessary
@@ -85,7 +84,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('stop'))
-            Logger.info('stop')
         except rospy.ServiceException, e:
             print "Stop Tracks Service call failed: %s"%e
 
@@ -95,7 +93,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('forward'))
-            Logger.info('forward')
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
 
@@ -105,7 +102,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('backward'))
-            Logger.info('backward')
         except rospy.ServiceException, e:
             print "Move backward Service call failed: %s"%e
 
@@ -121,7 +117,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('TuLef'))
-            Logger.info('turn left')
         except rospy.ServiceException, e:
             print "Move turn left Service call failed: %s"%e
 
@@ -131,7 +126,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('TuRi'))
-            Logger.info('turn right')
         except rospy.ServiceException, e:
             print "Move turn right Service call failed: %s"%e
 
@@ -141,7 +135,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('LefFor'))
-            Logger.info('left forward')
         except rospy.ServiceException, e:
             print "Move left forward Service call failed: %s"%e
 
@@ -151,7 +144,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('RiFor'))
-            Logger.info('right forward')
         except rospy.ServiceException, e:
             print "Move right forward Service call failed: %s"%e
 
@@ -161,7 +153,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('LefBa'))
-            Logger.info('left backward')
         except rospy.ServiceException, e:
             print "Move left backward Service call failed: %s"%e
 
@@ -171,7 +162,6 @@ class ControlClass(FloatLayout):
         '''
         try:
             self._pub.publish(String('RiBa'))
-            Logger.info('right backward')
         except rospy.ServiceException, e:
             print "Move right backward Service call failed: %s"%e
 
