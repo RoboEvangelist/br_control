@@ -252,7 +252,7 @@ class ControlClass(FloatLayout):
 ##            self._client.setMouseRatio(im_translation)
             # TODO: create a canvas just for the image and 
             # clear only that canvas
-            self.norm_im_widget.clear() 
+            self.norm_im_widget.canvas.clear() 
             with self.norm_im_widget.canvas:     #display image
                 Rectangle(texture = imdata, pos= (pos_x, pos_y),
                                       size=(w, h))
