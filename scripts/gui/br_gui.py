@@ -20,6 +20,8 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.core.image.img_pygame import ImageLoaderPygame
 
+from kivy.uix.widget import Widget
+
 # FIXME this shouldn't be necessary
 from kivy.base import EventLoop
 EventLoop.ensure_window()
@@ -58,7 +60,10 @@ class ControlClass(FloatLayout):
         super(ControlClass, self).__init__(**kwargs)
         self._started = False     # true if client connected
         self._client = None       # server client object
-
+        
+        # normal image widget
+        self.norm_im_widget = Widget()
+        self.add_widget(self.norm_im_widget) 
         # original image size (from server)
         self._im_width = 320.0
         self._im_height = 240.0
@@ -247,8 +252,8 @@ class ControlClass(FloatLayout):
 ##            self._client.setMouseRatio(im_translation)
             # TODO: create a canvas just for the image and 
             # clear only that canvas
-#            self.canvas.clear() 
-            with self.canvas:     #display image
+            self.norm_im_widget.clear() 
+            with self.norm_im_widget.canvas:     #display image
                 Rectangle(texture = imdata, pos= (pos_x, pos_y),
                                       size=(w, h))
         except BaseException:
