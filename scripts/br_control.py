@@ -358,9 +358,7 @@ class RovCon():
         '''
         Tells robot where to move based on the published command
         '''
-        print(move_order.data)
         if 'forward' in move_order.data:
-            print('forward')
             self.move_forward()
         elif 'backward' in move_order.data:
             self.move_backward()

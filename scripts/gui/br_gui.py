@@ -52,7 +52,7 @@ class KeyboardInterface():
 class ControlClass(FloatLayout):
     def __init__(self, **kwargs):
         '''
-        We use __init__ mainly because _args cannot be initialized
+        We use __init__ because some variables cannot be initialized
         to an ObjectProperty for some reason, so we gotta initialize
         it this way
         '''

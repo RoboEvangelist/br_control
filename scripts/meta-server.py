@@ -20,7 +20,7 @@ def startProcess():
 #    roscore_cmd = ['roscore']
     from tempfile import NamedTemporaryFile
     address_file = NamedTemporaryFile(delete=False)
-    # pass temp file name as argument to br_swarm_rover
+    # pass temp file name as argument to br_swarm_rover node
     uri_file = address_file.name
     robot_address = []
     # TODO: put findConnectedRobot() in the main function
@@ -28,21 +28,15 @@ def startProcess():
     robot_address = findConnectedRobot()
     print(str(len(robot_address)) + ' robots are connected \n')
     
-    # TODO: run this in a loop start a node per robot available
-    # Another argument of br_cmd shall be the NIC network name
-#    br_cmd = []
-#    for address in robot_address:
-#        br_cmd.append(['rosrun', 'br_swarm_rover', 
-#                'br_single_control.py', uri_file, address])
     from threading import Thread
 #    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
 #        subprocess.Popen(roscore_cmd)))
 #    roscore_thread.start()
     rover_started = False    # true if rover program started
-    sleep(3)
+    sleep(3)      # give roscore time to start
     while not rover_started:
         try:
-            # start a thread per robot
+            # start a node/thread per robot
             for address in robot_address:
                 br_cmd = ['rosrun', 'br_swarm_rover', 
                         'br_single_control.py', uri_file, address]
@@ -94,6 +88,8 @@ def getServerAddress(file_name):
 if __name__ == '__main__':
     threads = START_ROS_ROVER
     thread_started = False
+    # FIXME: I'm not sure if "0.0.0.0" will allow remote access
+    # it might not be a valid address
     server = SimpleXMLRPCServer(("0.0.0.0", 12345))
     server.register_function(startProcess, "startProcess")
     while True:
