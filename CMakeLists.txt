@@ -70,15 +70,12 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(talker src/talker.cpp)
-target_link_libraries(talker ${catkin_LIBRARIES})
-target_link_libraries(talker ${OpenCV_LIBS})
-
 add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
 
-add_executable(br_flow src/br_flow.cpp)
-target_link_libraries(br_flow ${catkin_LIBRARIES})
+add_executable(br_opt_flow src/br_opt_flow.cpp)
+target_link_libraries(br_opt_flow ${catkin_LIBRARIES})
+target_link_libraries(br_opt_flow ${OpenCV_LIBS})
 
 ## Declare a cpp library
 # add_library(br_swarm_rover
@@ -91,10 +88,8 @@ target_link_libraries(br_flow ${catkin_LIBRARIES})
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(br_swarm_rover_node br_swarm_rover_generate_messages_cpp)
- add_dependencies(talker br_swarm_rover_generate_messages_cpp)
- add_dependencies(talker ${catkin_EXPORTED_TARGETS})
- add_dependencies(br_flow br_swarm_rover_generate_messages_cpp)
- add_dependencies(br_flow ${catkin_EXPORTED_TARGETS})
+ add_dependencies(br_opt_flow br_swarm_rover_generate_messages_cpp)
+ add_dependencies(br_opt_flow ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(br_swarm_rover_node
