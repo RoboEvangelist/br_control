@@ -8,6 +8,9 @@ find_package(
     catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
     sensor_msgs cv_bridge image_transport)
 
+# OpenCV is not a ROS package, so you gotta do this:
+find_package(OpenCV REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -69,6 +72,7 @@ include_directories(
 
 add_executable(talker src/talker.cpp)
 target_link_libraries(talker ${catkin_LIBRARIES})
+target_link_libraries(talker ${OpenCV_LIBS})
 
 add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
