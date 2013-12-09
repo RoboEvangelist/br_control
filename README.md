@@ -1,7 +1,7 @@
 # This is a ROS package to control one or more Brookstone Rovers v1.0 (work in progress)
 
 > ## Prerequisites:
-> 1. (Brookstone Rover(s) v1.0)[http://www.brookstone.com/webassets/pdf/719302p _ manual.pdf]
+> 1. (Brookstone Rover(s) v1.0)[http://www.amazon.com/Rover-App-Controlled-Tank-Night-Vision/dp/B005OQYOB6]
 > 2. A wifi card per rover. These rovers create their own ad-hoc network, therefore you must connect to the rovers the same way you would connect to a router, for instance
 > 3. [Ubuntu Linux OS](http://www.ubuntu.com/download/desktop)- tested with v13.04 Raring Ringtail 64 bits
 > 4. [ROS](http://wiki.ros.org/ROS/Installation) - tested with ROS Hydro Medusa
