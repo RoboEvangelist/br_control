@@ -80,7 +80,7 @@ class ControlClass(FloatLayout):
 
     def call_stop_track(self, *args):
         '''
-        publishes the stop command to stop a robot robot
+        publishes the stop command to stop a robot
         '''
         try:
             self._pub.publish(String('stop'))
