@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+'''
+This is the main file that the meta-server calls when you want you
+test several robots at a time
+'''
+
 #import roslib; roslib.load_manifest('br_swarm_rover')
 #import rospy
 #from std_msgs.msg import String
