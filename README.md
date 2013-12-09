@@ -1,1 +1,18 @@
-# Create a Swarm research platform using Brookstone Rover and ROS
+# This is a ROS package to control one or more Brookstonr Rovers v1.0
+### (work in progress)
+
+> ## Prerequisites:
+> 1. Brookstone Rover(s) v1.0
+> 2. A wifi card per rover. These rovers create their own ad-hoc network, therefore you must connect to the rovers the same way you would connect to a router, for instance
+> 3. [Ubuntu Linux OS](http://www.ubuntu.com/download/desktop)- tested with v13.04 Raring Ringtail 64 bits
+> 4. [ROS](http://wiki.ros.org/ROS/Installation) - tested with ROS Hydro Medusa
+> 5. [Kivy](http://kivy.org/docs/installation/installation-linux.html) - tested with v1.71
+
+> # Installation:
+> After installing [ROS](http://wiki.ros.org/ROS/Installation) and [Kivy](http://kivy.org/docs/installation/installation-linux.html), follow steps 1 through 4 from the [Beginner Level](http://wiki.ros.org/ROS/Tutorials) tutorials on the ROS website to create a workspace called catkin _ ws, and then create and build a package.
+> Once the previous step is completed, you can checkout the br _ swarm _ rover repository into the workspace folder like this:
+>    /path to workspace/catkin _ ws/src 
+and from a terminal do 
+>    source /path to workspace/catkin _ ws/devel/setup.bash 
+> to add the ROS path of the br _ swarm _ rover into you .bashrc file
+
