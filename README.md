@@ -10,8 +10,12 @@
 > # Installation:
 > After installing [ROS](http://wiki.ros.org/ROS/Installation) and [Kivy](http://kivy.org/docs/installation/installation-linux.html), follow steps 1 through 4 from the [Beginner Level](http://wiki.ros.org/ROS/Tutorials) tutorials on the ROS website to create a workspace called catkin _ ws, and then create and build a package.
 > Once the previous step is completed, you can checkout the br _ swarm _ rover repository into the workspace folder like this:
+>
 >    /path to workspace/catkin _ ws/src 
+>
 and from a terminal do 
+>
 >    source /path to workspace/catkin _ ws/devel/setup.bash 
+>
 > to add the ROS path of the br _ swarm _ rover into you .bashrc file
 
