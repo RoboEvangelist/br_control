@@ -6,6 +6,8 @@
 *.jpeg
 *.jpg
 *.cpp~
+*.class
+*.java
 talker.cpp
 listener.cpp
 
@@ -17,9 +19,7 @@ bin/
 lib/
 msg_gen/
 srv_gen/
+_static
 .cproject
 .project
 .pydevproject
-
-
-address.txt
