@@ -1,12 +1,11 @@
-# This is a ROS package to control one or more Brookstonr Rovers v1.0
-### (work in progress)
+# This is a ROS package to control one or more Brookstone Rovers v1.0 (work in progress)
 
 > ## Prerequisites:
-> 1. Brookstone Rover(s) v1.0
+> 1. (Brookstone Rover(s) v1.0)[http://www.brookstone.com/webassets/pdf/719302p _ manual.pdf]
 > 2. A wifi card per rover. These rovers create their own ad-hoc network, therefore you must connect to the rovers the same way you would connect to a router, for instance
 > 3. [Ubuntu Linux OS](http://www.ubuntu.com/download/desktop)- tested with v13.04 Raring Ringtail 64 bits
 > 4. [ROS](http://wiki.ros.org/ROS/Installation) - tested with ROS Hydro Medusa
-> 5. [Kivy](http://kivy.org/docs/installation/installation-linux.html) - tested with v1.71
+> 5. [Kivy](http://kivy.org/docs/installation/installation-linux.html) GUI library - tested with v1.7.1
 
 > # Installation:
 > After installing [ROS](http://wiki.ros.org/ROS/Installation) and [Kivy](http://kivy.org/docs/installation/installation-linux.html), follow steps 1 through 4 from the [Beginner Level](http://wiki.ros.org/ROS/Tutorials) tutorials on the ROS website to create a workspace called catkin _ ws, and then create and build a package.
