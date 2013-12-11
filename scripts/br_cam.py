@@ -65,6 +65,7 @@ class RovCam():
         """
         self.video_socket =\
                  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#        self.video_socket.bind((self.nic, 0))       # bind to NIC
         self.video_socket.connect((self.host, self.port))
         self.video_socket.setblocking(1)
 

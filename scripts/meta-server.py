@@ -27,7 +27,6 @@ def startProcess():
     # and include it as argument for startProcess()
     robot_address = findConnectedRobot()
     print(str(len(robot_address)) + ' robots are connected \n')
-    
     from threading import Thread
 #    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
 #        subprocess.Popen(roscore_cmd)))
@@ -48,11 +47,15 @@ def startProcess():
         except BaseException:
             print('trying to connect to rover(s)')
             pass
-    line = None
-    while not line:
-        address_file.seek(0)
-        line =  address_file.readline()
-    return line       #threads
+    import os
+    robot_address.append(os.environ['ROS_MASTER_URI'])
+#    line = None
+#    while not line:
+#        address_file.seek(0)
+#        line =  address_file.readline()
+    # change uri as first key
+    robot_address.reverse()    # change uri as first key
+    return robot_address#line       #threads
 
 def findConnectedRobot():
     '''

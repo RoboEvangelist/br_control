@@ -11,6 +11,7 @@ import array
 class RovCon(): 
     def __init__(self, networkCard):
         self.nic = networkCard
+        self._robot_id = self.nic.split('.')[3]
 
         # all Brookstone rovers v1.0 have same host and port numbers
         self.host = '192.168.1.100'
@@ -358,21 +359,21 @@ class RovCon():
         '''
         Tells robot where to move based on the published command
         '''
-        if 'forward' in move_order.data:
+        if 'forward'+self._robot_id in move_order.data:
             self.move_forward()
-        elif 'backward' in move_order.data:
+        elif 'backward'+self._robot_id in move_order.data:
             self.move_backward()
-        elif 'TuLef' in move_order.data:
+        elif 'TuLef'+self._robot_id in move_order.data:
             self.turn_left()
-        elif 'TuRi' in move_order.data:
+        elif 'TuRi'+self._robot_id in move_order.data:
             self.turn_right()
-        elif 'LefFor' in move_order.data:
+        elif 'LefFor'+self._robot_id in move_order.data:
             self.move_left_forward()
-        elif 'RiFor' in move_order.data:
+        elif 'RiFor'+self._robot_id in move_order.data:
             self.move_right_forward()
-        elif 'LefBa' in move_order.data:
+        elif 'LefBa'+self._robot_id in move_order.data:
             self.move_left_backward()
-        elif 'RiBa' in move_order.data:
+        elif 'RiBa'+self._robot_id in move_order.data:
             self.move_right_backward()
-        else:
+        elif 'stop'+self._robot_id in move_order.data:
             self.stop_tracks()

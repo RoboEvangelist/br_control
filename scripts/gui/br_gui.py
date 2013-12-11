@@ -57,8 +57,10 @@ class ControlClass(FloatLayout):
         it this way
         '''
         super(ControlClass, self).__init__(**kwargs)
-        self._started = False     # true if client connected
-        self._client = None       # server client object
+        self._started = False         # true if client connected
+        self._client = None           # server client object
+        self._ros_uri = []      # stores robots ID plus rus URI
+        self._robot_id = 1            # ID of robot to command
         
         # normal image widget
         self.norm_im_widget = Widget()
@@ -83,7 +85,7 @@ class ControlClass(FloatLayout):
         publishes the stop command to stop a robot
         '''
         try:
-            self._pub.publish(String('stop'))
+            self._pub.publish(String('stop'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Stop Tracks Service call failed: %s"%e
 
@@ -92,7 +94,7 @@ class ControlClass(FloatLayout):
         calls the move forward service to move robot forward
         '''
         try:
-            self._pub.publish(String('forward'))
+            self._pub.publish(String('forward'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move forward Service call failed: %s"%e
 
@@ -101,7 +103,7 @@ class ControlClass(FloatLayout):
         calls the move backward service to move
         '''
         try:
-            self._pub.publish(String('backward'))
+            self._pub.publish(String('backward'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move backward Service call failed: %s"%e
 
@@ -116,7 +118,7 @@ class ControlClass(FloatLayout):
         calls the turn left service to move robot
         '''
         try:
-            self._pub.publish(String('TuLef'))
+            self._pub.publish(String('TuLef'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move turn left Service call failed: %s"%e
 
@@ -125,7 +127,7 @@ class ControlClass(FloatLayout):
         calls the turn right service to move
         '''
         try:
-            self._pub.publish(String('TuRi'))
+            self._pub.publish(String('TuRi'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move turn right Service call failed: %s"%e
 
@@ -134,7 +136,7 @@ class ControlClass(FloatLayout):
         calls the turn left forward service to move
         '''
         try:
-            self._pub.publish(String('LefFor'))
+            self._pub.publish(String('LefFor'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move left forward Service call failed: %s"%e
 
@@ -143,7 +145,7 @@ class ControlClass(FloatLayout):
         calls the turn right forward service to move
         '''
         try:
-            self._pub.publish(String('RiFor'))
+            self._pub.publish(String('RiFor'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move right forward Service call failed: %s"%e
 
@@ -152,7 +154,7 @@ class ControlClass(FloatLayout):
         calls the turn left backward service to move
         '''
         try:
-            self._pub.publish(String('LefBa'))
+            self._pub.publish(String('LefBa'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move left backward Service call failed: %s"%e
 
@@ -161,7 +163,7 @@ class ControlClass(FloatLayout):
         calls the turn right backward service to move
         '''
         try:
-            self._pub.publish(String('RiBa'))
+            self._pub.publish(String('RiBa'+str(self._robot_id)))
         except rospy.ServiceException, e:
             print "Move right backward Service call failed: %s"%e
 
@@ -180,16 +182,21 @@ class ControlClass(FloatLayout):
                     prox = \
                         ServerProxy("http://" + hostname + ":12345")
                     # get servers address from the meta server
-                    ros_uri = prox.startProcess()
-                    Logger.info('Server Address\n <%s>', ros_uri)
+                    self._ros_uri = prox.startProcess()
+                    Logger.info('Server Address\n <%s>', self._ros_uri[0])
 #                    self._client = \
-#                    KeyboardInterface(ros_uri,
+#                    KeyboardInterface(self._ros_uri,
 #                    self._args.image_updates)
                     self._started = True
                     Logger.info('Client Connected...')
                     # use double quote for subscriber name
-                    rospy.Subscriber("image", String,
-                                        self.get_image_data)
+                    # TODO: convert get_image_data into a list, so
+                    # that each key is the image data of a robot
+                    self._ros_uri.pop(0)                 # remove ROS uri
+                    for i in range(len(self._ros_uri)): 
+                        rospy.Subscriber("image"+
+                            self._ros_uri[i].split('.')[3], String,
+                            self.get_image_data)
                     from threading import Thread
                     spin_thread = Thread(target=lambda: rospy.spin())
                     spin_thread.start()
