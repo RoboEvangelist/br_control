@@ -11,7 +11,7 @@ from std_msgs.msg import String
 import br_cam
 from br_control import RovCon
 
-from time import sleep
+#from time import sleep
 
 # meta_server.py creates the file where ROS shall write its network
 # address, then the address is passed as an argument here
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         rover_video = br_cam.RovCam(rover.return_data())
 
         # publish robot camera data
-#        pub = rospy.Publisher('image') 
+#        pub = rospy.Publisher('chatter', String) 
         pub = rospy.Publisher('image'+ 
                 arg.robot_address.split('.')[3], String)
 #        rospy.init_node('br_single_control')
@@ -65,10 +65,9 @@ if __name__ == '__main__':
         spin_thread.start()
         while not rospy.is_shutdown(): 
 #            str = "robot moves %s" % rospy.get_time()
- #           rospy.loginfo(str)
             buf = rover_video.receive_image()
             pub.publish(String(buf))
-            sleep(0.033) # manually given image frame rate
+            rospy.sleep(0.033) # manually given image frame rate
 
     except rospy.ROSInterruptException:
         rover.disconnect_rover()

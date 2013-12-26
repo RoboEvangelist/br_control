@@ -176,7 +176,5 @@ class RovCam():
         # convert to numpy to use with OpenCV, etc.
         image_buffer = np.array(ldata[36:l_len])
         image_buffer = image_buffer.tostring() 
-        #image_file = 'test' + str(datetime.now()) + '.jpg' 
-#        image_file = 'test.jpg'
-#        time.sleep(0.033) 
+#        image_file = 'test' + str(datetime.now()) + '.jpg' 
         return image_buffer

@@ -37,12 +37,20 @@ def startProcess():
         try:
             # start a node/thread per robot
             for address in robot_address:
+                # start main node to control rover
                 br_cmd = ['rosrun', 'br_swarm_rover', 
                         'br_single_control.py', uri_file, address]
                 rover_thread = \
                     Thread(target=lambda: START_ROS_ROVER.append(
                         subprocess.Popen(br_cmd)))
                 rover_thread.start()
+                # start optical flow node for each robot connected
+                br_cmd = ['rosrun', 'br_swarm_rover', 
+                        'br_opt_flow', address.split('.')[3]]
+                flow_thread = \
+                    Thread(target=lambda: START_ROS_ROVER.append(
+                        subprocess.Popen(br_cmd)))
+                flow_thread.start()
             rover_started = True
         except BaseException:
             print('trying to connect to rover(s)')

@@ -12,7 +12,7 @@ import rospy
 from std_msgs.msg import String
 
 import StringIO
-
+#import pygame
 from kivy.uix.floatlayout import FloatLayout
 from kivy.app import App
 from kivy.graphics import Rectangle
@@ -37,17 +37,16 @@ class KeyboardInterface():
         Tab key and shift-tab toggle this.
         '''
         # Check if control flag should be toggled.
-        import pygame
-        if pygame.key.get_pressed()[pygame.K_TAB]:
-            self.__has_control = not (pygame.key.get_mods() &
-                                    pygame.KMOD_LSHIFT)
-
-            if self.__has_control:
-                print('Take control')
-            else:
-                print('Release control')
-
-        return self.__has_control
+#        #import #pygame
+#        if pygame.key.get_pressed()[pygame.K_TAB]:
+#            self.__has_control = not (pygame.key.get_mods() &
+#                                    pygame.KMOD_LSHIFT)
+#            if self.__has_control:
+#                print('Take control')
+#            else:
+#                print('Release control')
+#
+#        return self.__has_control
 
 class ControlClass(FloatLayout):
     def __init__(self, **kwargs):
@@ -364,5 +363,10 @@ class KivyGui(App):
         from sys import exit
         exit()
 
+    def schedule_turn_left(self, *args):
+        trigger = Clock.create_trigger(self.call_left_backward)
+        trigger()
+
 if __name__ == '__main__':
     KivyGui().run()
+    #events = pygame.key.get_pressed()
