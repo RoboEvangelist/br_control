@@ -21,6 +21,8 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.core.image.img_pygame import ImageLoaderPygame
 from kivy.uix.widget import Widget
+from kivy.uix.label import Label
+
 
 # FIXME this shouldn't be necessary
 from kivy.base import EventLoop
@@ -200,16 +202,20 @@ class ControlClass(FloatLayout):
                             self.get_image_data)
                         val.append(self._ros_uri[i].split('.')[3])
                     # create a robot selection menu
-                    robot_list = Spinner(
-                        # default value showed
+                    robot_menu = Spinner(
+                        # default robot showed
                         text=self._ros_uri[0].split('.')[3],
-                        # available values
+                        # available robots/values
                         values = val,
                         # just for positioning in our example
                         size_hint=(None, None),
                         size=(100, 44),
-                        pos_hint={'center_x': .1, 'center_y': .7})
-                    self.add_widget(robot_list)
+                        pos_hint={'center_x': .1, 'center_y': .8})
+                    self.add_widget(robot_menu)
+                    robot_menu_label = \
+                        Label(text='Select a robot:', 
+                        pos_hint={'center_x': .1, 'center_y': .87})
+                    self.add_widget(robot_menu_label)
                     from threading import Thread
                     spin_thread = Thread(target=lambda: rospy.spin())
                     spin_thread.start()
@@ -217,7 +223,7 @@ class ControlClass(FloatLayout):
                 except socket.error:
                     count += 1
                     import time
-                    time.sleep(.1)
+                    time.sleep(.5)
 
                 if count > 100:
                     waiting = 'Waiting for meta server at %s'
@@ -244,7 +250,7 @@ class ControlClass(FloatLayout):
             h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
-            (pos_x, pos_y) = (self.center_x, self.center_y/4)
+            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
             
             # use this part to implement mouse clicking on detected
             # objects
