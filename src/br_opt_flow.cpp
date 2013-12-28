@@ -92,7 +92,7 @@ void chatterCallback(const sensor_msgs::ImageConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "listener");
+  ros::init(argc, argv, "br_opt_flow");
 
   ros::NodeHandle n;
 

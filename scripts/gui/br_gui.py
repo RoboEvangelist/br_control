@@ -12,7 +12,8 @@ import rospy
 from std_msgs.msg import String
 
 import StringIO
-#import pygame
+from kivy.uix.spinner import Spinner
+from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from kivy.app import App
 from kivy.graphics import Rectangle
@@ -191,11 +192,24 @@ class ControlClass(FloatLayout):
                     # use double quote for subscriber name
                     # TODO: convert get_image_data into a list, so
                     # that each key is the image data of a robot
-                    self._ros_uri.pop(0)                 # remove ROS uri
+                    self._ros_uri.pop(0)            # remove ROS uri
+                    val = []     # store las byte of robot's address
                     for i in range(len(self._ros_uri)): 
                         rospy.Subscriber("image"+
                             self._ros_uri[i].split('.')[3], String,
                             self.get_image_data)
+                        val.append(self._ros_uri[i].split('.')[3])
+                    # create robot selection menu
+                    robot_list = Spinner(
+                        # default value showed
+                        text=self._ros_uri[0].split('.')[3],
+                        # available values
+                        values = val,
+                        # just for positioning in our example
+                        size_hint=(None, None),
+                        size=(100, 44),
+                        pos_hint={'center_x': .5, 'center_y': .5})
+                    self.add_widget(robot_list)
                     from threading import Thread
                     spin_thread = Thread(target=lambda: rospy.spin())
                     spin_thread.start()
@@ -230,7 +244,7 @@ class ControlClass(FloatLayout):
             h = aspect_ratio * w        # desired height
 
 #            # image's origin starts from buttom left
-            (pos_x, pos_y) = (self.center_x/4, self.center_y/4)
+            (pos_x, pos_y) = (self.center_x, self.center_y/4)
             
             # use this part to implement mouse clicking on detected
             # objects
@@ -363,10 +377,5 @@ class KivyGui(App):
         from sys import exit
         exit()
 
-    def schedule_turn_left(self, *args):
-        trigger = Clock.create_trigger(self.call_left_backward)
-        trigger()
-
 if __name__ == '__main__':
     KivyGui().run()
-    #events = pygame.key.get_pressed()
