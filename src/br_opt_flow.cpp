@@ -97,17 +97,18 @@ void chatterCallback(const std_msgs::String::ConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  std::stringstream ss;
+  std::stringstream node_stream;
   // argv[1] is the last byte of a robot's address
-  ss << "br_opt_flow" << argv[1];
-  std::string name = ss.str();
-  ros::init(argc, argv, name);
+  node_stream << "br_opt_flow" << argv[1];
+  std::string node_name = node_stream.str();
+  ros::init(argc, argv, node_name);
 
   ros::NodeHandle n;
 
-  ss << "image" << argv[1];
-  name = ss.str();
-  ros::Subscriber sub = n.subscribe(name, 1000, chatterCallback);
+  std::stringstream sub_stream;
+  sub_stream << "image" << argv[1];
+  std::string sub_name = sub_stream.str();
+  ros::Subscriber sub = n.subscribe(sub_name, 1000, chatterCallback);
 
   ros::spin();
 
