@@ -199,7 +199,7 @@ class ControlClass(FloatLayout):
                             self._ros_uri[i].split('.')[3], String,
                             self.get_image_data)
                         val.append(self._ros_uri[i].split('.')[3])
-                    # create robot selection menu
+                    # create a robot selection menu
                     robot_list = Spinner(
                         # default value showed
                         text=self._ros_uri[0].split('.')[3],
@@ -208,7 +208,7 @@ class ControlClass(FloatLayout):
                         # just for positioning in our example
                         size_hint=(None, None),
                         size=(100, 44),
-                        pos_hint={'center_x': .5, 'center_y': .5})
+                        pos_hint={'center_x': .1, 'center_y': .7})
                     self.add_widget(robot_list)
                     from threading import Thread
                     spin_thread = Thread(target=lambda: rospy.spin())
