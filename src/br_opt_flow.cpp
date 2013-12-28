@@ -75,12 +75,17 @@ int main(int argc, char** argv)
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
  */
-void chatterCallback(const sensor_msgs::ImageConstPtr& msg)
+// void chatterCallback(const sensor_msgs::ImageConstPtr& msg)
+void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
-    cv_bridge::CvImagePtr cv_ptr;
+//    cv_bridge::CvImagePtr cv_ptr;
     try
     {
-      cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+//      cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+      std::stringstream ss;
+      ss << msg->data.c_str() << " para ti!!!!!";
+      std::string s = ss.str();
+      std::cout << s << std::endl;
     }
     catch (cv_bridge::Exception& e)
     {
@@ -92,11 +97,17 @@ void chatterCallback(const sensor_msgs::ImageConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "br_opt_flow");
+  std::stringstream ss;
+  // argv[1] is the last byte of a robot's address
+  ss << "br_opt_flow" << argv[1];
+  std::string name = ss.str();
+  ros::init(argc, argv, name);
 
   ros::NodeHandle n;
 
-  ros::Subscriber sub = n.subscribe("image", 1000, chatterCallback);
+  ss << "image" << argv[1];
+  name = ss.str();
+  ros::Subscriber sub = n.subscribe(name, 1000, chatterCallback);
 
   ros::spin();
 
