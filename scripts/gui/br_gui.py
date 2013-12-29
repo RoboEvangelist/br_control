@@ -62,7 +62,7 @@ class ControlClass(FloatLayout):
         self._started = False         # true if client connected
         self._client = None           # server client object
         self._ros_uri = []      # stores robots ID plus rus URI
-        self._robot_id = 1            # ID of robot to command
+        self._robot_id = "1"      # default ID of robot to command
         
         # normal image widget
         self.norm_im_widget = Widget()
@@ -74,13 +74,14 @@ class ControlClass(FloatLayout):
         # variables for publishing movement
         self._pub = rospy.Publisher('move', String)
         rospy.init_node('br_gui')
-        self._im_string = ''      # image string
+#        self._im_string = ''      # image string
+        self._im_string = []      # image string
 
     def get_image_data(self, image_string):
         '''
         obtains the published image data
         '''
-        self._im_string = image_string
+        self._im_string[int(self._robot_id)-1] = image_string.data
 
     def call_stop_track(self, *args):
         '''
@@ -195,12 +196,16 @@ class ControlClass(FloatLayout):
                     # TODO: convert get_image_data into a list, so
                     # that each key is the image data of a robot
                     self._ros_uri.pop(0)            # remove ROS uri
+                    self._im_string = self._ros_uri 
                     val = []     # store las byte of robot's address
                     for i in range(len(self._ros_uri)): 
+                        self._robot_id = \
+                            self._ros_uri[i].split('.')[3]
                         rospy.Subscriber("image"+
-                            self._ros_uri[i].split('.')[3], String,
+                            self._robot_id, String,
                             self.get_image_data)
-                        val.append(self._ros_uri[i].split('.')[3])
+                        val.append(self._robot_id)
+                    self._robot_id = val[0]
                     # create a robot selection menu
                     robot_menu = Spinner(
                         # default robot showed
@@ -239,7 +244,7 @@ class ControlClass(FloatLayout):
 #            import pdb; pdb.set_trace()
             # get published image str and store it in a buffer
             buff = StringIO.StringIO()
-            buff.write(self._im_string.data)
+            buff.write(self._im_string[int(self._robot_id)-1])
             buff.seek(0)
             # open buffer file and extract image texture
             imdata = ImageLoaderPygame(buff).texture
@@ -272,8 +277,8 @@ class ControlClass(FloatLayout):
             with self.norm_im_widget.canvas:     #display image
                 Rectangle(texture = imdata, pos= (pos_x, pos_y),
                                       size=(w, h))
-        except BaseException:
-            Logger.warning('Error getting image frame')
+        except BaseException as e:
+            Logger.warning('Error getting image frame %s'%e)
             pass
     #        self.stop_connection()
 
