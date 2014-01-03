@@ -10,6 +10,7 @@ kivy.require('1.7.1')
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
 from std_msgs.msg import String
+from sensor_msgs.msg import CompressedImage
 
 import StringIO
 from kivy.uix.spinner import Spinner
@@ -77,11 +78,19 @@ class ControlClass(FloatLayout):
 #        self._im_string = ''      # image string
         self._im_string = []      # image string
 
-    def get_image_data(self, image_string):
+    def get_image_data(self, image_buffer):
         '''
-        obtains the published image data
+        obtains the published compressed image data
         '''
-        self._im_string[int(self._robot_id)-1] = image_string.data
+        self._im_string[int(self._robot_id)-1] = image_buffer.data
+
+    def selected_robot(self, robot_menu, robot):
+        '''
+        selected a robot to drive throgh the drop down menu
+        '''
+        self._robot_id = robot
+        Logger.info('Robot #' + robot + ' has been selected') 
+#        print('Robot #', robot, ' has been selected')
 
     def call_stop_track(self, *args):
         '''
@@ -201,8 +210,9 @@ class ControlClass(FloatLayout):
                     for i in range(len(self._ros_uri)): 
                         self._robot_id = \
                             self._ros_uri[i].split('.')[3]
-                        rospy.Subscriber("image"+
-                            self._robot_id, String,
+                        rospy.Subscriber(
+                            "/output/image_raw/compressed"+
+                            self._robot_id, CompressedImage,
                             self.get_image_data)
                         val.append(self._robot_id)
                     self._robot_id = val[0]
@@ -217,6 +227,7 @@ class ControlClass(FloatLayout):
                         size=(100, 44),
                         pos_hint={'center_x': .1, 'center_y': .8})
                     self.add_widget(robot_menu)
+                    robot_menu.bind(text=self.selected_robot)
                     robot_menu_label = \
                         Label(text='Select a robot:', 
                         pos_hint={'center_x': .1, 'center_y': .87})

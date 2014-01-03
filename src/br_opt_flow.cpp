@@ -85,7 +85,6 @@ void chatterCallback(const std_msgs::String::ConstPtr& msg)
       std::stringstream ss;
       ss << msg->data.c_str() << " para ti!!!!!";
       std::string s = ss.str();
-      std::cout << s << std::endl;
     }
     catch (cv_bridge::Exception& e)
     {
@@ -106,7 +105,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
 
   std::stringstream sub_stream;
-  sub_stream << "image" << argv[1];
+  sub_stream << "/output/image_raw/compressed" << argv[1];
   std::string sub_name = sub_stream.str();
   ros::Subscriber sub = n.subscribe(sub_name, 1000, chatterCallback);
 

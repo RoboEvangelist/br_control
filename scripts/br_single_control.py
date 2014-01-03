@@ -6,6 +6,7 @@ run just one robot at the time
 
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy
+from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import String
 
 import br_cam
@@ -30,28 +31,17 @@ arg = parser.parse_args()
 
 if __name__ == '__main__':
     try:
-        # open file to save ROS server address
-#        address_file = open(arg.file, 'w+b')
-
-        # store ROS server address
         #TODO: change the local host part to a normal address
         # for now the wanted address is exported manually in the
         # .bashrc file
-#        import os
-#        # obtain ROS address
-#        address_file.write(os.environ['ROS_MASTER_URI'])
-#        # allow meta-server read the file to obtain the address
-#        address_file.close()
 
         # initiate rover connection and video streaming
         rover = RovCon(arg.robot_address) 
         rover_video = br_cam.RovCam(rover.return_data())
 
         # publish robot camera data
-#        pub = rospy.Publisher('chatter', String) 
-        pub = rospy.Publisher('image'+ 
-                arg.robot_address.split('.')[3], String)
-#        rospy.init_node('br_single_control')
+        pub = rospy.Publisher('/output/image_raw/compressed'+ 
+                arg.robot_address.split('.')[3], CompressedImage)
         rospy.init_node('robot'+arg.robot_address.split('.')[3])
 #        distance = 0.5    # feet
 #        speed = 1         # foot/sec
@@ -63,11 +53,11 @@ if __name__ == '__main__':
         from threading import Thread
         spin_thread = Thread(target=lambda: rospy.spin())
         spin_thread.start()
+
         while not rospy.is_shutdown(): 
-#            str = "robot moves %s" % rospy.get_time()
             buf = rover_video.receive_image()
-            pub.publish(String(buf))
-            rospy.sleep(0.033) # manually given image frame rate
+            pub.publish(buf)    # publish CompressedImage
+            rospy.sleep(0.033)  # manually given image frame rate
 
     except rospy.ROSInterruptException:
         rover.disconnect_rover()

@@ -5,7 +5,9 @@ and publishes is so that other nodes can use it.
 '''
 
 import roslib; roslib.load_manifest('br_swarm_rover')
-#from cv_bridge import CvBridge, CvBridgeError
+import rospy
+
+from sensor_msgs.msg import CompressedImage
 
 import numpy as np
 
@@ -134,7 +136,8 @@ class RovCam():
         """
         data = ''
         ldata = array.array('c')
-        image_buffer = array.array('c')
+        image_buffer = CompressedImage()
+        image_buffer.format = "jpeg"
 #        start = ''
         found_start = False
         found_end = False
@@ -148,10 +151,8 @@ class RovCam():
             #check for the message start token 'MO_V'
             for i in range(0, len(data)-2):
                 if (data[i:(i+4)] == 'MO_V'):
-#                     print 'got in MO_V mode'
                     if not found_start:
                         found_start = True
-#                         print "start of picture found"
                         start_pos = i
                         #crop the data only include stuff after the
                         #start token.
@@ -159,7 +160,6 @@ class RovCam():
                         break
                     elif not found_end:
                         found_end = True
-#                         print "end of picture found"
                         end_pos = i
                         break
             #if you have found the start but not the end (in the
@@ -167,14 +167,13 @@ class RovCam():
             if (found_start and not found_end):
                 #add the recent data to ldata
                 ldata.extend(list(data))
-#                 print "adding recent data"
             if found_end:
                ldata.extend(list(data[0:end_pos]))
-#                print "adding data from 0 to end"
             data = ''
         l_len = len(ldata)
+        #### Create CompressedIamge ####
         # convert to numpy to use with OpenCV, etc.
-        image_buffer = np.array(ldata[36:l_len])
-        image_buffer = image_buffer.tostring() 
-#        image_file = 'test' + str(datetime.now()) + '.jpg' 
+        image_buffer.header.stamp = rospy.Time.now()
+        image_buffer.data = np.array(ldata[36:l_len]).tostring()
+
         return image_buffer
