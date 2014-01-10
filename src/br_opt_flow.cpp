@@ -3,9 +3,11 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/CompressedImage.h>
+#include "std_msgs/String.h"
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
-/*
+
 static const std::string OPENCV_WINDOW = "Image window";
 
 class ImageConverter
@@ -16,12 +18,16 @@ class ImageConverter
   image_transport::Publisher image_pub_;
   
 public:
-  ImageConverter()
+  ImageConverter(std::string argv)
     : it_(nh_)
   {
     // Subscrive to input video feed and publish output video feed
 //    image_sub_ = it_.subscribe("/camera/image_raw", 1, 
-    image_sub_ = it_.subscribe("image", 1, 
+    std::stringstream sub_stream;                                            
+    sub_stream << "/output/image_raw/compressed" << argv;                 
+    std::cout << "argv is: " << argv << std::endl;
+    std::string sub_name = sub_stream.str(); 
+    image_sub_ = it_.subscribe(sub_name, 1, 
       &ImageConverter::imageCb, this);
     image_pub_ = it_.advertise("/image_converter/output_video", 1);
 
@@ -61,30 +67,35 @@ public:
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "br_opt_flow");
-  ImageConverter ic;
+ 
+  std::stringstream node_stream;
+  // argv[1] is the last byte of a robot's address
+  node_stream << "br_opt_flow" << argv[1];
+  std::string node_name = node_stream.str();
+  ros::init(argc, argv, node_name);
+ 
+  ImageConverter ic(argv[1]);
   ros::spin();
   return 0;
 }
 
-*/
 
 
-#include "std_msgs/String.h"
 
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
- */
-// void chatterCallback(const sensor_msgs::ImageConstPtr& msg)
-void chatterCallback(const std_msgs::String::ConstPtr& msg)
+ *
+ void chatterCallback(const sensor_msgs:: ImageConstPtr& msg)
+//void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
-//    cv_bridge::CvImagePtr cv_ptr;
+    cv_bridge::CvImagePtr cv_ptr;
     try
     {
-//      cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-      std::stringstream ss;
-      ss << msg->data.c_str() << " para ti!!!!!";
-      std::string s = ss.str();
+      cv_ptr = cv_bridge::toCvCopy(msg, 
+                sensor_msgs::image_encodings::BGR8);
+//      std::stringstream ss;
+//      ss << msg->data.c_str() << " para ti!!!!!";
+//      std::string s = ss.str();
     }
     catch (cv_bridge::Exception& e)
     {
@@ -113,3 +124,5 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
+*/

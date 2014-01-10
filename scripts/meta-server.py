@@ -45,8 +45,10 @@ def startProcess():
                         subprocess.Popen(br_cmd)))
                 rover_thread.start()
                 # start optical flow node for each robot connected
+                # 'compressed' dictates type of image to subscribe to
                 br_cmd = ['rosrun', 'br_swarm_rover', 
-                        'br_opt_flow', address.split('.')[3]]
+                        'br_opt_flow', address.split('.')[3], 
+                        '_image_transport:=compressed']
                 flow_thread = \
                     Thread(target=lambda: START_ROS_ROVER.append(
                         subprocess.Popen(br_cmd)))

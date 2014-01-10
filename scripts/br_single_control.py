@@ -7,6 +7,7 @@ run just one robot at the time
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy
 from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import Image
 from std_msgs.msg import String
 
 import br_cam
