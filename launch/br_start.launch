@@ -1,0 +1,10 @@
+<launch>
+
+  <group ns="meta-server">
+    <node pkg="br_swarm_rover" name="meta_server" type="meta-server.py"/>
+  </group>
+
+  <group ns="br_gui">
+    <node pkg="br_swarm_rover" name="br_gui" type="br_gui.py"/>
+  </group>
+</launch>

@@ -45,6 +45,7 @@ public:
     try
     {
       cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+      std::cout << "cv_ptr" << std::endl;
     }
     catch (cv_bridge::Exception& e)
     {
@@ -55,6 +56,7 @@ public:
     // Draw an example circle on the video stream
     if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
       cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
+    std::cout << "drawing circle" << std::endl;
 
     // Update GUI Window
     cv::imshow(OPENCV_WINDOW, cv_ptr->image);
