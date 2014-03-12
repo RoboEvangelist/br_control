@@ -1,4 +1,4 @@
-# This is a ROS package to control one or more Brookstone Rovers v1.0 (work in progress)
+# This is a ROS package to control one or more Brookstone Rovers v0.0.1 
 
 > # Prerequisites:
 > 1. Working knowledge of the [Robot Operating System (ROS)](http://www.ros.org/)
