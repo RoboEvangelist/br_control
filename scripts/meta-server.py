@@ -8,16 +8,13 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 import subprocess
 from time import sleep
 
-
-START_ROS_ROVER = []    # stores roscore and rover program
+START_ROS_ROVER = []    # stores rover program
 
 def startProcess():
     '''
     This function starts roscore and the rovers software.
     The function is called when a client connects to the meta-server
     '''
-    # commands to start roscore and the rovers ROS program
-#    roscore_cmd = ['roscore']
     from tempfile import NamedTemporaryFile
     address_file = NamedTemporaryFile(delete=False)
     # pass temp file name as argument to br_swarm_rover node
@@ -28,9 +25,6 @@ def startProcess():
     robot_address = findConnectedRobot()
     print(str(len(robot_address)) + ' robots are connected \n')
     from threading import Thread
-#    roscore_thread = Thread(target=lambda: START_ROS_ROVER.append(
-#        subprocess.Popen(roscore_cmd)))
-#    roscore_thread.start()
     rover_started = False    # true if rover program started
     sleep(3)      # give roscore time to start
     while not rover_started:
