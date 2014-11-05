@@ -70,9 +70,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(listener src/listener.cpp)
-target_link_libraries(listener ${catkin_LIBRARIES})
-
 add_executable(br_opt_flow src/br_opt_flow.cpp)
 target_link_libraries(br_opt_flow ${catkin_LIBRARIES})
 target_link_libraries(br_opt_flow ${OpenCV_LIBS})
