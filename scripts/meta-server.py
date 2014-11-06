@@ -101,7 +101,7 @@ def main():
     thread_started = False
     # FIXME: I'm not sure if "0.0.0.0" will allow remote access
     # it might not be a valid address
-    server = SimpleXMLRPCServer(("127.0.0.1", 8005))
+    server = SimpleXMLRPCServer(("0.0.0.0", 5007))
     server.register_function(startProcess, "startProcess")
     while not rospy.is_shutdown():
         try:
