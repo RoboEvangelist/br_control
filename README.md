@@ -7,6 +7,7 @@
 > 4. [Ubuntu Linux OS](http://www.ubuntu.com/download/desktop) - tested with v13.04 Raring Ringtail 64 bits
 > 5. [ROS](http://wiki.ros.org/ROS/Installation) - tested with ROS Hydro Medusa
 > 6. [Kivy](http://kivy.org/docs/installation/installation-linux.html) GUI library - tested with v1.7.1
+> 6. [Cython](http://kivy.org/docs/installation/installation-linux.html) GUI library installation - installed with v0.17.1
 
 > # Installation:
 > After installing [ROS](http://wiki.ros.org/ROS/Installation) and [Kivy](http://kivy.org/docs/installation/installation-linux.html), follow steps 1 through 4 from the [Beginner Level](http://wiki.ros.org/ROS/Tutorials) tutorials on the ROS website to create a workspace called catkin _ ws, and then create and build a package.
