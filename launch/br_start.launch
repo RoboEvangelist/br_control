@@ -1,10 +1,10 @@
+<?xml version="1.0"?>
 <launch>
 
-  <group ns="meta-server">
+    <!--start meta-server that starts robots based on clients requests -->
     <node pkg="br_swarm_rover" name="meta_server" type="meta-server.py"/>
-  </group>
 
-  <group ns="br_gui">
+    <!--client GUI to control robots -->
     <node pkg="br_swarm_rover" name="br_gui" type="br_gui.py"/>
-  </group>
+
 </launch>
