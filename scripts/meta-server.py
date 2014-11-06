@@ -101,7 +101,7 @@ def main():
     thread_started = False
     # FIXME: I'm not sure if "0.0.0.0" will allow remote access
     # it might not be a valid address
-    server = SimpleXMLRPCServer(("0.0.0.0", 12345))
+    server = SimpleXMLRPCServer(("127.0.0.1", 8005))
     server.register_function(startProcess, "startProcess")
     while not rospy.is_shutdown():
         try:
@@ -110,6 +110,10 @@ def main():
                 server.handle_request() 
                 thread_started = True
         except BaseException:
+            try:
+                del server.socket
+            except BaseException:
+                rospy.logwarn("could not close socket")
             rospy.loginfo('exiting ROS program')
             for thread in threads:
                 thread.kill()

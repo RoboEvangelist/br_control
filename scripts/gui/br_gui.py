@@ -5,7 +5,7 @@ from the rovers
 '''
 
 import kivy
-kivy.require('1.7.1')
+kivy.require('1.8.0')
 
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
@@ -183,7 +183,7 @@ class ControlClass(FloatLayout):
         '''
         initializes the client connection, and gets image data
         '''
-        hostname = "0.0.0.0"
+        hostname = "127.0.0.1"
         if not self._started:
             count = 0
             while True:  # Keep trying in case server is not up yet
@@ -192,7 +192,7 @@ class ControlClass(FloatLayout):
                     from xmlrpclib import ServerProxy
                     # connect to meta server first
                     prox = \
-                        ServerProxy("http://" + hostname + ":12345")
+                        ServerProxy("http://" + hostname + ":8005")
                     # get servers address from the meta server
                     self._ros_uri = prox.startProcess()
                     Logger.info('Server Address\n <%s>', self._ros_uri[0])
