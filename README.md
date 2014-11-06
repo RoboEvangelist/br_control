@@ -24,12 +24,9 @@ and from a terminal do
 > # Use instructions:
 > 1. Connect additional wifi dongles to your computer if needed (your computer should have at least one by default).
 > 2. Turn on **one robot at a time**, and connect to it with the wifi dongle (or just with your computer's built in wifi card if only one robot is available). Generally, the rovers' default SSID, or network name, starts with "AC13" followed by its MAC address.
-> 3. Start "roscore" on the terminal
-> 4. Then, on the terminal run the meta-server node like this (assuming your package was correctly added to your ROS path):
+> 4. Then, on the terminal launch the meta-server and GUI like this (assuming your package was correctly added to your ROS path):
 >
->     rosrun br_swarm_rover meta-server.py
+>     roslaunch br_swarm_rover br_start.launch
 >
-> 5. On another terminal run the GUI node to start controlling the robots:
->     rosrun br_swarm_rover br_gui.py
 >
 > Enjoy!!!
