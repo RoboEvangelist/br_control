@@ -42,7 +42,8 @@ if __name__ == '__main__':
 
         # publish robot camera data
         pub = rospy.Publisher('/output/image_raw/compressed'+ 
-                arg.robot_address.split('.')[3], CompressedImage)
+            arg.robot_address.split('.')[3], CompressedImage, 
+            queue_size=100)
         rospy.init_node('robot'+arg.robot_address.split('.')[3])
 #        distance = 0.5    # feet
 #        speed = 1         # foot/sec
@@ -56,6 +57,7 @@ if __name__ == '__main__':
         spin_thread.start()
 
         while not rospy.is_shutdown(): 
+            rospy.loginfo("before video")
             buf = rover_video.receive_image()
             pub.publish(buf)    # publish CompressedImage
             rospy.sleep(0.033)  # manually given image frame rate
