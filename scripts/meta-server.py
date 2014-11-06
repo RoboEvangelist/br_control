@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 '''
-This files runs indefinitelly  in a computer and waits for a client
+This node runs indefinitelly  in a computer and waits for a client
 to request connection to a/the robot(s)
 '''
+
+import rospy
 
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import subprocess
@@ -23,7 +25,7 @@ def startProcess():
     # TODO: put findConnectedRobot() in the main function
     # and include it as argument for startProcess()
     robot_address = findConnectedRobot()
-    print(str(len(robot_address)) + ' robots are connected \n')
+    rospy.loginfo(str(len(robot_address)) + ' robots are connected \n')
     from threading import Thread
     rover_started = False    # true if rover program started
     sleep(3)      # give roscore time to start
@@ -49,7 +51,7 @@ def startProcess():
                 flow_thread.start()
             rover_started = True
         except BaseException:
-            print('trying to connect to rover(s)')
+            rospy.loginfo('trying to connect to rover(s)')
             pass
     import os
     robot_address.append(os.environ['ROS_MASTER_URI'])
@@ -78,7 +80,7 @@ def findConnectedRobot():
 #            # see if address matches common address given to NIC when
 #            # NIC is connected to a robot
             if temp2[0] == '192' and int(temp2[3]) < 30:
-                print('appending address: ' + temp)
+                rospy.loginfo('appending address: ' + temp)
                 robot_address.append(temp)
         except BaseException:
             pass
@@ -92,22 +94,27 @@ def getServerAddress(file_name):
     import tempfile
     tempfile.name
 
-if __name__ == '__main__':
+def main():
+    """Main function to run meta-server functionality"""
+    rospy.init_node('meta_server')
     threads = START_ROS_ROVER
     thread_started = False
     # FIXME: I'm not sure if "0.0.0.0" will allow remote access
     # it might not be a valid address
     server = SimpleXMLRPCServer(("0.0.0.0", 12345))
     server.register_function(startProcess, "startProcess")
-    while True:
+    while not rospy.is_shutdown():
         try:
             if not thread_started:
-                print('\nwaiting for a client to connect...\n\n')
+                rospy.loginfo('\nwaiting for a client to connect...\n\n')
                 server.handle_request() 
                 thread_started = True
         except BaseException:
-            print('exiting ROS program')
+            rospy.loginfo('exiting ROS program')
             for thread in threads:
                 thread.kill()
             from sys import exit
             exit()
+
+if __name__ == '__main__':
+    main()
