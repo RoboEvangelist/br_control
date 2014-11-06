@@ -5,7 +5,7 @@ from the rovers
 '''
 
 import kivy
-kivy.require('1.8.0')
+kivy.require('1.7.1')
 
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
