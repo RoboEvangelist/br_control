@@ -5,7 +5,7 @@ from the rovers
 '''
 
 import kivy
-kivy.require('1.7.1')
+kivy.require('1.8.0')
 
 import roslib; roslib.load_manifest('br_swarm_rover')
 import rospy 
@@ -250,6 +250,8 @@ class ControlClass(FloatLayout):
         '''
         Display the normal image comming straight from the rover
         '''
+        Logger.warning('about to do the try inside image')
+        print('about to do the try inside image')
         try:
             # assume size of all incoming images is 320x240
 #            import pdb; pdb.set_trace()
@@ -284,6 +286,7 @@ class ControlClass(FloatLayout):
 ##            self._client.setMouseRatio(im_translation)
             # TODO: create a canvas just for the image and 
             # clear only that canvas
+            print('inside image function')
             self.norm_im_widget.canvas.clear() 
             with self.norm_im_widget.canvas:     #display image
                 Rectangle(texture = imdata, pos= (pos_x, pos_y),
@@ -304,6 +307,7 @@ class ControlClass(FloatLayout):
         '''
         starts the thead to run the server simulation
         '''
+        print('ran scheduler')
         # called only when button is pressed
         trigger = Clock.create_trigger(self.start_server)
         # later
